@@ -1,0 +1,91 @@
+{% extends "index.html" %}
+
+{% block body %}
+<div class="page-header">
+    <h3 class="header">Стадии, в рамках которых проходят соревнования</h3>
+</div>
+
+<form id="editStage" class="flat-form">
+
+<div class="row">
+
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10">
+        <table id="listSeason" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_editStage"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a></td>
+                <td class="tableNumber">#</td>
+                <td class="tableText">Стадия</td>
+                <td class="tableText">Название стадии</td>
+                <td class="tableInputRight"></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editStage"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">1</td>
+                <td class="tableText">плэй-офф</td>
+                <td class="tableText">Финал</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editStage"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">1</td>
+                <td class="tableText">зона</td>
+                <td class="tableText">г. Воронеж</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editStage"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">1</td>
+                <td class="tableText">группа</td>
+                <td class="tableText">1 группа</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-1"></div>
+
+</div>
+
+<div id="Modal_editStage" class="modal fade modal-lg" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" aria-labelledby="Modal_editStage_Label">Добавить/изменить игровую стадию</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="btn-group">
+                    <div id="zoneGroupPlayoffToggle" class="btn-group btn-toggle" data-toggle="buttons">
+                        <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите тип стадию</label><br>
+                            <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_Zone" type="radio" name="zoneGroupPlayoffToggle" value="Z">зона</label>
+                            <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_Group" type="radio" name="zoneGroupPlayoffToggle" value="G">группа</label>
+                            <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_Playoff" type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф</label>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="btn-group">
+                    <label class="btn-label" for="editStage_seasonName">Название стадии</label> <input id="editStage_seasonName" class="form-control" name="editStage_seasonName" type="text">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-success">Сохранить</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,1 @@
+$('#Modal_editGP').modal()

@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+
+{% block title %}Города, в которых находятся юношеские спортивные школы{% endblock %}
+
+{% block body %}
+
+<div class="row">
+
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10">
+        <table id="listCity" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_addCity">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
+                    </a>
+                </td>
+                <td class="tableNumber">#</td>
+                <td class="tableText">Город</td>
+                <td class="tableInputRight"></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for listCity_item in listCity %}
+            <tr>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ listCity_item.city_ID }}">
+                        <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
+                    </a>
+                </td>
+                <td class="tableNumber">{{ loop.index }}</td>
+                <td class="tableText">{{ listCity_item.cityName }}</td>
+                <td class="tableInputRight">
+                    <form id="delete" class="flat-form" method="post">
+                        <button type="submit" name="modify" value="delete" class="form-control flat btn-danger input-sm">
+                            <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                        </button>
+                        <input type="hidden" name="city_ID" value="{{ listCity_item.city_ID }}">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+    </div>
+
+    <div class="col-lg-1"></div>
+
+</div>
+
+{% include "includes/createCity.html" %}
+
+{% include "includes/updateCity.html" %}
+
+{% endblock %}

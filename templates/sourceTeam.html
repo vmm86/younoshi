@@ -1,0 +1,139 @@
+{% extends "index.html" %}
+
+{% block body %}
+<div class="page-header">
+    <h3 class="header">Юношеские команды из разных спортивных школ и их распределение по возрастам</h3>
+</div>
+
+<form id="filterTeam" class="flat-form">
+
+<div class="row" style="margin-left: 15rem;">
+    <div class="btn-group">
+        <label class="btn-label" for="chooseCity">Выберите город</label>
+        <select id="chooseCity" name="chooseCity" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+            <option value="1">Белгород</option>
+            <option value="2">Воронеж</option>
+            <option value="3">Волжский</option>
+            <option value="4">Смоленск</option>
+            <option value="5">Тамбов</option>
+        </select>
+    </div>
+
+    <br>
+
+    <div class="btn-group">
+        <label class="btn-label" for="chooseSchool">Выберите школу</label>
+        <select id="chooseSchool" name="chooseSchool" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+            <option value="1">Первая школа</option>
+            <option value="2">Вторая школа</option>
+            <option value="3">Третья школа</option>
+            <option value="4">Четвёртая школа</option>
+            <option value="5">Пятая школа</option>
+        </select>
+    </div>
+</div>
+
+</form>
+
+<form id="editTeam" class="flat-form">
+
+<div class="row">
+
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10">
+        <table id="listTeam" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_editTeam"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a></td>
+                <td class="tableNumber">#</td>
+                <td class="tableText">Команда</td>
+                <td class="tableNumber">Возраст</td>
+                <td class="tableInputRight"></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editTeam"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">1</td>
+                <td class="tableText">Раз команда</td>
+                <td class="tableText">2004 г.р.</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editTeam"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">2</td>
+                <td class="tableText">Два команда</td>
+                <td class="tableText">2003 г.р.</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editTeam"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">3</td>
+                <td class="tableText">Три команда</td>
+                <td class="tableText">2002 г.р.</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editTeam"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">4</td>
+                <td class="tableText">Четыре команда</td>
+                <td class="tableText">2001 г.р.</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editTeam"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">5</td>
+                <td class="tableText">Пять команда</td>
+                <td class="tableText">2000 г.р.</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-1"></div>
+
+</div>
+
+<div id="Modal_editTeam" class="modal fade modal-lg" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" aria-labelledby="Modal_editTeam_Label">Добавить/изменить команду в выбранной школе</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="btn-group">
+                    <label class="btn-label" for="editTeam_teamName">Команда</label> <input id="editTeam_teamName" class="form-control" name="editTeam_teamName" type="text">
+                </div>
+                <br>
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center; border-radius: 1rem;">Выберите возраст</label>
+                        <br>
+                        <label class="btn btn-info" style="border-radius: 1rem 0 0 0;"><input type="radio" name="chooseAge" value="1">2004 г.р.</label>
+                        <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">2003 г.р.</label>
+                        <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">2002 г.р.</label>
+                        <label class="btn btn-info" style="border-radius: 0 1rem 0 0;"><input type="radio" name="chooseAge" value="1">2001 г.р.</label>
+                        <br>
+                        <label class="btn btn-info" style="border-radius: 0 0 0 1rem;"><input type="radio" name="chooseAge" value="1">2000 г.р.</label>
+                        <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">1999 г.р.</label>
+                        <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">1998 г.р.</label>
+                        <label class="btn btn-info" style="border-radius: 0 0 1rem 0;"><input type="radio" name="chooseAge" value="1">1997 г.р.</label>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-success">Сохранить</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</form>
+
+{% endblock %}

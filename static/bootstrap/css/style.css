@@ -1,0 +1,492 @@
+*, html, body {
+    box-sizing: border-box;
+}
+
+body {
+/*    font-family: Arial, Helvetica, sans-serif;*/
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Заголовки */
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 1rem;
+    margin: 0;
+}
+
+h1 {
+    font-size: 4rem;
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+form {
+    width: 100%;
+}
+
+/* Таблицы */
+
+table {
+    border: none;
+    border-collapse: collapse;
+
+    width: 100% !important;
+}
+
+table thead tr td {
+    background: #34495E; /* wetasphalt */
+
+    color: #FFF;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0 #2C3E50; /* midnightblue */
+}
+
+table tr td {
+    border: 1px solid #BDC3C7;
+
+    padding: 0;
+}
+
+.tableInputLeft,
+.tableInputRight {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    width: 15rem;
+    overflow: hidden;
+}
+
+.tableInputLeft input, .tableInputRight input,
+.tableInputLeft button, .tableInputRight button,
+.tableInputLeft a, .tableInputRight a {
+    display: block;
+    cursor: pointer;
+
+    border: none;
+
+    color: #FFF;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.35;
+
+    width: 12rem;
+    transition: all 0.7s ease;
+    height: 2.8rem;
+
+    position: relative;
+    top: -1px;
+}
+
+.tableInputLeft input,
+.tableInputLeft button,
+.tableInputLeft a {
+    border-radius: 1rem 0 0 1rem;
+
+    float: right;
+
+    left: 8.9rem;
+}
+.tableInputRight input,
+.tableInputRight button,
+.tableInputRight a {
+    border-radius: 0 1rem 1rem 0;
+
+    float: left;
+
+    right: 8.45rem;
+}
+
+.tableInputLeft input:hover,
+.tableInputLeft button:hover,
+.tableInputLeft a:hover {
+    width: 12rem;
+    transition: all 0.7s ease;
+
+    left: 0;
+}
+.tableInputRight input:hover,
+.tableInputRight button:hover,
+.tableInputLeft  a:hover {
+    width: 12rem;
+    transition: all 0.6s ease;
+
+    right: 0;
+}
+
+.tableNumber {
+    text-align: center;
+
+    width: 5rem;
+}
+.tableText {
+}
+.tableScore {
+    text-align: center;
+}
+
+/* Фиксы Flat UI */
+
+.container.wrapper {
+    margin-top: 53px;
+
+    width: 100%;
+}
+
+.page-header {
+    border: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+/* Верхнее меню навигации */
+
+#top-menu {
+    background: transparent;
+
+    box-shadow: 0 -1rem 1rem -1rem rgba(0,0,0,0.1) inset;
+}
+
+.navbar-default .navbar-nav > .active > a, 
+.navbar-default .navbar-nav > .active > a:hover, 
+.navbar-default .navbar-nav > .active > a:focus {
+    background: transparent;
+        color: #3498DB;
+}
+
+.navbar-default .navbar-nav > .active > a .caret,
+.navbar-default .navbar-nav > .dropdown > a:hover .caret, 
+.navbar-default .navbar-nav > .dropdown > a:focus .caret {
+    border-top-color: #3498DB;
+    border-bottom-color: #3498DB;
+}
+
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus {
+    color: #3498DB;
+}
+
+.navbar-nav > li > .dropdown-menu {
+    border-radius: 1rem;
+}
+
+.dropdown-menu li.active > a, 
+.dropdown-menu li.selected > a, 
+.dropdown-menu li.active > a.highlighted, 
+.dropdown-menu li.selected > a.highlighted {
+    background: none repeat scroll 0% 0% #3498DB;
+    color: #FFF;
+}
+
+.dropdown-menu li.active > a:hover, 
+.dropdown-menu li.selected > a:hover, 
+.dropdown-menu li.active > a.highlighted:hover, 
+.dropdown-menu li.selected > a.highlighted:hover, 
+.dropdown-menu li.active > a:focus, 
+.dropdown-menu li.selected > a:focus, 
+.dropdown-menu li.active > a.highlighted:focus, 
+.dropdown-menu li.selected > a.highlighted:focus {
+    background: none repeat scroll 0% 0% #3498DB;
+    color: #FFF;
+}
+
+.dropdown:hover > .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Формы */
+
+input[type="submit"],
+button {
+    color: #FFF;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+input[type="number"] {
+    width: 7rem;
+}
+
+.tableInputLeft > button,
+.tableInputRight > button {
+
+}
+
+.tableInputLeft > button > i,    .tableInputRight > button > i,
+.tableInputLeft > button > span, .tableInputRight > button > span,
+.tableInputLeft > a > i,         .tableInputLeft > a > i,
+.tableInputLeft > a > span,      .tableInputLeft > a > span {
+    color: #FFF;
+}
+
+.form-control {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+
+.form-control.btn-success {
+    background: #58D68D;
+
+    text-shadow: 1px 1px 0 #27AE60;
+}
+.form-control.btn-warning {
+    background: #F5D313;
+
+    text-shadow: 1px 1px 0 #F39C12;
+}
+.form-control.btn-danger {
+    background: #EC7063;
+
+    text-shadow: 1px 1px 0 #C0392B;
+}
+
+.form-control.btn-success:hover {
+    background: #2ECC71;
+}
+.form-control.btn-warning:hover {
+    background: #F1C40F;
+}
+.form-control.btn-danger:hover {
+    background: #E74C3C;
+}
+
+.btn-group, 
+.btn-group-vertical {
+    vertical-align: top;
+}
+
+.btn-group > label.btn-label {
+    color: #34495E;
+    font-size: inherit !important;
+    font-weight: bold;
+    line-height: inherit !important;
+    text-transform: uppercase;
+
+    padding: 0.5rem 1rem;
+    margin: 0;
+}
+
+.btn {
+    border-radius: 1rem;
+
+    font-weight: bold;
+    line-height: inherit;
+
+    padding: 0.4rem 1rem;
+}
+
+/* Выбор игровой стадии */
+
+#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(3) {
+    border-radius: 1rem 0 0 0;
+
+    text-align: right;
+
+    width: 50%;
+}
+#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(4) {
+    border-radius: 0 1rem 0 0;
+
+    text-align: left;
+
+    width: 50%;
+}
+#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(5),
+#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(6) {
+    border-radius: 0 0 1rem 1rem;
+
+    width: 100%;
+}
+
+/* Фиксы Bootstrap Switch */
+
+.btn.disabled, 
+.btn[disabled], 
+fieldset[disabled] .btn {
+    background-color: #BDC3C7;
+    color: #FFF;
+    opacity: 1;
+}
+
+.bootstrap-switch .bootstrap-switch-label {
+    display: none !important;
+}
+
+.bootstrap-switch.bootstrap-switch-off .bootstrap-switch-container {
+    margin-left: -100%;
+}
+
+.bootstrap-switch .bootstrap-switch-handle-on, 
+.bootstrap-switch .bootstrap-switch-handle-off {
+    width: 50%;
+}
+
+.bootstrap-switch .bootstrap-switch-container {
+    width: 200%;
+}
+
+/* Фиксы Bootstrap-Select */
+
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li > a {
+    text-align: left;
+}
+
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active > a, 
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.selected > a, 
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active > a.highlighted, 
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.selected > a.highlighted {
+    background: #3498DB;
+}
+
+.dropdown-menu {
+    display: none;
+    border-radius: 0 0 1rem 1rem;
+    width: 100%;
+    top: 15%;
+}
+
+.dropdown-menu.open {
+    background: transparent;
+}
+
+.dropdown-menu li > a {
+    padding: 0.5rem 1rem;
+}
+
+.dropdown-menu li > a:hover, 
+.dropdown-menu li > a:active, 
+.dropdown-menu li > a:focus {
+    background: #3498DB;
+    color: #FFF;
+}
+
+.dropdown-menu li:first-child > a {
+    border-radius: 0;
+}
+.dropdown-menu li:last-child > a {
+    border-radius: 0 0 1rem 1rem;
+}
+
+.bootstrap-select.btn-group:not(.input-group-btn), 
+.bootstrap-select.btn-group[class*="span"] {
+ /*   float: right;*/
+}
+
+.bootstrap-select > .btn.dropdown-toggle {
+    border-radius: 1rem;
+
+    text-transform: none;
+}
+.bootstrap-select.open > .btn.dropdown-toggle {
+    border-radius: 1rem 1rem 0 0;
+}
+
+.bootstrap-select-searchbox, 
+.bootstrap-select .bs-actionsbox {
+    background: #ECF0F1;
+
+    padding: 0;
+}
+.bootstrap-select-searchbox input {
+    border-radius: 0;
+    width: 100%;
+}
+
+
+.open > .dropdown-menu {
+    margin-top: 0 !important;
+}
+.dropdown-menu.open {
+    top: 3.2rem !important;
+}
+.nav .dropdown-menu {
+    top: 5.3rem !important;
+}
+
+.nav .dropdown-menu li:first-child > a {
+    border-radius: 1rem 1rem 0 0;
+}
+.nav .dropdown-menu li:last-child > a {
+    border-radius: 0 0 1rem 1rem;
+}
+
+.form-group.focus .form-control, 
+.form-control:focus {
+    border-color: #3498DB;
+}
+
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active > a, 
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.selected > a, 
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active > a.highlighted, 
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.selected > a.highlighted {
+    background: none repeat scroll 0% 0% #3498DB;
+}
+
+/* Форма авторизации при входе на сайт */
+
+#authForm {
+    display: inline-block;
+
+    width: 40rem;
+}
+
+#authFormLogin {
+    border-bottom: 1px solid #BDC3C7;
+    border-radius: none;
+
+    position: relative;
+    z-index: 1;
+}
+
+#authFormPassword {
+    border-top: 1px solid #BDC3C7;
+    border-radius: none;
+
+    position: relative;
+    z-index: 1;
+}
+
+#authFormLogin:focus,
+#authFormPassword:focus {
+   border-color: #1ABC9C; 
+}
+
+#authFormSubmit {
+    color: #FFF;
+    background-color: #1ABC9C;
+
+    border-radius: 0 1rem 1rem 0;
+
+    height: 8.4rem;
+
+    position: relative;
+    left: -2px;
+    z-index: 2;
+}
+
+/* Модальные окна */
+
+.modal-lg {
+    overflow: visible;
+
+    width: 80%;
+}
+
+.modal-footer {
+    text-align: center;
+}
+
+.modal-content {
+    border: none;
+    border-radius: 1rem;
+
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.5);
+}

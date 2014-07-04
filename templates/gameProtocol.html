@@ -1,0 +1,230 @@
+{% extends "index.html" %}
+
+{% block body %}
+<div class="page-header">
+    <h3 class="header">Результаты матчей</h3>
+</div>
+
+<form id="filterGP" class="flat-form">
+
+<div class="row" style="text-align: center;">
+    <div class="btn-group">
+        <label class="btn-label" for="chooseSeason">Выберите сезон</label>
+        <select id="chooseSeason" name="chooseSeason" class="selectpicker" data-style="btn-info" data-toggle="">
+            <option value="1">2014</option>
+        </select>
+    </div>
+</div>
+
+<div class="row" style="text-align: center;">
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center; border-radius: 1rem;">Выберите возраст</label>
+            <br>
+            <label class="btn btn-info" style="border-radius: 1rem 0 0 0;"><input type="radio" name="chooseAge" value="1">2004 г.р.</label>
+            <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">2003 г.р.</label>
+            <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">2002 г.р.</label>
+            <label class="btn btn-info" style="border-radius: 0 1rem 0 0;"><input type="radio" name="chooseAge" value="1">2001 г.р.</label>
+            <br>
+            <label class="btn btn-info" style="border-radius: 0 0 0 1rem;"><input type="radio" name="chooseAge" value="1">2000 г.р.</label>
+            <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">1999 г.р.</label>
+            <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">1998 г.р.</label>
+            <label class="btn btn-info" style="border-radius: 0 0 1rem 0;"><input type="radio" name="chooseAge" value="1">1997 г.р.</label>
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-lg-5" style="text-align: right;">
+
+        <div id="chooseZoneContainer" class="btn-group">
+            <label class="btn-label" for="chooseZone">&nbsp;</label>
+            <br>
+            <select id="chooseZone" name="chooseZone" class="selectpicker" data-style="btn-info">
+                <option value="5">г. Белгород</option>
+                <option value="4">г. Волжский</option>
+                <option value="3">г. Воронеж</option>
+                <option value="2">г. Смоленск</option>
+                <option value="1">г. Тамбов</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="col-lg-2" style="text-align: center;">
+
+        <div id="zoneGroupPlayoffToggle" class="btn-group btn-toggle" data-toggle="buttons">
+            <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label><br>
+                <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z">зона</label>
+                <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G">группа</label>
+                <br>
+                <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф</label>
+        </div>
+
+    </div>
+
+    <div class="col-lg-5" style="text-align: left;">
+
+        <div id="chooseGroupContainer" class="btn-group">
+            <label class="btn-label" for="chooseGroup">&nbsp;</label>
+            <br>
+            <select id="chooseGroup" name="chooseGroup" class="selectpicker" data-style="btn-info">
+                <option value="5">1 группа</option>
+                <option value="4">2 группа</option>
+                <option value="3">3 группа</option>
+                <option value="2">4 группа</option>
+                <option value="1">5 группа</option>
+            </select>
+        </div>
+
+    </div>
+</div>
+
+</form>
+
+<br>
+
+<form id="editGP" class="flat-form form-group">
+
+<div class="row">
+
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10">
+        <table id="listGP" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a></td>
+                <td class="tableNumber">#</td>
+                <td class="tableText" style="">Команда хозяев</td>
+                <td class="tableScore" style="width: 3rem;">Счёт</td>
+                <td class="tableText" style="">Команда гостей</td>
+                <td class="tableInputRight"></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">1</td>
+                <td class="tableText">Раз команда</td>
+                <td class="tableScore">1 : 0</td>
+                <td class="tableText">Два команда</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">2</td>
+                <td class="tableText">Два команда</td>
+                <td class="tableScore">3 : 2</td>
+                <td class="tableText">Три команда</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">3</td>
+                <td class="tableText">Три команда</td>
+                <td class="tableScore"></td>
+                <td class="tableText">Четыре команда</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">4</td>
+                <td class="tableText">Четыре команда</td>
+                <td class="tableScore"></td>
+                <td class="tableText">Пять команда</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">5</td>
+                <td class="tableText">Пять команда</td>
+                <td class="tableScore"></td>
+                <td class="tableText">Раз команда</td>
+                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-1"></div>
+
+</div>
+
+<div id="Modal_editGP" class="modal fade modal-lg" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" aria-labelledby="Modal_editGP_Label">Добавить/изменить результаты матча</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="btn-group">
+                    <label class="btn-label" for="editGP_gameNumber">Номер матча</label> <input id="editGP_gameNumber" class="form-control" name="editGP_gameNumber" type="number">
+                    <br>
+                    <label class="btn-label" for="editGP_tourNumber">Номер тура</label> <input id="editGP_tourNumber" class="form-control" name="editGP_tourNumber" type="number">
+                    <br>
+                    <label class="btn-label" for="editGP_gameDate">Дата матча</label> <input id="editGP_gameDate" class="form-control" name="editGP_gameDate" type="date">
+                    <br>
+                    <div class="btn-group">
+                        <label class="btn-label" for="editGP_homeTeam">Команда хозяев</label>
+                        <select id="editGP_homeTeam" class="selectpicker" name="editGP_homeTeam" data-live-search="true" data-style="btn-info" data-width="auto">
+                            <option value="1">Первая школа</option>
+                            <option value="2">Вторая школа</option>
+                            <option value="3">Третья школа</option>
+                            <option value="4">Четвёртая школа</option>
+                            <option value="5">Пятая школа</option>
+                        </select>
+                    </div>
+                    <div class="btn-group">
+                        <label class="btn-label" for="editGP_guestTeam">Команда гостей</label>
+                        <select id="editGP_guestTeam" class="selectpicker" name="editGP_guestTeam" data-live-search="true" data-style="btn-info" data-width="auto">
+                            <option value="1">Первая школа</option>
+                            <option value="2">Вторая школа</option>
+                            <option value="3">Третья школа</option>
+                            <option value="4">Четвёртая школа</option>
+                            <option value="5">Пятая школа</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="btn-group">
+                        <label class="btn-label" for="editGP_homeTeamScoreGame editGP_guestTeamScoreGame">Счёт матча <input id="editGP_homeTeamScoreGame" class="form-control" name="editGP_homeTeamScoreGame" type="number"> <input id="editGP_guestTeamScoreGame" class="form-control" name="editGP_guestTeamScoreGame" type="number"></label>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <!-- поля внутри д.б. доступны только в матчах стадии плэй-офф -->
+                    <div class="btn-group">
+                        <input id="editGP_is11m" class="checkbox" name="editGP_is11m" type="checkbox" />
+                        <label class="btn-label" for="editGP_homeTeamScore11m editGP_guestTeamScore11m">Счёт серии 11-метровых <input id="editGP_homeTeamScore11m" class="form-control" name="editGP_homeTeamScore11m" type="number"><input id="editGP_guestTeamScore11m" class="form-control" name="editGP_guestTeamScore11m" type="number"></label>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="btn-group">
+                        <input id="editGP_isSemifinal" class="checkbox" name="editGP_isSemifinal" type="checkbox" />
+                        <label class="btn-label" for="editGP_isSemifinal">полуфинальный матч плэй-офф</label>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="btn-group">
+                        <input id="editGP_isFinal" class="checkbox" name="editGP_isFinal" type="checkbox" />
+                        <label class="btn-label" for="editGP_isSemifinal">финальный матч плэй-офф</label>
+                    </div>
+                    <!-- поля внутри д.б. доступны только в матчах стадии плэй-офф -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-success">Сохранить</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</form>
+
+{% endblock %}
