@@ -33,7 +33,7 @@
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">{{ listCity_item.cityName }}</td>
                 <td class="tableInputRight">
-                    <form id="delete" class="flat-form" method="post">
+                    <form id="delete" class="flat-form" method="post" action="/city/delete">
                         <button type="submit" name="modify" value="delete" class="form-control flat btn-danger input-sm">
                             <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
                         </button>
