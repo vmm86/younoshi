@@ -1,5 +1,8 @@
 {% extends "index.html" %}
 
+{% set active_group = "Source" %}
+{% set active_page = "City" %}
+
 {% block title %}Города, в которых находятся юношеские спортивные школы{% endblock %}
 
 {% block body %}
@@ -33,12 +36,7 @@
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">{{ listCity_item.cityName }}</td>
                 <td class="tableInputRight">
-                    <form id="delete" class="flat-form" method="post" action="/city/delete">
-                        <button type="submit" name="modify" value="delete" class="form-control flat btn-danger input-sm">
-                            <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
-                        </button>
-                        <input type="hidden" name="city_ID" value="{{ listCity_item.city_ID }}">
-                    </form>
+                    {% include "includes/deleteCity.html" %}
                 </td>
             </tr>
             {% endfor %}

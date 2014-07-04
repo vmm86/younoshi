@@ -267,41 +267,24 @@ def listCity():
 @app.route('/city/create', methods=['GET', 'POST'])
 def createCity():
     if request.method == 'POST':
-        if  request.form['modify']  == 'create':
-            cityname = request.form['cityName']
+        if  request.form['modify'] == 'create':
+            cityname  = request.form['cityName']
             City.create(cityName=cityname)
             return redirect(url_for('listCity'))
 
 @app.route('/city/update', methods=['GET', 'POST'])
 def updateCity():
     if request.method == 'POST':
-        if request.form['modify'] == 'update':
-            cityid   = int(request.form['city_ID'])
-            cityname = request.form['cityName']
+        if  request.form['modify'] == 'update':
+            cityid    = int(request.form['city_ID'])
+            cityname  = request.form['cityName']
             City.update(cityName = cityname).where(City.city_ID == cityid).execute()
             return redirect(url_for('listCity'))
 
 @app.route('/city/delete', methods=['GET', 'POST'])
 def deleteCity():
     if request.method == 'POST':
-        if request.form['modify'] == 'delete':
-            cityid   = int(request.form['city_ID'])
+        if  request.form['modify'] == 'delete':
+            cityid    = int(request.form['city_ID'])
             City.get(city_ID = cityid).delete_instance()
             return redirect(url_for('listCity'))
-
-# @app.route('/city', methods=['GET', 'POST'])
-# def modifyCity():
-#     if request.method == 'POST':
-#         if  request.form['modify']  == 'create':
-#             cityname = request.form['cityName']
-#             City.create(cityName=cityname)
-#             return redirect(url_for('listCity'))
-#         elif request.form['modify'] == 'update':
-#             cityid   = int(request.form['city_ID'])
-#             cityname = request.form['cityName']
-#             City.update(cityName = cityname).where(City.city_ID == cityid).execute()
-#             return redirect(url_for('listCity'))
-#         elif request.form['modify'] == 'delete':
-#             cityid   = int(request.form['city_ID'])
-#             City.get(city_ID = cityid).delete_instance()
-#             return redirect(url_for('listCity'))

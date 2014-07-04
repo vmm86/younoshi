@@ -20,34 +20,37 @@
 </head>
 <body role="document">
 
+{% set active_group = active_group|default('Source') -%}
+{% set active_page  = active_page|default('/') -%}
+
 <div id="top-menu" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="dropdown{# {%+ if sourceCity.isActive="active" or sourceSchool.isActive="active" or sourceTeam.isActive="active" or sourceStage.isActive="active" or sourceSeason.isActive="active" %} active{% endif %} #}">
+                <li class="dropdown {% if active_group == 'source' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Исходные данные <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li{# {%+ if sourceCity.isActive="active" #%} class="active"{% endif %} #}><a href="/city">Города</a></li>
-                        <li{# {%+ if sourceSchool.isActive="active" %} class="active"{% endif %} #}><a href="/school">Школы</a></li>
-                        <li{# {%+ if sourceTeam.isActive="active" %} class="active"{% endif %} #}><a href="/team">Команды</a></li>
+                        <li{% if active_page == 'City' %} class="active"{% endif %}><a href="/city">Города</a></li>
+                        <li{% if active_page == 'School' %} class="active"{% endif %}><a href="/school">Школы</a></li>
+                        <li{% if active_page == 'Team' %} class="active"{% endif %}><a href="/team">Команды</a></li>
                         <li class="divider"></li>
-                        <li{# {%+ if sourceStage.isActive="active" %} class="active"{% endif %} #}><a href="/stage.html">Игровые стадии</a></li>
-                        <li{# {%+ if sourceSeason.isActive="active" %} class="active"{% endif %} #}><a href="/season.html">Сезоны</a></li>
+                        <li{% if active_page == 'Stage' %} class="active"{% endif %}><a href="/stage.html">Игровые стадии</a></li>
+                        <li{% if active_page == 'Season' %} class="active"{% endif %}><a href="/season.html">Сезоны</a></li>
                     </ul>
                 </li>
-                <li class="dropdown{# {%+ if seasonAgeStage.isActive="active" or seasonAgeStageTeam.isActive="active" %} active{% endif %} #}">
+                <li class="dropdown {% if active_group == 'calendar' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Календари соревнований <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li{# {%+ if seasonAgeStage.isActive="active" %} class="active"{% endif %} #}><a href="/sas">Зоны/группы по возрастам</a></li>
-                        <li{# {%+ if seasonAgeStageTeam.isActive="active" %} class="active"{% endif %} #}><a href="/sast">Команды по зонам/группам</a></li>
+                        <li{% if active_page == 'SAS' %} class="active"{% endif %}><a href="/sas">Зоны/группы по возрастам</a></li>
+                        <li{% if active_page == 'SAST' %} class="active"{% endif %}><a href="/sast">Команды по зонам/группам</a></li>
                     </ul>
                 </li>
                 <li class=""><a href="/gp">Результаты матчей</a></li>
-                <li class="dropdown{# {%+ if sourceCity.isActive="active" or sourceCity.isActive="active" or sourceTeam.isActive="active" or sourceStage.isActive="active" or sourceSeason.isActive="active" %} active{% endif %} #}">
+                <li class="dropdown {% if active_group == 'rating' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Текущий рейтинг <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li{# {%+ if schoolRating.isActive="active" %} class="active"{% endif %} #}><a href="/schoolrating.html">Школы</a></li>
-                        <li{# {%+ if teamRating.isActive="active" %} class="active"{% endif %} #}><a href="/teamrating.html">Команды</a></li>
+                        <li{% if active_page == 'SchoolRating' %} class="active"{% endif %}><a href="/schoolrating.html">Школы</a></li>
+                        <li{% if active_page == 'TeamRating' %} class="active"{% endif %}><a href="/teamrating.html">Команды</a></li>
                     </ul>
                 </li>
             </ul>
