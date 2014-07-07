@@ -272,19 +272,17 @@ def createCity():
             City.create(cityName=cityname)
             return redirect(url_for('listCity'))
 
-@app.route('/city/update', methods=['GET', 'POST'])
-def updateCity():
+@app.route('/city/<int:cityid>/update', methods=['GET', 'POST'])
+def updateCity(cityid):
     if request.method == 'POST':
         if  request.form['modify'] == 'update':
-            cityid    = int(request.form['city_ID'])
             cityname  = request.form['cityName']
             City.update(cityName = cityname).where(City.city_ID == cityid).execute()
             return redirect(url_for('listCity'))
 
-@app.route('/city/delete', methods=['GET', 'POST'])
-def deleteCity():
+@app.route('/city/<int:cityid>/delete', methods=['GET', 'POST'])
+def deleteCity(cityid):
     if request.method == 'POST':
         if  request.form['modify'] == 'delete':
-            cityid    = int(request.form['city_ID'])
             City.get(city_ID = cityid).delete_instance()
             return redirect(url_for('listCity'))
