@@ -1,0 +1,27 @@
+
+<form class="flat-form" name="update" method="POST" action="{{ url_for('updateSchool', cityid = ls.city_ID.city_ID, schoolid = ls.school_ID) }}">
+    <div id="Modal_update_{{ ls.school_ID }}" class="modal fade modal-lg" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" aria-labelledby="Modal_update_Label">Добавить/изменить школу в выбранном городе</h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="btn-group">
+                        <label class="btn-label" for="schoolName">Школа</label> 
+                        <input class="form-control" type="text" name="schoolName" value="{{ ls.schoolName }}">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="cancel" data-dismiss="modal">Отмена</button>
+                    <button class="btn btn-success" type="submit" name="modify" value="update">Сохранить</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

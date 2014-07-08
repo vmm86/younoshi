@@ -53,8 +53,8 @@ class User(YounoshiModel):
 
 ## Города
 class City(YounoshiModel):
-    city_ID  = PrimaryKeyField(db_column='city_ID')
-    cityName = CharField(db_column='cityName',max_length=128,null=False)
+    city_ID      = PrimaryKeyField(db_column='city_ID')
+    cityName     = CharField(db_column='cityName',max_length=128,null=False)
 
     class Meta:
         db_table = 'City'
@@ -62,9 +62,9 @@ class City(YounoshiModel):
 
 ## Спортивные школы
 class School(YounoshiModel):
-    school_ID  = PrimaryKeyField(db_column='school_ID')
-    city_ID    = ForeignKeyField(db_column='city_ID',rel_model=City,related_name='school_of_city',on_delete='NO ACTION',on_update='NO ACTION',to_field='city_ID',null=False)
-    schoolName = CharField(db_column='schoolName',max_length=128,null=False)
+    school_ID    = PrimaryKeyField(db_column='school_ID')
+    city_ID      = ForeignKeyField(db_column='city_ID',rel_model=City,related_name='school_of_city',on_delete='NO ACTION',on_update='NO ACTION',to_field='city_ID',null=False)
+    schoolName   = CharField(db_column='schoolName',max_length=128,null=False)
 
     class Meta:
         db_table = 'School'
@@ -73,16 +73,10 @@ class School(YounoshiModel):
             (('school_ID', 'city_ID'),True),
         )
 
-    def School_of_City(self, user):
-        return School.select().where(
-            (City.city_ID == self) &
-            (City.city_ID == School.city_ID)
-        ).count() > 0
-
 ## Возраста
 class Age(YounoshiModel):
-    age_ID  = PrimaryKeyField(db_column='age_ID')
-    ageName = IntegerField(db_column='ageName',null=False)
+    age_ID       = PrimaryKeyField(db_column='age_ID')
+    ageName      = IntegerField(db_column='ageName',null=False)
 
     class Meta:
         db_table = 'Age'
@@ -90,10 +84,10 @@ class Age(YounoshiModel):
 
 ## Команды
 class Team(YounoshiModel):
-    team_ID   = PrimaryKeyField(db_column='team_ID')
-    school_ID = ForeignKeyField(db_column='school_ID',rel_model=School,related_name='team_of_school',on_delete='NO ACTION',on_update='NO ACTION',to_field='school_ID',null=False)
-    age_ID    = ForeignKeyField(db_column='age_ID',rel_model=Age,related_name='age_of_team',on_delete='NO ACTION',on_update='NO ACTION',to_field='age_ID',null=False)
-    teamName  = CharField(db_column='teamName',max_length=128,null=False)
+    team_ID      = PrimaryKeyField(db_column='team_ID')
+    school_ID    = ForeignKeyField(db_column='school_ID',rel_model=School,related_name='team_of_school',on_delete='NO ACTION',on_update='NO ACTION',to_field='school_ID',null=False)
+    age_ID       = ForeignKeyField(db_column='age_ID',rel_model=Age,related_name='age_of_team',on_delete='NO ACTION',on_update='NO ACTION',to_field='age_ID',null=False)
+    teamName     = CharField(db_column='teamName',max_length=128,null=False)
 
     class Meta:
         db_table = 'Team'
@@ -104,8 +98,8 @@ class Team(YounoshiModel):
 
 ## Сезоны
 class Season(YounoshiModel):
-    season_ID  = PrimaryKeyField(db_column='season_ID')
-    seasonName = CharField(db_column='seasonName',max_length=128,null=False)
+    season_ID    = PrimaryKeyField(db_column='season_ID')
+    seasonName   = CharField(db_column='seasonName',max_length=128,null=False)
 
     class Meta:
         db_table = 'Season'
@@ -113,9 +107,9 @@ class Season(YounoshiModel):
 
 ## Игровые стадии
 class Stage(YounoshiModel):
-    stage_ID  = PrimaryKeyField(db_column='stage_ID')
-    stageType = CharField(db_column='stageType',max_length=1,null=False)
-    stageName = CharField(db_column='stageName',max_length=128,null=False)
+    stage_ID     = PrimaryKeyField(db_column='stage_ID')
+    stageType    = CharField(db_column='stageType',max_length=1,null=False)
+    stageName    = CharField(db_column='stageName',max_length=128,null=False)
 
     class Meta:
         db_table = 'Stage'
@@ -123,10 +117,10 @@ class Stage(YounoshiModel):
 
 ## СезонВозрастСтадия
 class SeasonAgeStage(YounoshiModel):
-    SAS_ID    = PrimaryKeyField(db_column='SAS_ID')
-    season_ID = ForeignKeyField(db_column='season_ID',rel_model=Season,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='season_ID',null=False)
-    age_ID    = ForeignKeyField(db_column='age_ID',rel_model=Age,related_name='age_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='age_ID',null=False)
-    stage_ID  = ForeignKeyField(db_column='stage_ID',rel_model=Stage,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='stage_ID',null=False)
+    SAS_ID       = PrimaryKeyField(db_column='SAS_ID')
+    season_ID    = ForeignKeyField(db_column='season_ID',rel_model=Season,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='season_ID',null=False)
+    age_ID       = ForeignKeyField(db_column='age_ID',rel_model=Age,related_name='age_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='age_ID',null=False)
+    stage_ID     = ForeignKeyField(db_column='stage_ID',rel_model=Stage,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='stage_ID',null=False)
 
     class Meta:
         db_table = 'SeasonAgeStage'
@@ -137,9 +131,9 @@ class SeasonAgeStage(YounoshiModel):
 
 ## СезонВозрастСтадияКоманда
 class SeasonAgeStageTeam(YounoshiModel):
-    SAST_ID = PrimaryKeyField(db_column='team_ID',)
-    SAS_ID  = ForeignKeyField(db_column='SAS_ID',rel_model=SeasonAgeStage,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
-    team_ID = ForeignKeyField(db_column='SAST_ID',rel_model=Team,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
+    SAST_ID      = PrimaryKeyField(db_column='team_ID',)
+    SAS_ID       = ForeignKeyField(db_column='SAS_ID',rel_model=SeasonAgeStage,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
+    team_ID      = ForeignKeyField(db_column='SAST_ID',rel_model=Team,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
 
     class Meta:
         db_table = 'SeasonAgeStageTeam'
@@ -164,9 +158,9 @@ class GameProtocol(YounoshiModel):
     is_Final           = BooleanField(db_column='is_Final',default=False,null=False)
 
     class Meta:
-        db_table = 'GameProtocol'
-        order_by = ('GP_ID',)
-        indexes  = (
+        db_table       = 'GameProtocol'
+        order_by       = ('GP_ID',)
+        indexes        = (
             (('GP_ID', 'homeTeam_ID', 'guestTeam_ID'),True),
         )
 
@@ -286,3 +280,33 @@ def deleteCity(cityid):
         if  request.form['modify'] == 'delete':
             City.get(city_ID = cityid).delete_instance()
             return redirect(url_for('listCity'))
+
+## Спортивные школы
+@app.route('/city/<int:cityid>/school')
+def listSchool(cityid):
+    listCity   = City.select().order_by(City.city_ID)
+    listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.school_ID)
+    return render_template('sourceSchool.html', listCity = listCity, listSchool = listSchool)
+
+@app.route('/city/<int:cityid>/school/create', methods=['GET', 'POST'])
+def createSchool(cityid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'create':
+            schoolname = request.form['schoolName']
+            School.create(city_ID=cityid, schoolName=schoolname)
+            return redirect(url_for('listSchool', cityid = cityid))
+
+@app.route('/city/<int:cityid>/school/<int:schoolid>/update', methods=['GET', 'POST'])
+def updateSchool(cityid, schoolid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'update':
+            schoolname = request.form['schoolName']
+            School.update(city_ID=cityid, schoolName = schoolname).where(School.school_ID == schoolid).execute()
+            return redirect(url_for('listSchool', cityid = cityid))
+
+@app.route('/city/<int:cityid>/school/<int:schoolid>/delete', methods=['GET', 'POST'])
+def deleteSchool(cityid, schoolid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'delete':
+            School.get(city_ID=cityid, school_ID=schoolid).delete_instance()
+            return redirect(url_for('listSchool', cityid = cityid))

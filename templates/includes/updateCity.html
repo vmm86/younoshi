@@ -1,6 +1,6 @@
-{% for listCity_item in listCity %}
-<form name="update" method="post" action="{{ url_for('updateCity', cityid = listCity_item.city_ID) }}">
-    <div id="Modal_update_{{ listCity_item.city_ID }}" class="modal fade modal-lg" role="dialog">
+{% for lc in listCity %}
+<form class="flat-form" name="update" method="post" action="{{ url_for('updateCity', cityid = lc.city_ID) }}">
+    <div id="Modal_update_{{ lc.city_ID }}" class="modal fade modal-lg" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
@@ -12,13 +12,13 @@
                 <div class="modal-body">
                     <div class="btn-group">
                         <label class="btn-label" for="cityName">Город</label> 
-                        <input type="text" name="cityName" value="{{ listCity_item.cityName }}" class="form-control">
+                        <input class="form-control" type="text" name="cityName" value="{{ lc.cityName }}">
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="cancel" data-dismiss="modal" class="btn btn-danger">Отмена</button>
-                    <button type="submit" name="modify" value="update" class="btn btn-success">Изменить</button>
+                    <button class="btn btn-danger" type="cancel" data-dismiss="modal">Отмена</button>
+                    <button class="btn btn-success" type="submit" name="modify" value="update">Изменить</button>
                 </div>
 
             </div>

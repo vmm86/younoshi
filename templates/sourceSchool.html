@@ -1,28 +1,26 @@
 {% extends "index.html" %}
 
-{% block body %}
-<div class="page-header">
-    <h3 class="header">Школы, в которых находятся юношеские команды разных возрастов</h3>
-</div>
+{% set active_group = "Source" %}
+{% set active_page  = "School" %}
 
-<form id="filterSchool" class="flat-form">
+{% block title %}Школы, в которых находятся юношеские команды разных возрастов{% endblock %}
+
+{% block body %}
+
+<form id="filterCity" class="flat-form" name="filterCity">
 
 <div class="row" style="margin-left: 15rem;">
     <div class="btn-group">
         <label class="btn-label" for="chooseCity">Выберите город</label>
-        <select id="chooseCity" name="listCity" class="selectpicker" data-live-search="true" data-style="btn-info">
-            <option value="1">Белгород</option>
-            <option value="2">Воронеж</option>
-            <option value="3">Волжский</option>
-            <option value="4">Смоленск</option>
-            <option value="5">Тамбов</option>
+        <select id="chooseCity" name="chooseCity" class="selectpicker" data-live-search="true" data-style="btn-info">
+        {% for lc in listCity %}
+            <option value="{{ lc.city_ID }}">{{ lc.cityName }}</option>
+        {% endfor %}
         </select>
     </div>
 </div>
 
 </form>
-
-<form id="editSchool" class="flat-form">
 
 <div class="row">
 
@@ -32,43 +30,25 @@
         <table id="listSchool" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_editSchool"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a></td>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a>
+                </td>
                 <td class="tableNumber">#</td>
                 <td class="tableText">Команда</td>
                 <td class="tableInputRight"></td>
             </tr>
         </thead>
         <tbody>
+            {% for ls in listSchool %}
             <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSchool"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">1</td>
-                <td class="tableText">Первая школа</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ ls.school_ID }}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">{{ loop.index }}</td>
+                <td class="tableText">{{ ls.schoolName }}</td>
+                <td class="tableInputRight">
+                    {% include "includes/deleteSchool.html" %}
+                </td>
             </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSchool"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">2</td>
-                <td class="tableText">Первая школа</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSchool"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">3</td>
-                <td class="tableText">Третья школа</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSchool"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">4</td>
-                <td class="tableText">Четвёртая школа</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSchool"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">5</td>
-                <td class="tableText">Пятая школа</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
+            {% endfor %}
         </tbody>
         </table>
     </div>
@@ -77,30 +57,12 @@
 
 </div>
 
-<div id="Modal_editSchool" class="modal fade modal-lg" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+{% for lc in listCity %}
+    {% include "includes/createSchool.html" %}
+{% endfor %}
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="modal-title" aria-labelledby="Modal_editSchool_Label">Добавить/изменить школу в выбранном городе</h3>
-            </div>
-
-            <div class="modal-body">
-                <div class="btn-group">
-                    <label class="btn-label" for="editSchool_schoolName">Школа</label> <input id="editSchool_schoolName" class="form-control" name="editSchool_schoolName" type="text">
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-success">Сохранить</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-</form>
+{% for ls in listSchool %}
+    {% include "includes/updateSchool.html" %}
+{% endfor %}
 
 {% endblock %}

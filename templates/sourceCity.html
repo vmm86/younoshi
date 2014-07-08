@@ -16,7 +16,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_addCity">
+                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -26,15 +26,15 @@
             </tr>
         </thead>
         <tbody>
-            {% for listCity_item in listCity %}
+            {% for lc in listCity %}
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ listCity_item.city_ID }}">
+                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lc.city_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText">{{ listCity_item.cityName }}</td>
+                <td class="tableText">{{ lc.cityName }}</td>
                 <td class="tableInputRight">
                     {% include "includes/deleteCity.html" %}
                 </td>

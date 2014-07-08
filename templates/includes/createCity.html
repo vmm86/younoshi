@@ -1,6 +1,6 @@
 
-<form name="create" method="post" action="/city/create">
-    <div id="Modal_addCity" class="modal fade modal-lg" role="dialog">
+<form name="create" method="post" action="{{ url_for('createCity') }}">
+    <div id="Modal_create" class="modal fade modal-lg" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <div class="btn-group">
                         <label class="btn-label" for="cityName">Город</label> 
-                        <input class="form-control" name="cityName" type="text"></input>
+                        <input class="form-control" type="text" name="cityName"></input>
                     </div>
                 </div>
 
