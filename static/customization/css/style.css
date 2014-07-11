@@ -418,6 +418,10 @@ fieldset[disabled] .btn {
     border-radius: 0 0 1rem 1rem;
 }
 
+.form-group {
+    margin-bottom: 0 !important;
+}
+
 .form-group.focus .form-control, 
 .form-control:focus {
     border-color: #3498DB;
@@ -489,4 +493,75 @@ fieldset[disabled] .btn {
     border-radius: 1rem;
 
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.5);
+}
+
+/* Список возрастов */
+
+[data-toggle="buttons"] label input[type="radio"] {
+    visibility: hidden !important;
+    
+    position: absolute;
+    top: 0;
+    left: -1000%;
+}
+
+.listAgeTop, 
+.listAgeBottom {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    width: 100% !important;
+}
+
+.listAgeTop    > label,
+.listAgeBottom > label {
+    font-weight: bold !important;
+}
+.listAgeTop    > label.active,
+.listAgeBottom > label.active {
+    text-shadow: -1px -1px 0 rgba(0, 60, 100, 0.5);
+}
+
+.listAgeTop    > label:first-child {
+    border-radius: 1rem 0 0 0 !important;
+}
+.listAgeTop    > label:last-child {
+    border-radius: 0 1rem 0 0 !important;
+}
+.listAgeBottom > label:first-child {
+    border-radius: 0 0 0 1rem !important;
+}
+.listAgeBottom > label:last-child {
+    border-radius: 0 0 1rem 0 !important;
+}
+
+/* Валидация форм */
+
+input.error {
+    border-color: #D2322D !important;
+    font-weight: bold;
+    padding: 0px 1.5rem;
+    margin: 0;
+}
+
+/**/
+
+.close {
+    font-size: 36px;
+    line-height: 1.25;
+}
+
+.modal-header {
+    padding: 0 15px;
+}
+
+.modal-footer {
+    padding: 20px;
+    margin: 0;
+}
+
+/* Всплывающие сообщения */
+
+.alert .close {
+    line-height: 0;
 }
