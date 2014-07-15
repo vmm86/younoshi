@@ -1,0 +1,46 @@
+
+<form class="flat-form update-form" name="update" method="POST" action="{{ url_for('updateStage', stageid = lst.stage_ID) }}">
+    <div id="Modal_update_{{ lst.stage_ID }}" class="modal fade modal-lg" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <a href="{{ url_for('listStage', stageid = stageid) }}">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                    </a>
+                    <h3 class="modal-title" aria-labelledby="Modal_update_Label">Изменить стадию {{ lst.stageName }}</h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group btn-group" data-toggle="buttons">
+                        <label class="btn-label">Выберите тип стадии</label>
+                        <div class="btn-group stageTypeTop">
+                            <label for="stagetype_zone" class="btn btn-info {% if lst.stageType == "Z" %}active{% endif %}">
+                                <input id="stagetype_zone" type="radio" name="stagetype" value="Z" {% if lst.stageType == "Z" %}checked{% endif %}>зона
+                            </label>
+                            <label for="stagetype_group" class="btn btn-info {% if lst.stageType == "G" %}active{% endif %}">
+                                <input id="stagetype_group" type="radio" name="stagetype" value="G" {% if lst.stageType == "G" %}checked{% endif %}>группа
+                            </label>
+                        </div>
+                        <div class="btn-group stageTypeBottom">
+                            <label for="stagetype_playoff" class="btn btn-info {% if lst.stageType == "P" %}active{% endif %}">
+                                <input id="stagetype_playoff" type="radio" name="stagetype" value="P" {% if lst.stageType == "P" %}checked{% endif %}>плэй-офф
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group btn-group">
+                        <label for="stageName" class="btn-label">Название стадии</label> 
+                        <input class="form-control" type="text" name="stageName" value="{{ lst.stageName }}">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <a class="btn btn-danger" href="{{ url_for('listStage', stageid = stageid) }}">Отмена</a>
+                    <button class="btn btn-success" type="submit" name="modify" value="update">Изменить</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

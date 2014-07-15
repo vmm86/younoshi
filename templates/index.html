@@ -10,18 +10,20 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='bootstrap/ico/favicon.ico') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-select/bootstrap-select.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-switch/bootstrap-switch.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-select/css/bootstrap-select.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-switch/css/bootstrap-switch.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-validator/css/bootstrap-validator.css') }}">
 <!--
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap-theme.min.css') }}">
 -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/flat-ui.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='data-tables/css/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat-ui/css/flat-ui.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='customization/css/style.css') }}">
 </head>
 <body role="document">
 
 {% set active_group = active_group|default('Source') -%}
-{% set active_page  = active_page|default('/') -%}
+{% set active_page  =  active_page|default('/') -%}
 
 <div id="top-menu" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -30,27 +32,27 @@
                 <li class="dropdown {% if active_group == 'Source' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Исходные данные <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li{% if active_page == 'City' %} class="active"{% endif %}><a href="/city">Города</a></li>
-                        <li{% if active_page == 'School' %} class="active"{% endif %}><a href="/city/1/school">Школы</a></li>
-                        <li{% if active_page == 'Team' %} class="active"{% endif %}><a href="/city/school/team">Команды</a></li>
+                        <li{% if active_page == 'City'   %} class="active"{% endif %}><a href="/city">Города</a></li>
+                        <li{% if active_page == 'School' %} class="active"{% endif %}><a href="/city/0/school">Школы</a></li>
+                        <li{% if active_page == 'Team'   %} class="active"{% endif %}><a href="/city/0/school/0/team">Команды</a></li>
                         <li class="divider"></li>
-                        <li{% if active_page == 'Stage' %} class="active"{% endif %}><a href="/stage.html">Игровые стадии</a></li>
-                        <li{% if active_page == 'Season' %} class="active"{% endif %}><a href="/season.html">Сезоны</a></li>
+                        <li{% if active_page == 'Stage'  %} class="active"{% endif %}><a href="/stage">Игровые стадии</a></li>
+                        <li{% if active_page == 'Season' %} class="active"{% endif %}><a href="/season">Сезоны</a></li>
                     </ul>
                 </li>
                 <li class="dropdown {% if active_group == 'Calendar' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Календари соревнований <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li{% if active_page == 'SAS' %} class="active"{% endif %}><a href="/sas">Зоны/группы по возрастам</a></li>
+                        <li{% if active_page == 'SAS'  %} class="active"{% endif %}><a href="/sas">Зоны/группы по возрастам</a></li>
                         <li{% if active_page == 'SAST' %} class="active"{% endif %}><a href="/sast">Команды по зонам/группам</a></li>
+                        <li{% if active_page == 'GP'   %} class="active"{% endif %}><a href="/gp">Результаты матчей</a></li>
                     </ul>
                 </li>
-                <li class=""><a href="/gp">Результаты матчей</a></li>
                 <li class="dropdown {% if active_group == 'Rating' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Текущий рейтинг <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li{% if active_page == 'SchoolRating' %} class="active"{% endif %}><a href="/schoolrating.html">Школы</a></li>
-                        <li{% if active_page == 'TeamRating' %} class="active"{% endif %}><a href="/teamrating.html">Команды</a></li>
+                        <li{% if active_page == 'SchoolRating' %} class="active"{% endif %}><a href="/schoolrating">Школы</a></li>
+                        <li{% if active_page == 'TeamRating'   %} class="active"{% endif %}><a href="/teamrating">Команды</a></li>
                     </ul>
                 </li>
             </ul>
@@ -64,27 +66,51 @@
     <h3 class="header">{{ self.title() }}</h3>
 </div>
 
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть это сообщение</span></button>
+        {{ message }}
+    </div>
+{% endfor %}
+
 {% block body %}{% endblock %}
 
 </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <script src="{{ url_for('static', filename='data-tables/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static', filename='data-tables/js/dataTables.bootstrap.js') }}"></script>
+
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-select/bootstrap-select.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap-select/bootstrap-select-enabler.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap-switch/bootstrap-switch.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap-switch/bootstrap-switch-enabler.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap/js/flatui-checkbox.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap/js/flatui-radio.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap/js/zoneGroupPlayoffToggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='selectAction.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-select/js/bootstrap-select.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-switch/js/bootstrap-switch.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='flat-ui/js/flatui-checkbox.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat-ui/js/flatui-radio.js') }}"></script>
+
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <script type="text/javascript">
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('table').dataTable( {
+                'language': {
+                    'lengthMenu':   '_MENU_ <div class="dataTables_length_caption">записей на страницу</div>',
+                    'zeroRecords':  '',
+                    'emptyTable':   '',
+                    'info':         'Страница _PAGE_ из _PAGES_',
+                    'infoEmpty':    'Нет данных для отображения',
+                    'infoFiltered': '(отобрано из _MAX_ записей)'
+                }
+            } );
+        $('select').selectpicker();
+        $('.checkbox').bootstrapSwitch();
+        } );
+</script>
 
-    </script>
-
+<script src="{{ url_for('static', filename='bootstrap-validator/js/bootstrap-validator.js') }}"></script>
+{% block scripts %}{% endblock %}
 </body>

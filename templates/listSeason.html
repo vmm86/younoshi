@@ -1,0 +1,68 @@
+{% extends "index.html" %}
+
+{% set active_group = "Source" %}
+{% set active_page  = "Season" %}
+
+{% block title %}Сезоны, в рамках которых проводятся соревнования{% endblock %}
+
+{% block body %}
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть это сообщение</span></button>
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="row">
+
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10">
+        <table id="listSeason" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
+                    </a>
+                </td>
+                <td class="tableNumber">#</td>
+                <td class="tableText">Сезон</td>
+                <td class="tableInputRight"></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lse in listSeason %}
+            <tr>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lse.season_ID }}">
+                        <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
+                    </a>
+                </td>
+                <td class="tableNumber">{{ loop.index }}</td>
+                <td class="tableText">{{ lse.seasonName }}</td>
+                <td class="tableInputRight">
+                    {% include "includes/deleteSeason.html" %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-1"></div>
+
+</div>
+
+{% include "includes/createSeason.html" %}
+
+{% for lse in listSeason %}
+    {% include "includes/updateSeason.html" %}
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='customization/js/createValidation.js') }}"></script>
+{% endblock %}

@@ -1,23 +1,25 @@
-{% for lc in listCity %}
-<form class="flat-form" name="update" method="post" action="{{ url_for('updateCity', cityid = lc.city_ID) }}">
+
+<form class="flat-form update-form" name="update" method="POST" action="{{ url_for('updateCity', cityid = lc.city_ID) }}">
     <div id="Modal_update_{{ lc.city_ID }}" class="modal fade modal-lg" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" aria-labelledby="Modal_update_Label">Изменить город</h3>
+                    <a href="{{ url_for('listCity') }}">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                    </a>
+                    <h3 class="modal-title" aria-labelledby="Modal_update_Label">Изменить г. {{ lc.cityName }}</h3>
                 </div>
 
                 <div class="modal-body">
-                    <div class="btn-group">
+                    <div class="form-group btn-group">
                         <label class="btn-label" for="cityName">Город</label> 
                         <input class="form-control" type="text" name="cityName" value="{{ lc.cityName }}">
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-danger" type="cancel" data-dismiss="modal">Отмена</button>
+                    <a class="btn btn-danger" href="{{ url_for('listCity') }}">Отмена</a>
                     <button class="btn btn-success" type="submit" name="modify" value="update">Изменить</button>
                 </div>
 
@@ -25,4 +27,3 @@
         </div>
     </div>
 </form>
-{% endfor %}

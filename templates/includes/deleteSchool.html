@@ -1,5 +1,5 @@
 
-<form id="delete" class="flat-form" method="POST" action="{{ url_for('deleteSchool', cityid = ls.city_ID.city_ID, schoolid = ls.school_ID) }}">
+<form class="flat-form delete-form" method="POST" action="{{ url_for('deleteSchool', cityid = ls.city_ID.city_ID, schoolid = ls.school_ID) }}">
     <button type="submit" name="modify" value="delete" class="form-control flat btn-danger input-sm">
         <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
     </button>

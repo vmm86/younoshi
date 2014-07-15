@@ -24,5 +24,5 @@ small.help-block {
 
 .has-success .form-control,
 .has-error   .form-control {
-    color: inherit;
+    color: inherit !important;
 }

@@ -98,7 +98,7 @@ table tr td {
 
     float: left;
 
-    right: 8.45rem;
+    right: 7.9rem;
 }
 
 .tableInputLeft input:hover,
@@ -234,17 +234,14 @@ input[type="number"] {
 
 .form-control.btn-success {
     background: #58D68D;
-
     text-shadow: 1px 1px 0 #27AE60;
 }
 .form-control.btn-warning {
     background: #F5D313;
-
     text-shadow: 1px 1px 0 #F39C12;
 }
 .form-control.btn-danger {
-    background: #EC7063;
-
+    background: #EF5A4A;
     text-shadow: 1px 1px 0 #C0392B;
 }
 
@@ -252,7 +249,7 @@ input[type="number"] {
     background: #2ECC71;
 }
 .form-control.btn-warning:hover {
-    background: #F1C40F;
+    background: #EFC20E;
 }
 .form-control.btn-danger:hover {
     background: #E74C3C;
@@ -270,7 +267,7 @@ input[type="number"] {
     line-height: inherit !important;
     text-transform: uppercase;
 
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem 0.5rem 0;
     margin: 0;
 }
 
@@ -281,6 +278,10 @@ input[type="number"] {
     line-height: inherit;
 
     padding: 0.4rem 1rem;
+}
+
+a.btn {
+    text-transform: uppercase;
 }
 
 /* Выбор игровой стадии */
@@ -478,14 +479,14 @@ fieldset[disabled] .btn {
 
 /* Модальные окна */
 
+.modal-dialog {
+    margin: 53px auto 0 auto;
+}
+
 .modal-lg {
     overflow: visible;
 
     width: 80%;
-}
-
-.modal-footer {
-    text-align: center;
 }
 
 .modal-content {
@@ -495,9 +496,68 @@ fieldset[disabled] .btn {
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.5);
 }
 
+.modal-header {
+    padding: 0 15px;
+}
+
+.close {
+    font-size: 36px;
+    line-height: 1.25;
+}
+
+.modal-body {
+    padding: 1.5rem 2.5rem;
+}
+
+.modal-footer {
+    text-align: center;
+    padding: 7px 0;
+    margin: 0;
+}
+
+.modal-footer .btn-success {
+    background: #2ECC71;
+    text-shadow: 1px 1px 0 #27AE60;
+}
+.modal-footer .btn-warning {
+    background: #F1C40F;
+    text-shadow: 1px 1px 0 #F39C12;
+}
+.modal-footer .btn-danger {
+    background: #E74C3C;
+    text-shadow: 1px 1px 0 #C0392B;
+}
+
+.modal-footer .btn-success:hover {
+    background: #23BF64;
+    text-shadow: 1px 1px 0 #27AE60;
+}
+.modal-footer .btn-warning:hover {
+    background: #DFB200;
+    text-shadow: 1px 1px 0 #F39C12;
+}
+.modal-footer .btn-danger:hover {
+    background: #CF3626;
+    text-shadow: 1px 1px 0 #C0392B;
+}
+
+.modal-footer .btn.disabled, 
+.modal-footer .btn[disabled], 
+.modal-footer fieldset[disabled] .btn {
+    background-color: #BDC3C7;
+    color: #FFF;
+    text-shadow: none;
+    opacity: 1;
+}
+
 /* Список возрастов */
 
+.btn-info.active {
+    background: #268BCF;
+}
+
 [data-toggle="buttons"] label input[type="radio"] {
+    display: inline-block;
     visibility: hidden !important;
     
     position: absolute;
@@ -506,26 +566,36 @@ fieldset[disabled] .btn {
 }
 
 .listAgeTop, 
-.listAgeBottom {
-    margin: 0 !important;
+.listAgeBottom,
+.stageTypeTop,
+.stageTypeBottom {
+    margin:  0 !important;
     padding: 0 !important;
 
     width: 100% !important;
 }
 
-.listAgeTop    > label,
-.listAgeBottom > label {
+.listAgeTop      > label,
+.listAgeBottom   > label,
+.stageTypeTop    > label,
+.stageTypeBottom > label {
     font-weight: bold !important;
-}
-.listAgeTop    > label.active,
-.listAgeBottom > label.active {
-    text-shadow: -1px -1px 0 rgba(0, 60, 100, 0.5);
+    text-shadow: 1px 1px 0 rgba(0, 60, 100, 0.35);
 }
 
-.listAgeTop    > label:first-child {
+.stageTypeTop > label {
+    width: 75px;
+}
+.stageTypeBottom > label {
+    width: 150px;
+}
+
+.listAgeTop    > label:first-child,
+.stageTypeTop  > label:first-child  {
     border-radius: 1rem 0 0 0 !important;
 }
-.listAgeTop    > label:last-child {
+.listAgeTop    > label:last-child,
+.stageTypeTop  > label:last-child  {
     border-radius: 0 1rem 0 0 !important;
 }
 .listAgeBottom > label:first-child {
@@ -533,6 +603,31 @@ fieldset[disabled] .btn {
 }
 .listAgeBottom > label:last-child {
     border-radius: 0 0 1rem 0 !important;
+}
+.stageTypeBottom > label {
+    border-radius: 0 0 1rem 1rem !important;
+}
+
+.listAgeTop    > label.active {
+    box-shadow: 0 -4px 4px -1px    rgba(0, 0, 0, 0.2) inset;
+}
+.listAgeTop    > label:first-child.active,
+.stageTypeTop  > label:first-child.active {
+    box-shadow: -4px -4px 4px -1px rgba(0, 0, 0, 0.2) inset;
+}
+.listAgeTop    > label:last-child.active,
+.stageTypeTop  > label:last-child.active {
+    box-shadow: 4px -4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
+}
+.listAgeBottom    > label.active,
+.stageTypeBottom  >  label.active {
+    box-shadow: 0 4px 4px -1px     rgba(0, 0, 0, 0.2) inset;
+}
+.listAgeBottom    > label:first-child.active {
+    box-shadow: -4px 4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
+}
+.listAgeBottom    > label:last-child.active {
+    box-shadow: 4px 4px 4px -1px   rgba(0, 0, 0, 0.2) inset;
 }
 
 /* Валидация форм */
@@ -542,26 +637,4 @@ input.error {
     font-weight: bold;
     padding: 0px 1.5rem;
     margin: 0;
-}
-
-/**/
-
-.close {
-    font-size: 36px;
-    line-height: 1.25;
-}
-
-.modal-header {
-    padding: 0 15px;
-}
-
-.modal-footer {
-    padding: 20px;
-    margin: 0;
-}
-
-/* Всплывающие сообщения */
-
-.alert .close {
-    line-height: 0;
 }

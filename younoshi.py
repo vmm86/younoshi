@@ -1,14 +1,13 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-import datetime
+import datetime, MySQLdb
 
-from flask import Flask
-from flask import g
-from flask import redirect
-from flask import request
-from flask import session
-from flask import url_for, abort, render_template, flash
+from werkzeug.wrappers import BaseRequest
+from werkzeug.wsgi import responder
+from werkzeug.exceptions import default_exceptions, HTTPException, NotFound
+
+from flask import Flask, g, redirect, request, session, url_for, abort, render_template, flash
 from functools import wraps
 from hashlib import md5
 from peewee import *
@@ -23,6 +22,8 @@ PASSWD     = 'test'
 
 SECRET_KEY = '~a8a<uccng{,3}fr$[#n5\*s=h7"2n=}jhd-?y6dbb8a(n6+esykqy'
 DEBUG      = True
+
+# TRAP_BAD_REQUEST_ERRORS = True
 
 # Инициализация приложения
 app = Flask(__name__)
@@ -252,61 +253,263 @@ def mainpage():
 #     flash('Вы вышли из системы')
 #     return redirect(url_for('homepage'))
 
+# @app.errorhandler(400)
+# def key_error(e):
+#     flash('К сожалению, ваш запрос не удалось выполнить. Попробуйте сделать это ещё раз, введя все необходимые данные.')
+#     return render_template('index.html'), 400
+
 ## Города
 @app.route('/city')
 def listCity():
-    listCity = City.select().order_by(City.city_ID)
-    return render_template('sourceCity.html', listCity = listCity)
+    listCity = City.select().order_by(City.cityName)
+    return render_template(
+        'listCity.html', 
+            listCity = listCity
+    )
 
 @app.route('/city/create', methods=['GET', 'POST'])
 def createCity():
     if request.method == 'POST':
         if  request.form['modify'] == 'create':
             cityname  = request.form['cityName']
-            City.create(cityName=cityname)
-            return redirect(url_for('listCity'))
+            City.create(cityName   = cityname)
+            return redirect(
+                url_for('listCity')
+            )
 
-@app.route('/city/<int:cityid>/update', methods=['GET', 'POST'])
+@app.route('/city/<int:cityid>/update', methods = ['GET', 'POST'])
 def updateCity(cityid):
     if request.method == 'POST':
         if  request.form['modify'] == 'update':
             cityname  = request.form['cityName']
-            City.update(cityName = cityname).where(City.city_ID == cityid).execute()
-            return redirect(url_for('listCity'))
+            City.update(cityName   = cityname).where(City.city_ID == cityid).execute()
+            return redirect(
+                url_for('listCity')
+            )
 
-@app.route('/city/<int:cityid>/delete', methods=['GET', 'POST'])
+@app.route('/city/<int:cityid>/delete', methods = ['GET', 'POST'])
 def deleteCity(cityid):
     if request.method == 'POST':
         if  request.form['modify'] == 'delete':
-            City.get(city_ID = cityid).delete_instance()
-            return redirect(url_for('listCity'))
+            try:
+                City.get(city_ID   = cityid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить этот город, пока с ним связана хотя бы одна спортивная школа')
+            return redirect(
+                url_for('listCity')
+            )
 
 ## Спортивные школы
 @app.route('/city/<int:cityid>/school')
 def listSchool(cityid):
-    listCity   = City.select().order_by(City.city_ID)
-    listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.school_ID)
-    return render_template('sourceSchool.html', listCity = listCity, listSchool = listSchool)
+    listCity   = City.select().order_by(City.cityName)
+    try:
+        cityname = City.get(city_ID = cityid).cityName
+    except City.DoesNotExist:
+        cityname = 0
+    listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.schoolName)
+    return render_template(
+        'listSchool.html', 
+            listCity   = listCity, 
+            listSchool = listSchool, 
+            cityid     = cityid, 
+            cityname   = cityname
+    )
 
-@app.route('/city/<int:cityid>/school/create', methods=['GET', 'POST'])
+@app.route('/city/<int:cityid>/school/create', methods = ['GET', 'POST'])
 def createSchool(cityid):
     if request.method == 'POST':
         if  request.form['modify'] == 'create':
             schoolname = request.form['schoolName']
-            School.create(city_ID=cityid, schoolName=schoolname)
-            return redirect(url_for('listSchool', cityid = cityid))
+            School.create(city_ID  = cityid, schoolName  = schoolname)
+            return redirect(
+                url_for('listSchool', 
+                    cityid = cityid)
+            )
 
-@app.route('/city/<int:cityid>/school/<int:schoolid>/update', methods=['GET', 'POST'])
+@app.route('/city/<int:cityid>/school/<int:schoolid>/update', methods = ['GET', 'POST'])
 def updateSchool(cityid, schoolid):
     if request.method == 'POST':
         if  request.form['modify'] == 'update':
             schoolname = request.form['schoolName']
-            School.update(city_ID=cityid, schoolName = schoolname).where(School.school_ID == schoolid).execute()
-            return redirect(url_for('listSchool', cityid = cityid))
+            School.update(city_ID  = cityid, schoolName  = schoolname).where(School.school_ID == schoolid).execute()
+            return redirect(
+                url_for('listSchool', 
+                    cityid = cityid)
+            )
 
-@app.route('/city/<int:cityid>/school/<int:schoolid>/delete', methods=['GET', 'POST'])
+@app.route('/city/<int:cityid>/school/<int:schoolid>/delete', methods = ['GET', 'POST'])
 def deleteSchool(cityid, schoolid):
     if request.method == 'POST':
         if  request.form['modify'] == 'delete':
-            School.get(city_ID=cityid, school_ID=schoolid).delete_instance()
-            return redirect(url_for('listSchool', cityid = cityid))
+            try:
+                School.get(city_ID = cityid, school_ID = schoolid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить эту спортивную школу, пока с ней связана хотя бы одна команда')
+            return redirect(
+                url_for('listSchool', 
+                    cityid = cityid)
+            )
+
+## Команды
+@app.route('/city/<int:cityid>/school/<int:schoolid>/team')
+def listTeam(cityid, schoolid):
+    listCity = City.select().order_by(City.cityName)
+    try:
+        cityname = City.get(city_ID = cityid).cityName
+    except City.DoesNotExist:
+        cityname   = None
+    listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.schoolName)
+    try:
+        schoolname = School.get(school_ID = schoolid).schoolName
+    except School.DoesNotExist:
+        schoolname = None
+    listAge    = Age.select().order_by(Age.ageName)
+    listTeam   = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).order_by(Team.team_ID)
+    return render_template(
+        'listTeam.html', 
+            listCity   = listCity, 
+            listSchool = listSchool, 
+            listAge    = listAge, 
+            listTeam   = listTeam, 
+            cityid     = cityid, 
+            cityname   = cityname, 
+            schoolid   = schoolid, 
+            schoolname = schoolname
+    )
+
+@app.route('/city/<int:cityid>/school/<int:schoolid>/team/create', methods = ['GET', 'POST'])
+def createTeam(cityid, schoolid):
+    if  request.form['modify'] == 'reset':
+        return redirect(
+            url_for('listTeam', 
+                cityid   = cityid, 
+                schoolid = schoolid)
+            )
+    if request.method == 'POST':
+        if  request.form['modify'] == 'create':
+            teamname  = request.form['teamName']
+            ageid     = request.form['ageid']
+            Team.create(school_ID  = schoolid,  age_ID = ageid,  teamName = teamname)
+            return redirect(
+                url_for('listTeam', 
+                    cityid   = cityid, 
+                    schoolid = schoolid)
+            )
+
+@app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/update', methods = ['GET', 'POST'])
+def updateTeam(cityid, schoolid, teamid):
+    if  request.form['modify'] == 'cancel':
+        return redirect(
+            url_for('listTeam', 
+                cityid   = cityid, 
+                schoolid = schoolid)
+        )
+    if request.method == 'POST':
+        if  request.form['modify'] == 'update':
+            teamname  = request.form['teamName']
+            ageid     = request.form['ageid']
+            Team.update(school_ID  = schoolid,  age_ID = ageid,  teamName = teamname).where(Team.team_ID == teamid).execute()
+            return redirect(
+                url_for('listTeam', 
+                    cityid   = cityid, 
+                    schoolid = schoolid,
+                    teamid   = teamid)
+            )
+
+@app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods  = ['GET', 'POST'])
+def deleteTeam(cityid, schoolid, teamid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'delete':
+            Team.get(school_ID     = schoolid, team_ID = teamid).delete_instance()
+            return redirect(
+                url_for('listTeam', 
+                    cityid   = cityid, 
+                    schoolid = schoolid,
+                    teamid   = teamid)
+            )
+
+## Игровые стадии
+@app.route('/stage')
+def listStage():
+    listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
+    return render_template(
+        'listStage.html', 
+            listStage = listStage
+    )
+
+@app.route('/stage/create', methods=['GET', 'POST'])
+def createStage():
+    if request.method == 'POST':
+        if  request.form['modify'] == 'create':
+            stagetype  = request.form['stagetype']
+            stagename  = request.form['stageName']
+            Stage.create(stageType = stagetype, stageName = stagename)
+            return redirect(
+                url_for('listStage')
+            )
+
+@app.route('/stage/<int:stageid>/update', methods = ['GET', 'POST'])
+def updateStage(stageid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'update':
+            stagetype  = request.form['stagetype']
+            stagename  = request.form['stageName']
+            Stage.update(stageType = stagetype, stageName = stagename).where(Stage.stage_ID == stageid).execute()
+            return redirect(
+                url_for('listStage')
+            )
+
+@app.route('/stage/<int:stageid>/delete', methods = ['GET', 'POST'])
+def deleteStage(stageid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'delete':
+            try:
+                Stage.get(stage_ID = stageid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить эту игровую стадию, пока с ним связан хотя бы один внутрисезонный игровой этап')
+            return redirect(
+                url_for('listStage')
+            )
+
+## Сезоны
+@app.route('/season')
+def listSeason():
+    listSeason = Season.select().order_by(Season.seasonName)
+    return render_template(
+        'listSeason.html', 
+            listSeason = listSeason
+    )
+
+@app.route('/season/create', methods=['GET', 'POST'])
+def createSeason():
+    if request.method == 'POST':
+        if  request.form['modify'] == 'create':
+            seasonname  = request.form['seasonName']
+            Season.create(seasonName = seasonname)
+            return redirect(
+                url_for('listSeason')
+            )
+
+@app.route('/season/<int:seasonid>/update', methods = ['GET', 'POST'])
+def updateSeason(seasonid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'update':
+            seasonname  = request.form['seasonName']
+            Season.update(seasonName = seasonname).where(Season.season_ID == seasonid).execute()
+            return redirect(
+                url_for('listSeason')
+            )
+
+@app.route('/season/<int:seasonid>/delete', methods = ['GET', 'POST'])
+def deleteSeason(seasonid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'delete':
+            try:
+                Season.get(season_ID = seasonid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить этот сезон, пока с ним связан хотя бы один внутрисезонный игровой этап')
+            return redirect(
+                url_for('listSeason')
+            )
+
