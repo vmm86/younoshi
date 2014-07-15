@@ -1,0 +1,66 @@
+
+<form class="flat-form create-form" name="create" method="POST" action="{{ url_for('createTeam', cityid = cityid, schoolid = schoolid) }}">
+    <div id="Modal_create" class="modal fade modal-lg" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <a href="{{ url_for('listSAS') }}">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                    </a>
+                    <h3 class="modal-title" aria-labelledby="Modal_editSAS_Label">Добавить/изменить команду, участвующую в выбранной игровой стадии в текущем сезоне</h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-4" style="text-align: center;">
+                            <div class="form-group btn-group">
+                                <label class="btn-label" for="chooseCity">Выберите город</label>
+                                <select id="chooseCity" name="chooseCity" class="selectpicker" data-live-search="true" data-style="btn-info">
+                                    <option value="1">Белгород</option>
+                                    <option value="2">Воронеж</option>
+                                    <option value="3">Волжский</option>
+                                    <option value="4">Смоленск</option>
+                                    <option value="5">Тамбов</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4" style="text-align: center;">
+                            <div class="form-group btn-group">
+                                <label class="btn-label" for="chooseSchool">Выберите школу</label>
+                                <select id="chooseSchool" name="chooseSchool" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+                                    <option value="1">Первая школа</option>
+                                    <option value="2">Вторая школа</option>
+                                    <option value="3">Третья школа</option>
+                                    <option value="4">Четвёртая школа</option>
+                                    <option value="5">Пятая школа</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4" style="text-align: center;">
+                            <div class="form-group btn-group">
+                                <label class="btn-label" for="chooseTeam">Выберите команду</label>
+                                <select id="chooseTeam" class="selectpicker" name="chooseTeam" data-live-search="true" data-style="btn-info" data-width="auto">
+                                    <option value="1">Первая школа</option>
+                                    <option value="2">Вторая школа</option>
+                                    <option value="3">Третья школа</option>
+                                    <option value="4">Четвёртая школа</option>
+                                    <option value="5">Пятая школа</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-success">Сохранить</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
