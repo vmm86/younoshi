@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% set active_group = "Source" %}
-{% set active_page  = "Team" %}
+{% set active_page  = "Team"   %}
 
 {% block title %}Юношеские команды из разных спортивных школ и их распределение по возрастам{% endblock %}
 
@@ -20,9 +20,9 @@
             <div class="btn-group">
                 <label class="btn-label" for="filterCityforTeam">Выберите город</label>
                 <select id="filterCityforTeam" name="filterCityforTeam" class="selectpicker" data-live-search="true" data-style="btn-info">
-                    <option value="0" {% for lc in listCity %}{% if lc.city_ID == cityid %} selected{% endif %}{% endfor %}>выберите город</option>
+                    <option value="0" {% for lc in listCity %}{% if lc.city_ID == cityid %}selected{% endif %}{% endfor %}>выберите город</option>
                 {% for lc in listCity %}
-                    <option value="{{ lc.city_ID }}" {% if lc.city_ID == cityid %} selected{% endif %}>{{ lc.cityName }}</option>
+                    <option value="{{ lc.city_ID }}" {% if lc.city_ID == cityid %}selected{% endif %}>{{ lc.cityName }}</option>
                 {% endfor %}
                 </select>
             </div>
@@ -34,12 +34,12 @@
             <div class="btn-group">
                 <label class="btn-label" for="filterSchoolforTeam">Выберите школу</label>
                 <select id="filterSchoolforTeam" name="filterSchoolforTeam" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto" {% if listSchool.count() == 0 %} disabled="disabled"{% endif %}>
-                    <option value="0" {% for ls in listSchool %}{% if ls.school_ID == schoolid %} selected{% endif %}{% endfor %}>
+                    <option value="0" {% for ls in listSchool %}{% if ls.school_ID == schoolid %}selected{% endif %}{% endfor %}>
                         {% if listSchool.count() >  0 %}выберите школу{% endif %}
                         {% if listSchool.count() == 0 %}{% endif %}
                     </option>
                 {% for ls in listSchool %}
-                    <option value="{{ ls.school_ID }}" {% if ls.school_ID == schoolid %} selected{% endif %}>{{ ls.schoolName }}</option>
+                    <option value="{{ ls.school_ID }}" {% if ls.school_ID == schoolid %}selected{% endif %}>{{ ls.schoolName }}</option>
                 {% endfor %}
                 </select>
             </div>

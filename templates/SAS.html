@@ -1,0 +1,84 @@
+{% extends "index.html" %}
+
+{% set active_group = "Calendar" %}
+{% set active_page  = "SAS"      %}
+
+{% block title %}Игровые стадии в выбранном сезоне{% endblock %}
+
+{% block body %}
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть это сообщение</span></button>
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="row" style="margin-left: 35rem;">
+    <div class="col-md-4">
+        <form id="filterSeason" class="flat-form" name="filterSeason">
+            <div class="btn-group">
+                <label class="btn-label" for="filterSeasonforSAS">Выберите сезон</label>
+                <select id="filterSeasonforSAS" name="filterSeasonforSAS" class="selectpicker" data-live-search="true" data-style="btn-info">
+                    <option value="0" {% for lse in listSeason %}{% if lse.season_ID == seasonid %}selected{% endif %}{% endfor %}>выберите сезон</option>
+                {% for lse in listSeason %}
+                    <option value="{{ lse.season_ID }}" {% if lse.season_ID == seasonid %}selected{% endif %}>{{ lse.seasonName }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10">
+        <table id="listSAS" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
+                    </a>
+                </td>
+                <td class="tableNumber">#</td>
+                <td class="tableText">Возраст</td>
+                <td class="tableText">Игровая стадия</td>
+                <td class="tableInputRight"></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lsas in listSAS %}
+            <tr>
+                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSAST"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableNumber">{{ loop.index }}</td>
+                <td class="tableText">{{ lsas.age_ID.ageName }}</td>
+                <td class="tableText">{{ lsas.stage_ID.stageName }}</td>
+                <td class="tableInputRight">
+                    {% include "includes/deleteSAS.html" %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-1"></div>
+
+</div>
+
+{% for lsas in listSAS %}
+    {% include "includes/createSAS.html" %}
+{% endfor %}
+
+{% for lsas in listSAS %}
+    {% include "includes/updateSAS.html" %}
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='customization/js/createValidation.js') }}"></script>
+{% endblock %}

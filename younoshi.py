@@ -187,15 +187,6 @@ class GameProtocol(YounoshiModel):
 #         return f(*args, **kwargs)
 #     return inner
 
-# Имея шаблон и экземпляр класса SelectQuery, получаем постраничный перечень объектов (пагинация с помощью функции object_list) из запроса в самом шаблоне.
-def object_list(template_name, qr, var_name='object_list', **kwargs):
-    kwargs.update(
-        page=int(request.args.get('page', 1)),
-        pages=qr.count() / 20 + 1
-    )
-    kwargs[var_name] = qr.paginate(kwargs['page'])
-    return render_template(template_name, **kwargs)
-
 # Получаем одиночный объект, соответствующий запросу или страницу ошибки 404.
 # Используется алиас вызова метода "GET" из модели, который получает одиночный объект 
 # или выдаёт исключение DoesNotExist, если ни одного такого объекта не найдено.
@@ -513,3 +504,34 @@ def deleteSeason(seasonid):
                 url_for('listSeason')
             )
 
+## СезонВозрастСтадия
+@app.route('/season/<int:seasonid>/sas')
+def listSAS(seasonid):
+    listSeason = Season.select().order_by(Season.season_ID.asc())
+    try:
+        seasonname = Season.get(season_ID = seasonid).seasonName
+    except Season.DoesNotExist:
+        seasoname  = None
+    listAge   = Age.select().order_by(Age.ageName)
+    listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
+    listSAS   = SeasonAgeStage.select().order_by(SeasonAgeStage.SAS_ID)
+    return render_template(
+        'SAS.html', 
+            listSeason = listSeason,
+            listAge    = listAge,
+            listStage  = listStage,
+            listSAS    = listSAS,
+            seasonid   = seasonid
+    )
+
+@app.route('/sas/create', methods=['GET', 'POST'])
+def createSAS():
+    if request.method == 'POST':
+        if  request.form['modify'] == 'create':
+            seasonid  = request.form['season_ID']
+            ageid     = request.form['age_ID']
+            stageid   = request.form['stage_ID']
+            SeasonAgeStage.create(season_ID = seasonid, age_ID = ageid, stage_ID = stageid)
+            return redirect(
+                url_for('listSAS')
+            )
