@@ -8,7 +8,7 @@
                     <a href="{{ url_for('listTeam', cityid = cityid, schoolid = schoolid) }}">
                         <button type="button" class="close" aria-hidden="true">&times;</button>
                     </a>
-                    <h3 class="modal-title" aria-labelledby="Modal_update_Label">Добавить/изменить команду {{ lt.teamName }} (школа {{ schoolname}}, г. {{ cityname }})</h3>
+                    <h3 class="modal-title" aria-labelledby="Modal_update_Label">Изменить команду {{ lt.teamName }} (школа {{ schoolname}}, г. {{ cityname }})</h3>
                 </div>
 
                 <div class="modal-body">
@@ -22,8 +22,8 @@
                         <div class="btn-group listAgeTop">
                         {% for la in listAge %}
                             {% if loop.index in range(1,5) %}
-                            <label for="ageid_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == lt.age_ID.age_ID %}active{% endif %}">
-                                <input id="ageid_{{ la.age_ID }}" type="radio" name="ageid" value="{{ la.age_ID }}" {% if la.age_ID == lt.age_ID.age_ID %}checked{% endif %}>{{ la.ageName }}
+                            <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == lt.age_ID.age_ID %}active{% endif %}">
+                                <input id="age_ID_{{ la.age_ID }}" type="radio" name="age_ID" value="{{ la.age_ID }}" {% if la.age_ID == lt.age_ID.age_ID %}checked{% endif %}>{{ la.ageName }}
                             </label>
                             {% endif %}
                         {% endfor %}
@@ -31,8 +31,8 @@
                         <div class="btn-group listAgeBottom">
                         {% for la in listAge %}
                             {% if loop.index in range(5,9) %}
-                            <label for="ageid_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == lt.age_ID.age_ID %}active{% endif %}">
-                                <input id="ageid_{{ la.age_ID }}" type="radio" name="ageid" value="{{ la.age_ID }}" {% if la.age_ID == lt.age_ID.age_ID %}checked{% endif %}>{{ la.ageName }}
+                            <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == lt.age_ID.age_ID %}active{% endif %}">
+                                <input id="age_ID_{{ la.age_ID }}" type="radio" name="age_ID" value="{{ la.age_ID }}" {% if la.age_ID == lt.age_ID.age_ID %}checked{% endif %}>{{ la.ageName }}
                             </label>
                             {% endif %}
                         {% endfor %}
