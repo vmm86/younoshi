@@ -15,10 +15,12 @@
 {% endfor %}
 
 <div class="row" style="margin-left: 35rem;">
+
     <div class="col-md-4">
-        <form id="filterSeason" class="flat-form" name="filterSeason">
+        <form id="filterSeason" class="flat-form" name="filterSeason" style="text-align: center;">
             <div class="btn-group">
                 <label class="btn-label" for="filterSeasonforSAS">Выберите сезон</label>
+                <br>
                 <select id="filterSeasonforSAS" name="filterSeasonforSAS" class="selectpicker" data-live-search="true" data-style="btn-info">
                     <option value="0" {% for lse in listSeason %}{% if lse.season_ID == seasonid %}selected{% endif %}{% endfor %}>выберите сезон</option>
                 {% for lse in listSeason %}
@@ -28,6 +30,33 @@
             </div>
         </form>
     </div>
+
+    <div class="col-md-4">
+        <form id="filterAge" class="flat-form" name="filterAge" style="text-align: left;">
+            <div class="form-group btn-group" data-toggle="buttons">
+                <label class="btn-label">Выберите возраст</label>
+                <div class="btn-group listAgeTop">
+                {% for la in listAge %}
+                    {% if loop.index in range(1,5) %}
+                    <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAS" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                    </label>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <div class="btn-group listAgeBottom">
+                {% for la in listAge %}
+                    {% if loop.index in range(5,9) %}
+                    <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAS" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                    </label>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+        </form>
+    </div>
+
 </div>
 
 <div class="row">
@@ -35,16 +64,17 @@
     <div class="col-lg-1"></div>
 
     <div class="col-lg-10">
+        {% if not seasonid == 0 %}
+        {% if not ageid == 0 %}
         <table id="listSAS" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create">
-                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
-                    </a>
+                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a>
                 </td>
                 <td class="tableNumber">#</td>
-                <td class="tableText">Возраст</td>
+<!--                 <td class="tableText">Сезон</td>
+                <td class="tableText">Возраст</td> -->
                 <td class="tableText">Игровая стадия</td>
                 <td class="tableInputRight"></td>
             </tr>
@@ -52,10 +82,17 @@
         <tbody>
             {% for lsas in listSAS %}
             <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSAST"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lsas.SAS_ID }}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a>
+                </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText">{{ lsas.age_ID.ageName }}</td>
-                <td class="tableText">{{ lsas.stage_ID.stageName }}</td>
+<!--                 <td class="tableText">{{ lsas.season_ID.seasonName }}</td>
+                <td class="tableText">{{ lsas.age_ID.ageName }}</td> -->
+                <td class="tableText">
+                    {% if lsas.stage_ID.stageType == "Z" %}зона {{ lsas.stage_ID.stageName }}{% endif %}
+                    {% if lsas.stage_ID.stageType == "G" %}группа {{ lsas.stage_ID.stageName }}{% endif %}
+                    {% if lsas.stage_ID.stageType == "P" %}плэй-офф{% endif %}
+                </td>
                 <td class="tableInputRight">
                     {% include "includes/deleteSAS.html" %}
                 </td>
@@ -63,6 +100,8 @@
             {% endfor %}
         </tbody>
         </table>
+        {% endif %}
+        {% endif %}
     </div>
 
     <div class="col-lg-1"></div>
@@ -81,5 +120,6 @@
 
 {% block scripts %}
     <script src="{{ url_for('static', filename='customization/js/selectAction_SAS.js') }}"></script>
+    <script src="{{ url_for('static', filename='customization/js/zoneGroupPlayoffToggle.js') }}"></script>
     <script src="{{ url_for('static', filename='customization/js/formValidation.js') }}"></script>
 {% endblock %}

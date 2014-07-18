@@ -297,7 +297,7 @@ def listSchool(cityid):
     try:
         cityname = City.get(city_ID = cityid).cityName
     except City.DoesNotExist:
-        cityname = 0
+        cityname = None
     listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.schoolName)
     return render_template(
         'listSchool.html', 
@@ -371,16 +371,10 @@ def listTeam(cityid, schoolid):
 
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/create', methods = ['GET', 'POST'])
 def createTeam(cityid, schoolid):
-    if  request.form['modify'] == 'reset':
-        return redirect(
-            url_for('listTeam', 
-                cityid   = cityid, 
-                schoolid = schoolid)
-            )
     if request.method == 'POST':
         if  request.form['modify'] == 'create':
             teamname  = request.form['teamName']
-            ageid     = request.form['ageid']
+            ageid     = request.form['age_ID']
             Team.create(school_ID  = schoolid,  age_ID = ageid,  teamName = teamname)
             return redirect(
                 url_for('listTeam', 
@@ -390,16 +384,10 @@ def createTeam(cityid, schoolid):
 
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/update', methods = ['GET', 'POST'])
 def updateTeam(cityid, schoolid, teamid):
-    if  request.form['modify'] == 'cancel':
-        return redirect(
-            url_for('listTeam', 
-                cityid   = cityid, 
-                schoolid = schoolid)
-        )
     if request.method == 'POST':
         if  request.form['modify'] == 'update':
             teamname  = request.form['teamName']
-            ageid     = request.form['ageid']
+            ageid     = request.form['age_ID']
             Team.update(school_ID  = schoolid,  age_ID = ageid,  teamName = teamname).where(Team.team_ID == teamid).execute()
             return redirect(
                 url_for('listTeam', 
@@ -433,7 +421,7 @@ def listStage():
 def createStage():
     if request.method == 'POST':
         if  request.form['modify'] == 'create':
-            stagetype  = request.form['stagetype']
+            stagetype  = request.form['stageType']
             stagename  = request.form['stageName']
             Stage.create(stageType = stagetype, stageName = stagename)
             return redirect(
@@ -444,7 +432,7 @@ def createStage():
 def updateStage(stageid):
     if request.method == 'POST':
         if  request.form['modify'] == 'update':
-            stagetype  = request.form['stagetype']
+            stagetype  = request.form['stageType']
             stagename  = request.form['stageName']
             Stage.update(stageType = stagetype, stageName = stagename).where(Stage.stage_ID == stageid).execute()
             return redirect(
@@ -505,33 +493,68 @@ def deleteSeason(seasonid):
             )
 
 ## СезонВозрастСтадия
-@app.route('/season/<int:seasonid>/sas')
-def listSAS(seasonid):
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage')
+def listSAS(seasonid, ageid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
     try:
         seasonname = Season.get(season_ID = seasonid).seasonName
     except Season.DoesNotExist:
-        seasoname  = None
+        seasonname = None
     listAge   = Age.select().order_by(Age.ageName)
+    try:
+        agename    = Age.get(age_ID = ageid).ageName
+    except Age.DoesNotExist:
+        agename    = None
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
-    listSAS   = SeasonAgeStage.select().order_by(SeasonAgeStage.SAS_ID)
+    listSAS   = SeasonAgeStage.select().where(Season.season_ID == seasonid, Age.age_ID == ageid).join(Stage).where(Stage.stage_ID == SeasonAgeStage.stage_ID).order_by(Stage.stageName)
     return render_template(
         'SAS.html', 
             listSeason = listSeason,
             listAge    = listAge,
             listStage  = listStage,
             listSAS    = listSAS,
-            seasonid   = seasonid
+            seasonid   = seasonid,
+            seasonname = seasonname,
+            ageid      = ageid,
+            agename    = agename
     )
 
-@app.route('/sas/create', methods=['GET', 'POST'])
-def createSAS():
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/create', methods=['GET', 'POST'])
+def createSAS(seasonid, ageid):
     if request.method == 'POST':
         if  request.form['modify'] == 'create':
-            seasonid  = request.form['season_ID']
-            ageid     = request.form['age_ID']
+            ageid     = ageid
             stageid   = request.form['stage_ID']
             SeasonAgeStage.create(season_ID = seasonid, age_ID = ageid, stage_ID = stageid)
             return redirect(
-                url_for('listSAS')
+                url_for('listSAS',
+                    seasonid = seasonid,
+                    ageid    = ageid)
+            )
+
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/update', methods = ['GET', 'POST'])
+def updateSAS(seasonid, ageid, sasid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'update':
+            ageid     = ageid
+            sasid     = sasis
+            stageid   = request.form['stage_ID']
+            SeasonAgeStage.update(season_ID = seasonid, age_ID = ageid, stage_ID = stageid).where(SeasonAgeStage.SAS_ID == sasid).execute()
+            return redirect(
+                url_for('listSAS',
+                    seasonid = seasonid,
+                    ageid    = ageid,
+                    sasid    = sasid)
+            )
+
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/delete', methods  = ['GET', 'POST'])
+def deleteSAS(seasonid, ageid, sasid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'delete':
+            SeasonAgeStage.get(SAS_ID = sasid).delete_instance()
+            return redirect(
+                url_for('listSAS',
+                    seasonid = seasonid,
+                    ageid    = ageid,
+                    sasid    = sasid)
             )
