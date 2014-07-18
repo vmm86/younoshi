@@ -52,7 +52,7 @@
                     <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ ls.school_ID }}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText">{{ ls.schoolName }}</td>
+                <td class="tableText"><a href="/city/{{ ls.city_ID.city_ID }}/school/{{ ls.school_ID }}/team">{{ ls.schoolName }}</a></td>
                 <td class="tableInputRight">
                     {% include "includes/deleteSchool.html" %}
                 </td>

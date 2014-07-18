@@ -8,6 +8,18 @@ body {
     line-height: 1.6;
 }
 
+a {
+    color: #428BCA;
+    text-decoration: none;
+    transition: all 0.25s ease 0s;
+}
+a:hover, 
+a:focus {
+    color: #428BCA;
+    text-decoration: underline;
+    transition: all 0.25s ease 0s;
+}
+
 /* Заголовки */
 
 h1, h2, h3, h4, h5, h6 {

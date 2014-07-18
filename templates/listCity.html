@@ -41,7 +41,7 @@
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText">{{ lc.cityName }}</td>
+                <td class="tableText"><a href="/city/{{ lc.city_ID }}/school">{{ lc.cityName }}</a></td>
                 <td class="tableInputRight">
                     {% include "includes/deleteCity.html" %}
                 </td>
