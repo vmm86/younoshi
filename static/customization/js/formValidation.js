@@ -21,7 +21,7 @@ $(document).ready(function() {
                     notEmpty: {message: 'Не забудьте указать название команды'}
                 }
             },
-            ageid: {
+            age_ID: {
                 validators: {
                     notEmpty: {message: 'Не забудьте указать возраст игроков команды'}
                 }
@@ -31,7 +31,7 @@ $(document).ready(function() {
                     notEmpty: {message: 'Не забудьте указать сезон'}
                 }
             },
-            stagetype: {
+            stageType: {
                 validators: {
                     notEmpty: {message: 'Не забудьте указать тип игровой стадии'}
                 }
