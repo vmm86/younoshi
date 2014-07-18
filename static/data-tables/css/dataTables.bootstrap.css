@@ -1,7 +1,7 @@
 div.dataTables_length label {
 	font-weight: normal;
-	text-align: right;
     margin: 0;
+    margin-left: 136px;
     width: 100%;
     float: left;
 }
@@ -13,7 +13,8 @@ div.dataTables_length select {
 div.dataTables_length .bootstrap-select.input-sm {
     margin: 0 4px;
     width: 80px;
-    height: 36px;
+    height: 32px;
+    float: left;
 }
 
 div.dataTables_length .bootstrap-select.input-sm .dropdown-toggle {
@@ -21,11 +22,12 @@ div.dataTables_length .bootstrap-select.input-sm .dropdown-toggle {
 }
 
 div.dataTables_length .dataTables_length_caption {
-    float: right;
 }
 
 div.dataTables_filter {
-float: left;
+    float: right;
+    margin: 0;
+    margin-right: 150px;
 }
 
 div.dataTables_filter label {
