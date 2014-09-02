@@ -83,6 +83,7 @@ table tr td {
     color: #FFF;
     font-size: 1.3rem;
     font-weight: bold;
+    text-decoration: none;
     text-transform: uppercase;
     line-height: 1.35;
 
@@ -649,4 +650,35 @@ input.error {
     font-weight: bold;
     padding: 0px 1.5rem;
     margin: 0;
+}
+
+/* Пагинация */
+
+.pagination > li > a, 
+.pagination > li > span {
+    color: #3498DB;
+    background-color: #FFF;
+    border: 1px solid #BDC3C7;
+}
+
+.pagination > .active > a, 
+.pagination > .active > span, 
+.pagination > .active > a:hover, 
+.pagination > .active > span:hover, 
+.pagination > .active > a:focus, 
+.pagination > .active > span:focus {
+    background-color: #3498DB;
+    border-color: #3498DB;
+}
+
+.pagination > .disabled > span, 
+.pagination > .disabled > span:hover, 
+.pagination > .disabled > span:focus, 
+.pagination > .disabled > a, 
+.pagination > .disabled > a:hover, 
+.pagination > .disabled > a:focus {
+    color: #999;
+    background-color: #FFF;
+    border-color: #BDC3C7;
+    cursor: not-allowed;
 }
