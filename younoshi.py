@@ -26,7 +26,7 @@ DEBUG      = True
 # TRAP_BAD_REQUEST_ERRORS = True
 
 # Инициализация приложения
-app = Flask(__name__)
+app       = Flask(__name__)
 app.config.from_object(__name__) # доступ к переменным базовой конфигурации в верхнем регистре
 app.debug = True
 
@@ -122,6 +122,7 @@ class SeasonAgeStage(YounoshiModel):
     season_ID    = ForeignKeyField(db_column='season_ID',rel_model=Season,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='season_ID',null=False)
     age_ID       = ForeignKeyField(db_column='age_ID',rel_model=Age,related_name='age_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='age_ID',null=False)
     stage_ID     = ForeignKeyField(db_column='stage_ID',rel_model=Stage,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='stage_ID',null=False)
+    gameTitle    = CharField(db_column='gameTitle',max_length=16,null=False)
 
     class Meta:
         db_table = 'SeasonAgeStage'
@@ -132,9 +133,12 @@ class SeasonAgeStage(YounoshiModel):
 
 ## СезонВозрастСтадияКоманда
 class SeasonAgeStageTeam(YounoshiModel):
-    SAST_ID      = PrimaryKeyField(db_column='team_ID',)
-    SAS_ID       = ForeignKeyField(db_column='SAS_ID',rel_model=SeasonAgeStage,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
-    team_ID      = ForeignKeyField(db_column='SAST_ID',rel_model=Team,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
+    SAST_ID       = PrimaryKeyField(db_column='team_ID',)
+    SAS_ID        = ForeignKeyField(db_column='SAS_ID',rel_model=SeasonAgeStage,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
+    team_ID       = ForeignKeyField(db_column='SAST_ID',rel_model=Team,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
+    substageTitle = CharField(db_column='substageTitle',max_length=16,null=True)
+    startDate     = DateField(db_column='startDate',formats='%Y-%m-%d',null=True)
+    finishDate    = DateField(db_column='finishDate',formats='%Y-%m-%d',null=True)
 
     class Meta:
         db_table = 'SeasonAgeStageTeam'
@@ -375,7 +379,7 @@ def createTeam(cityid, schoolid):
         if  request.form['modify'] == 'create':
             teamname  = request.form['teamName']
             ageid     = request.form['age_ID']
-            Team.create(school_ID  = schoolid,  age_ID = ageid,  teamName = teamname)
+            Team.create(school_ID  = schoolid, age_ID = ageid, teamName = teamname)
             return redirect(
                 url_for('listTeam', 
                     cityid   = cityid, 
@@ -388,7 +392,7 @@ def updateTeam(cityid, schoolid, teamid):
         if  request.form['modify'] == 'update':
             teamname  = request.form['teamName']
             ageid     = request.form['age_ID']
-            Team.update(school_ID  = schoolid,  age_ID = ageid,  teamName = teamname).where(Team.team_ID == teamid).execute()
+            Team.update(school_ID  = schoolid, age_ID = ageid, teamName = teamname).where(Team.team_ID == teamid).execute()
             return redirect(
                 url_for('listTeam', 
                     cityid   = cityid, 
@@ -396,7 +400,7 @@ def updateTeam(cityid, schoolid, teamid):
                     teamid   = teamid)
             )
 
-@app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods  = ['GET', 'POST'])
+@app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods = ['GET', 'POST'])
 def deleteTeam(cityid, schoolid, teamid):
     if request.method == 'POST':
         if  request.form['modify'] == 'delete':
