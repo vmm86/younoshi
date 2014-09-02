@@ -1,11 +1,19 @@
 {% extends "index.html" %}
 
 {% set active_group = "Calendar" %}
-{% set active_page  = "SAST"      %}
+{% set active_page  = "SAST"     %}
 
-{% block title %}Игровые стадии в выбранном сезоне{% endblock %}
+{% block title %}Команды, участвующие в выбранной игровой стадии{% endblock %}
 
 {% block body %}
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть это сообщение</span></button>
+        {{ message }}
+    </div>
+{% endfor %}
+
 <form id="filterSAST" class="flat-form">
 
 <div class="row" style="text-align: center;">
