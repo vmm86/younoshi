@@ -97,15 +97,19 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('table').dataTable( {
-                'language': {
-                    'lengthMenu':   '_MENU_ <div class="dataTables_length_caption">записей на страницу</div>',
-                    'zeroRecords':  '',
-                    'emptyTable':   '',
-                    'info':         'Страница _PAGE_ из _PAGES_',
-                    'infoEmpty':    'Нет данных для отображения',
-                    'infoFiltered': '(отобрано из _MAX_ записей)'
+            'language': {
+                'lengthMenu':   '_MENU_ <div class="dataTables_length_caption">записей на страницу</div>',
+                'zeroRecords':  '',
+                'emptyTable':   '',
+                'info':         'Страница _PAGE_ из _PAGES_',
+                'infoEmpty':    'Нет данных для отображения',
+                'infoFiltered': '(отобрано из _MAX_ записей)',
+                'paginate': {
+                    'previous': '< назад',
+                    'next':     'вперёд >'
                 }
-            } );
+            }
+        } );
         $('select').selectpicker();
         $('.checkbox').bootstrapSwitch();
         } );
