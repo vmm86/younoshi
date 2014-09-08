@@ -194,6 +194,7 @@ table tr td {
 .dropdown-menu li.selected > a.highlighted {
     background: none repeat scroll 0% 0% #3498DB;
     color: #FFF;
+    text-shadow: 1px 1px 0px rgba(0, 60, 100, 0.5);
 }
 
 .dropdown-menu li.active > a:hover, 
@@ -297,6 +298,12 @@ a.btn {
     text-transform: uppercase;
 }
 
+.btn-info {
+    color: #FFF;
+    background: #3498DB;
+    text-shadow: 1px 1px 0 rgba(0, 60, 100, 0.5);
+}
+
 /* Выбор игровой стадии */
 
 #zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(3) {
@@ -380,6 +387,7 @@ fieldset[disabled] .btn {
 .dropdown-menu li > a:focus {
     background: #3498DB;
     color: #FFF;
+    text-shadow: 1px 1px 0px rgba(0, 60, 100, 0.5);
 }
 
 .dropdown-menu li:first-child > a {
@@ -593,7 +601,6 @@ fieldset[disabled] .btn {
 .stageTypeTop    > label,
 .stageTypeBottom > label {
     font-weight: bold !important;
-    text-shadow: 1px 1px 0 rgba(0, 60, 100, 0.35);
 }
 
 .stageTypeTop > label {
