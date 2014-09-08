@@ -32,20 +32,20 @@
                 <li class="dropdown {% if active_group == 'Source' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Исходные данные <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li{% if active_page == 'City'   %} class="active"{% endif %}><a href="/city">Города</a></li>
-                        <li{% if active_page == 'School' %} class="active"{% endif %}><a href="/city/0/school">Школы</a></li>
-                        <li{% if active_page == 'Team'   %} class="active"{% endif %}><a href="/city/0/school/0/team">Команды</a></li>
+                        <li{% if active_page == 'City'         %} class="active"{% endif %}><a href="/city">Города</a></li>
+                        <li{% if active_page == 'School'       %} class="active"{% endif %}><a href="/city/0/school">Школы</a></li>
+                        <li{% if active_page == 'Team'         %} class="active"{% endif %}><a href="/city/0/school/0/team">Команды</a></li>
                         <li class="divider"></li>
-                        <li{% if active_page == 'Stage'  %} class="active"{% endif %}><a href="/stage">Игровые стадии</a></li>
-                        <li{% if active_page == 'Season' %} class="active"{% endif %}><a href="/season">Сезоны</a></li>
+                        <li{% if active_page == 'Stage'        %} class="active"{% endif %}><a href="/stage">Игровые стадии</a></li>
+                        <li{% if active_page == 'Season'       %} class="active"{% endif %}><a href="/season">Сезоны</a></li>
                     </ul>
                 </li>
                 <li class="dropdown {% if active_group == 'Calendar' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Календари соревнований <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li{% if active_page == 'SAS'  %} class="active"{% endif %}><a href="/season/0/age/0/stage">Зоны/группы по возрастам</a></li>
-                        <li{% if active_page == 'SAST' %} class="active"{% endif %}><a href="/sast">Команды по зонам/группам</a></li>
-                        <li{% if active_page == 'GP'   %} class="active"{% endif %}><a href="/gp">Результаты матчей</a></li>
+                        <li{% if active_page == 'SAS'          %} class="active"{% endif %}><a href="/season/0/age/0/stage">Зоны/группы по возрастам</a></li>
+                        <li{% if active_page == 'SAST'         %} class="active"{% endif %}><a href="/season/0/age/0/stage/0/team">Команды по зонам/группам</a></li>
+                        <li{% if active_page == 'GP'           %} class="active"{% endif %}><a href="/gp">Результаты матчей</a></li>
                     </ul>
                 </li>
                 <li class="dropdown {% if active_group == 'Rating' %} active{% endif %}">
@@ -110,9 +110,11 @@
                 }
             }
         } );
+
         $('select').selectpicker();
+
         $('.checkbox').bootstrapSwitch();
-        } );
+    } );
 </script>
 
 <script src="{{ url_for('static', filename='bootstrap-validator/js/bootstrap-validator.js') }}"></script>

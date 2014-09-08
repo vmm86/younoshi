@@ -123,6 +123,8 @@ class SeasonAgeStage(YounoshiModel):
     age_ID       = ForeignKeyField(db_column='age_ID',rel_model=Age,related_name='age_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='age_ID',null=False)
     stage_ID     = ForeignKeyField(db_column='stage_ID',rel_model=Stage,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='stage_ID',null=False)
     gameTitle    = CharField(db_column='gameTitle',max_length=16,null=False)
+    startDate    = DateField(db_column='startDate',formats='%Y-%m-%d',null=True)
+    finishDate   = DateField(db_column='finishDate',formats='%Y-%m-%d',null=True)
 
     class Meta:
         db_table = 'SeasonAgeStage'
@@ -133,12 +135,10 @@ class SeasonAgeStage(YounoshiModel):
 
 ## СезонВозрастСтадияКоманда
 class SeasonAgeStageTeam(YounoshiModel):
-    SAST_ID       = PrimaryKeyField(db_column='team_ID',)
+    SAST_ID       = PrimaryKeyField(db_column='SAST_ID',)
     SAS_ID        = ForeignKeyField(db_column='SAS_ID',rel_model=SeasonAgeStage,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
-    team_ID       = ForeignKeyField(db_column='SAST_ID',rel_model=Team,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
+    team_ID       = ForeignKeyField(db_column='team_ID',rel_model=Team,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
     substageTitle = CharField(db_column='substageTitle',max_length=16,null=True)
-    startDate     = DateField(db_column='startDate',formats='%Y-%m-%d',null=True)
-    finishDate    = DateField(db_column='finishDate',formats='%Y-%m-%d',null=True)
 
     class Meta:
         db_table = 'SeasonAgeStageTeam'
@@ -450,7 +450,7 @@ def deleteStage(stageid):
             try:
                 Stage.get(stage_ID = stageid).delete_instance()
             except IntegrityError:
-                flash('Вы не можете удалить эту игровую стадию, пока с ним связан хотя бы один внутрисезонный игровой этап')
+                flash('Вы не можете удалить эту игровую стадию, пока с ним связан хотя бы один игровой этап внутри сезона')
             return redirect(
                 url_for('listStage')
             )
@@ -541,7 +541,7 @@ def updateSAS(seasonid, ageid, sasid):
     if request.method == 'POST':
         if  request.form['modify'] == 'update':
             ageid     = ageid
-            sasid     = sasis
+            sasid     = sasid
             stageid   = request.form['stage_ID']
             SeasonAgeStage.update(season_ID = seasonid, age_ID = ageid, stage_ID = stageid).where(SeasonAgeStage.SAS_ID == sasid).execute()
             return redirect(
@@ -561,4 +561,65 @@ def deleteSAS(seasonid, ageid, sasid):
                     seasonid = seasonid,
                     ageid    = ageid,
                     sasid    = sasid)
+            )
+
+## СезонВозрастСтадияКоманда
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team')
+def listSAST(seasonid, ageid, sasid):
+    seasonid   = seasonid
+    sasid      = sasid
+    ageid      = ageid
+
+    listSeason = Season.select().order_by(Season.season_ID.asc())
+    try:
+        seasonname = Season.get(season_ID = seasonid).seasonName
+    except Season.DoesNotExist:
+        seasonname = None
+
+    listAge    = Age.select().order_by(Age.ageName)
+    try:
+        agename    = Age.get(age_ID = ageid).ageName
+    except Age.DoesNotExist:
+        agename    = None
+
+    # listStage  = Stage.select().order_by(Stage.stageType, Stage.stageName)
+
+    listSAS_Z  = SeasonAgeStage.select().where(Season.season_ID == seasonid, Age.age_ID == ageid).join(Stage).where(Stage.stage_ID == SeasonAgeStage.stage_ID).where(Stage.stageType == "Z").order_by(Stage.stageName)
+    listSAS_G  = SeasonAgeStage.select().where(Season.season_ID == seasonid, Age.age_ID == ageid).join(Stage).where(Stage.stage_ID == SeasonAgeStage.stage_ID).where(Stage.stageType == "G").order_by(Stage.stageName)
+    listSAS_P  = SeasonAgeStage.select().where(Season.season_ID == seasonid, Age.age_ID == ageid).join(Stage).where(Stage.stage_ID == SeasonAgeStage.stage_ID).where(Stage.stageType == "P").order_by(Stage.stageName)
+
+    listTeam   = Team.select().join(School).join(City).switch(Team).join(Age).where(Age.age_ID == ageid).order_by(Team.team_ID)
+
+    listSAST   = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid)
+
+    return render_template(
+        'SAST.html', 
+            listSeason = listSeason,
+            listAge    = listAge,
+            # listStage  = listStage,
+            listSAS_Z  = listSAS_Z,
+            listSAS_G  = listSAS_G,
+            listSAS_P  = listSAS_P,
+            listTeam   = listTeam,
+            listSAST   = listSAST,
+            seasonid   = seasonid,
+            seasonname = seasonname,
+            ageid      = ageid,
+            agename    = agename,
+            sasid      = sasid
+    )
+
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/create', methods=['GET', 'POST'])
+def createSAST(seasonid, ageid, sasid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'create':
+            sasid = sasid
+            teamid = request.form['team_ID']
+            SeasonAgeStageTeam.create(SAS_ID = sasid, team_ID = teamid)
+            return redirect(
+                url_for('listSAST',
+                    seasonid = seasonid,
+                    ageid    = ageid,
+                    sasid    = sasid
+                    )
             )

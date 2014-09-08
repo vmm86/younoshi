@@ -14,45 +14,72 @@
     </div>
 {% endfor %}
 
-<form id="filterSAST" class="flat-form">
+<div class="row">
 
-<div class="row" style="text-align: center;">
-    <div class="btn-group">
-        <label class="btn-label" for="chooseSeason">Выберите сезон</label>
-        <select id="chooseSeason" name="chooseSeason" class="selectpicker" data-style="btn-info" data-toggle="">
-            <option value="1">2014</option>
-        </select>
-    </div>
-</div>
-
-<div class="row" style="text-align: center;">
-        <div class="btn-group" data-toggle="buttons">
-            <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center; border-radius: 1rem;">Выберите возраст</label>
-                <br>
-                <label class="btn btn-info" style="border-radius: 1rem 0 0 0;"><input type="radio" name="chooseAge" value="1">2004 г.р.</label>
-                <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">2003 г.р.</label>
-                <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">2002 г.р.</label>
-                <label class="btn btn-info" style="border-radius: 0 1rem 0 0;"><input type="radio" name="chooseAge" value="1">2001 г.р.</label>
-                <br>
-                <label class="btn btn-info" style="border-radius: 0 0 0 1rem;"><input type="radio" name="chooseAge" value="1">2000 г.р.</label>
-                <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">1999 г.р.</label>
-                <label class="btn btn-info"><input type="radio" name="chooseAge" value="1">1998 г.р.</label>
-                <label class="btn btn-info" style="border-radius: 0 0 1rem 0;"><input type="radio" name="chooseAge" value="1">1997 г.р.</label>
+    <div class="col-lg-5" style="text-align: right;">
+ 
+        <div class="btn-group">
+            <label class="btn-label" for="chooseSeason">Выберите сезон</label>
+            <br>
+            <select id="filterSeasonforSAST" name="filterSeasonforSAST" class="selectpicker" data-live-search="true" data-style="btn-info">
+                <option value="0" {% for lse in listSeason %}{% if lse.season_ID == seasonid %}selected{% endif %}{% endfor %}>
+                    {% if listSeason.count() >  0 %}выберите сезон{% endif %}
+                    {% if listSeason.count() == 0 %}{% endif %}
+                </option>
+            {% for lse in listSeason %}
+                <option value="{{ lse.season_ID }}" {% if lse.season_ID == seasonid %}selected{% endif %}>{{ lse.seasonName }}</option>
+            {% endfor %}
+            </select>
         </div>
+
+    </div>
+
+    <div class="col-lg-2" style="text-align: center;">
+
+            <div class="form-group btn-group" data-toggle="buttons">
+                <label class="btn-label">Выберите возраст</label>
+                <div class="btn-group listAgeTop">
+                {% for la in listAge %}
+                    {% if loop.index in range(1,5) %}
+                    <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAST" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                    </label>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <div class="btn-group listAgeBottom">
+                {% for la in listAge %}
+                    {% if loop.index in range(5,9) %}
+                    <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAST" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                    </label>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+
+    </div>
+
+    <div class="col-lg-5" style="text-align: left;"></div>
+
 </div>
 
 <div class="row">
+
     <div class="col-lg-5" style="text-align: right;">
 
-        <div id="chooseZoneContainer" class="btn-group">
+        <div id="chooseZoneContainer" class="form-group btn-group">
             <label class="btn-label" for="chooseZone">&nbsp;</label>
             <br>
-            <select id="chooseZone" name="chooseZone" class="selectpicker" data-style="btn-info">
-                <option value="5">г. Белгород</option>
-                <option value="4">г. Волжский</option>
-                <option value="3">г. Воронеж</option>
-                <option value="2">г. Смоленск</option>
-                <option value="1">г. Тамбов</option>
+            <br>
+            <select id="chooseZone" name="stage_ID" class="selectpicker" data-style="btn-info" {% if listSAS_Z.count() == 0 %}disabled="disabled"{% endif %}>
+                <option value="0" {% for lsasz in listSAS_Z %}{% if lsasz.SAS_ID == sasid %}selected{% endif %}{% endfor %}>
+                    {% if listSAS_Z.count() >  0 %}выберите стадию{% endif %}
+                    {% if listSAS_Z.count() == 0 %}{% endif %}
+                </option>
+            {% for lsasz in listSAS_Z %}
+                <option value="{{ lsasz.SAS_ID }}" {% if lsasz.SAS_ID == sasid %}selected{% endif %}>{{ lsasz.stage_ID.stageName }}</option>
+            {% endfor %}
             </select>
         </div>
 
@@ -62,11 +89,20 @@
 
         <div id="zoneGroupPlayoffToggle" class="btn-group btn-toggle" data-toggle="buttons">
             <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label><br>
-                <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z">зона</label>
-                <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G">группа</label>
+                <label class="zoneGroupPlayoffToggle btn btn-info {% if listSAS_Z.count() == 0 %}disabled{% endif %}">
+                    <input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z" {% if listSAS_Z.count() == 0 %}disabled{% endif %}>зона
+                </label>
+                <label class="zoneGroupPlayoffToggle btn btn-info {% if listSAS_G.count() == 0 %}disabled{% endif %}">
+                    <input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G" {% if listSAS_G.count() == 0 %}disabled{% endif %}>группа
+                </label>
                 <br>
-                <label class="zoneGroupPlayoffToggle btn btn-info"><input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф</label>
+                <label class="zoneGroupPlayoffToggle btn btn-info {% if listSAS_P.count() == 0 %}disabled{% endif %}">
+                    <input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P" {% if listSAS_P.count() == 0 %}disabled{% endif %}>плэй-офф
+                </label>
         </div>
+    {% for lsasp in listSAS_P %}
+        <input id="choosePlayoff" type="hidden" name="stage_ID" value="{{ lsasp.SAS_ID }}">
+    {% endfor %}
 
     </div>
 
@@ -75,143 +111,78 @@
         <div id="chooseGroupContainer" class="btn-group">
             <label class="btn-label" for="chooseGroup">&nbsp;</label>
             <br>
-            <select id="chooseGroup" name="chooseGroup" class="selectpicker" data-style="btn-info">
-                <option value="5">1 группа</option>
-                <option value="4">2 группа</option>
-                <option value="3">3 группа</option>
-                <option value="2">4 группа</option>
-                <option value="1">5 группа</option>
+            <br>
+            <select id="chooseGroup" name="stage_ID" class="selectpicker" data-style="btn-info" {% if listSAS_G.count() == 0 %}disabled="disabled"{% endif %}>
+                <option value="0" {% for lsasg in listSAS_G %}{% if lsasg.SAS_ID == sasid %}selected{% endif %}{% endfor %}>
+                    {% if listSAS_G.count() >  0 %}выберите стадию{% endif %}
+                    {% if listSAS_G.count() == 0 %}{% endif %}
+                </option>
+            {% for lsasg in listSAS_G %}
+                <option value="{{ lsasg.SAS_ID }}" {% if lsasg.SAS_ID == sasid %}selected{% endif %}>{{ lsasg.stage_ID.stageName }}</option>
+            {% endfor %}
             </select>
         </div>
 
     </div>
 </div>
 
-</form>
-
 <br>
-
-<form id="editSAST" class="flat-form">
 
 <div class="row">
 
     <div class="col-lg-1"></div>
 
     <div class="col-lg-10">
+        {% if not seasonid == 0 %}
+        {% if not ageid    == 0 %}
+        {% if not sasid    == 0 %}
         <table id="listSAST" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_editSAST"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a></td>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a>
+                </td>
                 <td class="tableNumber">#</td>
                 <td class="tableText">Команда</td>
                 <td class="tableInputRight"></td>
             </tr>
         </thead>
         <tbody>
+            {% for lsast in listSAST %}
             <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSAST"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">1</td>
-                <td class="tableText">Раз команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lsast.SAST_ID }}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a>
+                </td>
+                <td class="tableNumber">{{ loop.index }}</td>
+                <td class="tableText">{{ lsast.team_ID.teamName }}</td>
+                <td class="tableInputRight">
+                    {# {% include "includes/deleteSAST.html" %} #}
+                </td>
             </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSAST"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">2</td>
-                <td class="tableText">Два команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSAST"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">3</td>
-                <td class="tableText">Три команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSAST"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">4</td>
-                <td class="tableText">Четыре команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editSAST"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">5</td>
-                <td class="tableText">Пять команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
+            {% endfor %}
         </tbody>
         </table>
+        {% endif %}
+        {% endif %}
+        {% endif %}
     </div>
 
     <div class="col-lg-1"></div>
 
 </div>
 
-<div id="Modal_editSAST" class="modal fade modal-lg" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+{% include "includes/createSAST.html" %}
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="modal-title" aria-labelledby="Modal_editSAS_Label">Добавить/изменить команду, участвующую в выбранной игровой стадии в текущем сезоне</h3>
-            </div>
+{#
+{% for lsast in listSAST %}
+    {% include "includes/updateSAST.html" %}
+{% endfor %}
+#}
 
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-4" style="text-align: center;">
-                        <div class="btn-group">
-                            <label class="btn-label" for="editSAST_chooseCity">Выберите город</label>
-                            <select id="editSAST_chooseCity" name="editSAST_chooseCity" class="selectpicker" data-live-search="true" data-style="btn-info">
-                                <option value="1">Белгород</option>
-                                <option value="2">Воронеж</option>
-                                <option value="3">Волжский</option>
-                                <option value="4">Смоленск</option>
-                                <option value="5">Тамбов</option>
-                            </select>
-                        </div>
-                    </div>
+{% endblock %}
 
-                    <div class="col-lg-4" style="text-align: center;">
-
-                        <div class="btn-group">
-                            <label class="btn-label" for="editSAST_chooseSchool">Выберите школу</label>
-                            <select id="editSAST_chooseSchool" name="editSAST_chooseSchool" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
-                                <option value="1">Первая школа</option>
-                                <option value="2">Вторая школа</option>
-                                <option value="3">Третья школа</option>
-                                <option value="4">Четвёртая школа</option>
-                                <option value="5">Пятая школа</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-4" style="text-align: center;">
-
-                        <div class="btn-group">
-                            <label class="btn-label" for="editSAST_chooseTeam">Выберите команду</label>
-                            <select id="editSAST_chooseTeam" class="selectpicker" name="editSAST_chooseTeam" data-live-search="true" data-style="btn-info" data-width="auto">
-                                <option value="1">Первая школа</option>
-                                <option value="2">Вторая школа</option>
-                                <option value="3">Третья школа</option>
-                                <option value="4">Четвёртая школа</option>
-                                <option value="5">Пятая школа</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-success">Сохранить</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-</form>
-
+{% block scripts %}
+    <script src="{{ url_for('static', filename='customization/js/selectAction_SAST.js') }}"></script>
+    <script src="{{ url_for('static', filename='customization/js/zoneGroupPlayoffToggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='customization/js/formValidation.js') }}"></script>
 {% endblock %}
