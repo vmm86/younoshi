@@ -145,7 +145,7 @@ table tr td {
 /* Фиксы Flat UI */
 
 .container.wrapper {
-    margin-top: 53px;
+    margin-top: 5.5rem;
 
     width: 100%;
 }
@@ -160,22 +160,29 @@ table tr td {
 /* Верхнее меню навигации */
 
 #top-menu {
-    background: transparent;
+    background: #FFF;
 
-    box-shadow: 0 -1rem 1rem -1rem rgba(0,0,0,0.1) inset;
+    box-shadow: 0 -1rem 1.1rem -1rem rgba(0,0,0,0.11) inset;
+
+    width: 100%;
+}
+
+.navbar {
+    margin: 0;
+    min-height: 5.5rem;
 }
 
 .navbar-default .navbar-nav > .active > a, 
 .navbar-default .navbar-nav > .active > a:hover, 
 .navbar-default .navbar-nav > .active > a:focus {
     background: transparent;
-        color: #3498DB;
+    color: #3498DB;
 }
 
 .navbar-default .navbar-nav > .active > a .caret,
 .navbar-default .navbar-nav > .dropdown > a:hover .caret, 
 .navbar-default .navbar-nav > .dropdown > a:focus .caret {
-    border-top-color: #3498DB;
+    border-top-color:    #3498DB;
     border-bottom-color: #3498DB;
 }
 
@@ -186,6 +193,7 @@ table tr td {
 
 .navbar-nav > li > .dropdown-menu {
     border-radius: 1rem;
+    box-shadow: 0 0.15rem 0.2rem 0 rgba(0,0,0,0.5);
 }
 
 .dropdown-menu li.active > a, 
@@ -300,8 +308,12 @@ a.btn {
 
 .btn-info {
     color: #FFF;
-    background: #3498DB;
     text-shadow: 1px 1px 0 rgba(0, 60, 100, 0.5);
+}
+
+.btn-info.disabled {
+    color: #FFF;
+    text-shadow: 1px 1px 0 rgba(100, 100, 100, 0.5);
 }
 
 /* Выбор игровой стадии */
@@ -313,6 +325,10 @@ a.btn {
 
     width: 50%;
 }
+#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(3).active {
+    box-shadow: -4px -4px 4px -1px rgba(0, 0, 0, 0.2) inset;
+}
+
 #zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(4) {
     border-radius: 0 1rem 0 0;
 
@@ -320,11 +336,19 @@ a.btn {
 
     width: 50%;
 }
+#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(4).active {
+    box-shadow: 4px -4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
+}
+
 #zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(5),
 #zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(6) {
     border-radius: 0 0 1rem 1rem;
 
     width: 100%;
+}
+#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(5).active,
+#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(6).active {
+    box-shadow: 0 4px 4px -1px     rgba(0, 0, 0, 0.2) inset;
 }
 
 /* Фиксы Bootstrap Switch */
@@ -390,10 +414,13 @@ fieldset[disabled] .btn {
     text-shadow: 1px 1px 0px rgba(0, 60, 100, 0.5);
 }
 
-.dropdown-menu li:first-child > a {
+.dropdown-menu li:first-child a,
+.dropdown-menu li.filtered:first-child a {
     border-radius: 0;
 }
-.dropdown-menu li:last-child > a {
+.dropdown-menu li:last-child a,
+.dropdown-menu li:last-child a.filtered,
+.dropdown-menu li:only-child a.filtered {
     border-radius: 0 0 1rem 1rem;
 }
 
@@ -430,7 +457,7 @@ fieldset[disabled] .btn {
     top: 3.2rem !important;
 }
 .nav .dropdown-menu {
-    top: 5.3rem !important;
+    top: 5.5rem !important;
 }
 
 .nav .dropdown-menu li:first-child > a {
@@ -449,11 +476,15 @@ fieldset[disabled] .btn {
     border-color: #3498DB;
 }
 
-.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active > a, 
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active   > a, 
 .selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.selected > a, 
-.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active > a.highlighted, 
+.selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active   > a.highlighted, 
 .selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.selected > a.highlighted {
     background: none repeat scroll 0% 0% #3498DB;
+}
+
+.bootstrap-select.btn-group .dropdown-menu.inner {
+    border-radius: 0 0 1rem 1rem;
 }
 
 /* Форма авторизации при входе на сайт */
@@ -501,7 +532,7 @@ fieldset[disabled] .btn {
 /* Модальные окна */
 
 .modal-dialog {
-    margin: 53px auto 0 auto;
+    margin: 5.5rem auto 0 auto;
 }
 
 .modal-lg {
@@ -596,58 +627,85 @@ fieldset[disabled] .btn {
     width: 100% !important;
 }
 
-.listAgeTop      > label,
-.listAgeBottom   > label,
-.stageTypeTop    > label,
-.stageTypeBottom > label {
+.listAgeTop       label,
+.listAgeBottom    label,
+.stageTypeTop     label,
+.stageTypeBottom  label {
     font-weight: bold !important;
 }
 
-.stageTypeTop > label {
+.stageTypeTop  label {
     width: 75px;
 }
-.stageTypeBottom > label {
+.stageTypeBottom  label {
     width: 150px;
 }
 
-.listAgeTop    > label:first-child,
-.stageTypeTop  > label:first-child  {
+.listAgeTop     label:first-child,
+.stageTypeTop   label:first-child  {
     border-radius: 1rem 0 0 0 !important;
 }
-.listAgeTop    > label:last-child,
-.stageTypeTop  > label:last-child  {
+.listAgeTop     label:last-child,
+.stageTypeTop   label:last-child  {
     border-radius: 0 1rem 0 0 !important;
 }
-.listAgeBottom > label:first-child {
+.listAgeBottom  label:first-child {
     border-radius: 0 0 0 1rem !important;
 }
-.listAgeBottom > label:last-child {
+.listAgeBottom  label:last-child {
     border-radius: 0 0 1rem 0 !important;
 }
-.stageTypeBottom > label {
+.stageTypeBottom  label {
     border-radius: 0 0 1rem 1rem !important;
 }
 
-.listAgeTop    > label.active {
+.listAgeTop     label.active {
     box-shadow: 0 -4px 4px -1px    rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeTop    > label:first-child.active,
-.stageTypeTop  > label:first-child.active {
+.listAgeTop     label:first-child.active,
+.stageTypeTop   label:first-child.active {
     box-shadow: -4px -4px 4px -1px rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeTop    > label:last-child.active,
-.stageTypeTop  > label:last-child.active {
+.listAgeTop     label:last-child.active,
+.stageTypeTop   label:last-child.active {
     box-shadow: 4px -4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom    > label.active,
-.stageTypeBottom  >  label.active {
+.listAgeBottom     label.active,
+.stageTypeBottom   label.active {
     box-shadow: 0 4px 4px -1px     rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom    > label:first-child.active {
+.listAgeBottom     label:first-child.active {
     box-shadow: -4px 4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom    > label:last-child.active {
+.listAgeBottom     label:last-child.active {
     box-shadow: 4px 4px 4px -1px   rgba(0, 0, 0, 0.2) inset;
+}
+
+/* Выбор подгрупп в списке команд внутри игровой стадии */
+
+#substage_ID .substage_ID:nth-child(3) {
+    border-radius: 1rem 1rem 0 0;
+
+    width: 100%; 
+}
+#substage_ID .substage_ID:nth-child(5) {
+    border-radius: 0 0 0 1rem;
+}
+#substage_ID .substage_ID:nth-child(9) {
+    border-radius: 0 0 1rem 0;
+}
+
+#substage_ID .substage_ID.active {
+    box-shadow: 0 4px 4px -1px    rgba(0, 0, 0, 0.2) inset;
+}
+#substage_ID .substage_ID:nth-child(3).active {
+    box-shadow: 0 -4px 4px -1px   rgba(0, 0, 0, 0.2) inset;
+}
+#substage_ID .substage_ID:nth-child(5).active {
+    box-shadow: -4px 4px 4px -1px rgba(0, 0, 0, 0.2) inset;
+}
+#substage_ID .substage_ID:nth-child(9).active {
+    box-shadow: 4px 4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
 
 /* Валидация форм */
