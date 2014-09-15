@@ -77,7 +77,7 @@
 
 </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery-2.1.1.min.js') }}"></script>
 
     <script src="{{ url_for('static', filename='data-tables/js/jquery.dataTables.js') }}"></script>
     <script src="{{ url_for('static', filename='data-tables/js/dataTables.bootstrap.js') }}"></script>
@@ -97,19 +97,21 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('table').dataTable( {
-            'language': {
-                'lengthMenu':   '_MENU_ <div class="dataTables_length_caption">записей на страницу</div>',
-                'zeroRecords':  '',
-                'emptyTable':   '',
-                'info':         'Страница _PAGE_ из _PAGES_',
-                'infoEmpty':    'Нет данных для отображения',
+                'language': {
+                'lengthMenu': '_MENU_ <div class="dataTables_length_caption">записей на страницу</div>',
+                'zeroRecords': '',
+                'emptyTable': '',
+                'info': 'Страница _PAGE_ из _PAGES_',
+                'infoEmpty': 'Нет данных для отображения',
                 'infoFiltered': '(отобрано из _MAX_ записей)',
                 'paginate': {
                     'previous': '< назад',
-                    'next':     'вперёд >'
+                    'next': 'вперёд >'
                 }
-            }
-        } );
+            },
+            'iDisplayLength': 10,
+            'aLengthMenu': [ 5, 10, 20, 50, 100 ],
+        });
 
         $('select').selectpicker();
 
