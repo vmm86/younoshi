@@ -89,9 +89,11 @@
 <!--                 <td class="tableText">{{ lsas.season_ID.seasonName }}</td>
                 <td class="tableText">{{ lsas.age_ID.ageName }}</td> -->
                 <td class="tableText">
-                    {% if lsas.stage_ID.stageType == "Z" %}зона {{ lsas.stage_ID.stageName }}{% endif %}
-                    {% if lsas.stage_ID.stageType == "G" %}группа {{ lsas.stage_ID.stageName }}{% endif %}
-                    {% if lsas.stage_ID.stageType == "P" %}плэй-офф{% endif %}
+                    <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/team">
+                        {% if lsas.stage_ID.stageType == "Z" %}зона {{ lsas.stage_ID.stageName }}{% endif %}
+                        {% if lsas.stage_ID.stageType == "G" %}группа {{ lsas.stage_ID.stageName }}{% endif %}
+                        {% if lsas.stage_ID.stageType == "P" %}плэй-офф{% endif %}
+                    </a>
                 </td>
                 <td class="tableInputRight">
                     {% include "includes/deleteSAS.html" %}
