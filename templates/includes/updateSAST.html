@@ -1,0 +1,109 @@
+
+<form class="flat-form create-form" name="create" method="POST" action="{{ url_for('updateSAST', seasonid = lsast.SAS_ID.season_ID.season_ID, ageid = lsast.SAS_ID.age_ID.age_ID, sasid = lsast.SAS_ID.SAS_ID, sastid = lsast.SAST_ID) }}">
+    <div id="Modal_update_{{ lsast.SAST_ID }}" class="modal fade modal-lg" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <a href="{{ url_for('listSAST', seasonid = seasonid, ageid = ageid, sasid = sasid) }}">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                    </a>
+                    <h3 class="modal-title" aria-labelledby="Modal_editSAST_Label">Изменить команду, участвующую в 
+                        {% for lsast in listSAST %}
+                            {% if loop.index in range(1,2) %}
+                                {% if lsast.SAS_ID.stage_ID.stageType == "G" %}
+                                    группе {{ lsast.SAS_ID.stage_ID.stageName }}
+                                {% endif %}
+                                {% if lsast.SAS_ID.stage_ID.stageType == "P" %}
+                                    этапе плэй-офф
+                                {% endif %}
+                                {% if lsast.SAS_ID.stage_ID.stageType == "Z" %}
+                                    зоне {{ lsast.SAS_ID.stage_ID.stageName }}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </h3>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-lg-4" style="text-align: center;">
+                            <div class="btn-group">
+                                <label class="btn-label" for="filterCity">Выберите город</label>
+                                <select id="filterCity" name="filterCity" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+                                    <option value="0">
+                                        выберите город
+                                    </option>
+                                {% for fc in filterCity %}
+                                    <option value="{{ fc.city_ID }}">{{ fc.cityName }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4" style="text-align: center;">
+                            <div class="btn-group">
+                                <label class="btn-label" for="filterSchool">Выберите школу</label>
+                                <select id="filterSchool" name="filterSchool" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+                                    <option value="0">
+                                        выберите школу
+                                    </option>
+                                {% for fs in filterSchool %}
+                                    <option value="{{ fs.school_ID }}" data-city-id="{{ fs.city_ID.city_ID }}">{{ fs.schoolName }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4" style="text-align: center;">
+                            <div class="btn-group">
+                                <label class="btn-label" for="filterTeam">Выберите команду</label>
+                                <select id="filterTeam" name="filterTeam" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+                                    <option value="0">
+                                        выберите команду
+                                    </option>
+                                {% for ft in filterTeam %}
+                                    <option value="{{ ft.team_ID }}" data-school-id="{{ ft.school_ID.school_ID }}" {% if lsast.team_ID.team_ID == ft.team_ID %}selected{% endif %}>{{ ft.teamName }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: center;">
+                            <div class="btn-group">
+                                <div id="substage_ID" class="btn-group btn-toggle" data-toggle="buttons">
+                                    <label class="btn-label" for="substage_ID" style="width: 100%; text-align: center;">Выберите подгруппу (если есть)</label>
+                                    <br>
+                                    <label class="substage_ID btn btn-info {% if not lsast.substage_ID.stage_ID %}active{% endif %}">
+                                        <input type="radio" name="substage_ID" value="" {% if not lsast.substage_ID.stage_ID %}checked{% endif %}>нет
+                                    </label>
+                                    <br>
+                                    {% for lst in listStage %}
+                                        {% if lst.stageType == "G" %}
+                                            {% if lst.stageName == "А" or lst.stageName == "Б" or lst.stageName == "В" or lst.stageName == "Г" or lst.stageName == "Д" %}
+                                                <label class="substage_ID btn btn-info {% if lsast.substage_ID.stage_ID == lst.stage_ID %}active{% endif %}" style="width: 20%;">
+                                                    <input type="radio" name="substage_ID" value="{{ lst.stage_ID }}" {% if lsast.substage_ID.stage_ID == lst.stage_ID %}checked{% endif %}>{{ lst.stageName }}
+                                                </label>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <a class="btn btn-danger" href="{{ url_for('listSAST', seasonid = seasonid, ageid = ageid, sasid = sasid) }}">Отмена</a>
+                    <button class="btn btn-success" type="submit" name="modify" value="update">Сохранить</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

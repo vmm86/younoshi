@@ -7,7 +7,8 @@ from werkzeug.wrappers import BaseRequest
 from werkzeug.wsgi import responder
 from werkzeug.exceptions import default_exceptions, HTTPException, NotFound
 
-from flask import Flask, g, redirect, request, session, url_for, abort, render_template, flash
+from flask import Flask, g, redirect, request, session, url_for, abort, render_template, flash, jsonify
+import json
 from functools import wraps
 from hashlib import md5
 from peewee import *
@@ -135,10 +136,10 @@ class SeasonAgeStage(YounoshiModel):
 
 ## СезонВозрастСтадияКоманда
 class SeasonAgeStageTeam(YounoshiModel):
-    SAST_ID       = PrimaryKeyField(db_column='SAST_ID',)
-    SAS_ID        = ForeignKeyField(db_column='SAS_ID',rel_model=SeasonAgeStage,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
-    team_ID       = ForeignKeyField(db_column='team_ID',rel_model=Team,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
-    substageTitle = CharField(db_column='substageTitle',max_length=16,null=True)
+    SAST_ID      = PrimaryKeyField(db_column='SAST_ID',)
+    SAS_ID       = ForeignKeyField(db_column='SAS_ID',rel_model=SeasonAgeStage,related_name='SAS_of_SAST',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
+    team_ID      = ForeignKeyField(db_column='team_ID',rel_model=Team,related_name='team_of_SAST',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
+    substage_ID  = ForeignKeyField(db_column='substage_ID',rel_model=Stage,related_name='substage_of_SAST',on_delete='NO ACTION',on_update='NO ACTION',to_field='stage_ID',null=True)
 
     class Meta:
         db_table = 'SeasonAgeStageTeam'
@@ -319,7 +320,8 @@ def createSchool(cityid):
             School.create(city_ID  = cityid, schoolName  = schoolname)
             return redirect(
                 url_for('listSchool', 
-                    cityid = cityid)
+                    cityid = cityid
+                )
             )
 
 @app.route('/city/<int:cityid>/school/<int:schoolid>/update', methods = ['GET', 'POST'])
@@ -330,7 +332,8 @@ def updateSchool(cityid, schoolid):
             School.update(city_ID  = cityid, schoolName  = schoolname).where(School.school_ID == schoolid).execute()
             return redirect(
                 url_for('listSchool', 
-                    cityid = cityid)
+                    cityid = cityid
+                )
             )
 
 @app.route('/city/<int:cityid>/school/<int:schoolid>/delete', methods = ['GET', 'POST'])
@@ -343,7 +346,8 @@ def deleteSchool(cityid, schoolid):
                 flash('Вы не можете удалить эту спортивную школу, пока с ней связана хотя бы одна команда')
             return redirect(
                 url_for('listSchool', 
-                    cityid = cityid)
+                    cityid = cityid
+                )
             )
 
 ## Команды
@@ -360,7 +364,7 @@ def listTeam(cityid, schoolid):
     except School.DoesNotExist:
         schoolname = None
     listAge    = Age.select().order_by(Age.ageName)
-    listTeam   = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).order_by(Team.team_ID)
+    listTeam   = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).order_by(Team.teamName)
     return render_template(
         'listTeam.html', 
             listCity   = listCity, 
@@ -383,7 +387,8 @@ def createTeam(cityid, schoolid):
             return redirect(
                 url_for('listTeam', 
                     cityid   = cityid, 
-                    schoolid = schoolid)
+                    schoolid = schoolid
+                )
             )
 
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/update', methods = ['GET', 'POST'])
@@ -397,7 +402,8 @@ def updateTeam(cityid, schoolid, teamid):
                 url_for('listTeam', 
                     cityid   = cityid, 
                     schoolid = schoolid,
-                    teamid   = teamid)
+                    teamid   = teamid
+                )
             )
 
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods = ['GET', 'POST'])
@@ -409,7 +415,8 @@ def deleteTeam(cityid, schoolid, teamid):
                 url_for('listTeam', 
                     cityid   = cityid, 
                     schoolid = schoolid,
-                    teamid   = teamid)
+                    teamid   = teamid
+                )
             )
 
 ## Игровые стадии
@@ -510,7 +517,7 @@ def listSAS(seasonid, ageid):
     except Age.DoesNotExist:
         agename    = None
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
-    listSAS   = SeasonAgeStage.select().where(Season.season_ID == seasonid, Age.age_ID == ageid).join(Stage).where(Stage.stage_ID == SeasonAgeStage.stage_ID).order_by(Stage.stageName)
+    listSAS   = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(SeasonAgeStage.stage_ID == Stage.stage_ID).order_by(Stage.stageName)
     return render_template(
         'SAS.html', 
             listSeason = listSeason,
@@ -533,7 +540,8 @@ def createSAS(seasonid, ageid):
             return redirect(
                 url_for('listSAS',
                     seasonid = seasonid,
-                    ageid    = ageid)
+                    ageid    = ageid
+                )
             )
 
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/update', methods = ['GET', 'POST'])
@@ -548,7 +556,8 @@ def updateSAS(seasonid, ageid, sasid):
                 url_for('listSAS',
                     seasonid = seasonid,
                     ageid    = ageid,
-                    sasid    = sasid)
+                    sasid    = sasid
+                )
             )
 
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/delete', methods  = ['GET', 'POST'])
@@ -560,66 +569,131 @@ def deleteSAS(seasonid, ageid, sasid):
                 url_for('listSAS',
                     seasonid = seasonid,
                     ageid    = ageid,
-                    sasid    = sasid)
+                    sasid    = sasid
+                )
             )
 
 ## СезонВозрастСтадияКоманда
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team')
 def listSAST(seasonid, ageid, sasid):
-    seasonid   = seasonid
-    sasid      = sasid
-    ageid      = ageid
+    seasonid     = seasonid
+    sasid        = sasid
+    try:
+        sastype    = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
+    except SeasonAgeStage.DoesNotExist:
+        sastype    = None
+    ageid        = ageid
 
-    listSeason = Season.select().order_by(Season.season_ID.asc())
+    listSeason   = Season.select().order_by(Season.season_ID.asc())
     try:
         seasonname = Season.get(season_ID = seasonid).seasonName
     except Season.DoesNotExist:
         seasonname = None
 
-    listAge    = Age.select().order_by(Age.ageName)
+    listAge      = Age.select().order_by(Age.ageName)
     try:
         agename    = Age.get(age_ID = ageid).ageName
     except Age.DoesNotExist:
         agename    = None
 
-    # listStage  = Stage.select().order_by(Stage.stageType, Stage.stageName)
+    listSAS_Z    = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
+    listSAS_G    = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
+    listSAS_P    = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
 
-    listSAS_Z  = SeasonAgeStage.select().where(Season.season_ID == seasonid, Age.age_ID == ageid).join(Stage).where(Stage.stage_ID == SeasonAgeStage.stage_ID).where(Stage.stageType == "Z").order_by(Stage.stageName)
-    listSAS_G  = SeasonAgeStage.select().where(Season.season_ID == seasonid, Age.age_ID == ageid).join(Stage).where(Stage.stage_ID == SeasonAgeStage.stage_ID).where(Stage.stageType == "G").order_by(Stage.stageName)
-    listSAS_P  = SeasonAgeStage.select().where(Season.season_ID == seasonid, Age.age_ID == ageid).join(Stage).where(Stage.stage_ID == SeasonAgeStage.stage_ID).where(Stage.stageType == "P").order_by(Stage.stageName)
+    filterCity   =   City.select().order_by(City.cityName)
+    filterSchool = School.select().order_by(School.schoolName)
+    filterTeam   =   Team.select().order_by(Team.teamName)
 
-    listTeam   = Team.select().join(School).join(City).switch(Team).join(Age).where(Age.age_ID == ageid).order_by(Team.team_ID)
+    listSAST     = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
+    listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName).order_by(Stage.stage_ID)
 
-    listSAST   = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid)
+    sastsubstagecount = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).where(Stage.stage_ID != None).count()
 
     return render_template(
         'SAST.html', 
-            listSeason = listSeason,
-            listAge    = listAge,
-            # listStage  = listStage,
-            listSAS_Z  = listSAS_Z,
-            listSAS_G  = listSAS_G,
-            listSAS_P  = listSAS_P,
-            listTeam   = listTeam,
-            listSAST   = listSAST,
-            seasonid   = seasonid,
-            seasonname = seasonname,
-            ageid      = ageid,
-            agename    = agename,
-            sasid      = sasid
+            listSeason   = listSeason,
+            listAge      = listAge,
+            listSAS_Z    = listSAS_Z,
+            listSAS_G    = listSAS_G,
+            listSAS_P    = listSAS_P,
+            filterCity   = filterCity,
+            filterSchool = filterSchool,
+            filterTeam   = filterTeam,
+            listSAST     = listSAST,
+            listStage    = listStage,
+            seasonid     = seasonid,
+            seasonname   = seasonname,
+            ageid        = ageid,
+            agename      = agename,
+            sasid        = sasid,
+            sastype      = sastype,
+            sastsubstagecount = sastsubstagecount
     )
 
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/create', methods=['GET', 'POST'])
 def createSAST(seasonid, ageid, sasid):
     if request.method == 'POST':
         if  request.form['modify'] == 'create':
-            sasid = sasid
-            teamid = request.form['team_ID']
-            SeasonAgeStageTeam.create(SAS_ID = sasid, team_ID = teamid)
+            seasonid   = seasonid
+            ageid      = ageid
+            sasid      = sasid
+            teamid     = request.form['filterTeam']
+            substageid = request.form['substage_ID']
+            if substageid:
+                pass
+                substageid
+            else:
+                substageid = None
+            
+            SeasonAgeStageTeam.create(SAS_ID = sasid, team_ID = teamid, substage_ID = substageid)
             return redirect(
                 url_for('listSAST',
                     seasonid = seasonid,
                     ageid    = ageid,
                     sasid    = sasid
-                    )
+                )
+            )
+
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/update', methods=['GET', 'POST'])
+def updateSAST(seasonid, ageid, sasid, sastid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'update':
+            seasonid   = seasonid
+            ageid      = ageid
+            sasid      = sasid
+            sastid     = sastid
+            teamid     = request.form['filterTeam']
+            substageid = request.form['substage_ID']
+            # В шаблоне для значения NULL указано value=""
+            if substageid:
+                pass
+                substageid
+            else:
+                substageid = None
+
+            SAST             = SeasonAgeStageTeam()
+            SAST.SAST_ID     = sastid
+            SAST.team_ID     = teamid
+            SAST.substage_ID = substageid
+            SAST.save()
+
+            return redirect(
+                url_for('listSAST',
+                    seasonid = seasonid,
+                    ageid    = ageid,
+                    sasid    = sasid
+                )
+            )
+
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/delete', methods  = ['GET', 'POST'])
+def deleteSAST(seasonid, ageid, sasid, sastid):
+    if request.method == 'POST':
+        if  request.form['modify'] == 'delete':
+            SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
+            return redirect(
+                url_for('listSAST',
+                    seasonid = seasonid,
+                    ageid    = ageid,
+                    sasid    = sasid
+                )
             )
