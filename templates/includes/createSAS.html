@@ -17,7 +17,7 @@
 
                         <div class="col-lg-5" style="text-align: right;">
 
-                            <div id="chooseZoneContainer" class="form-group btn-group">
+                            <div class="form-group btn-group">
                                 <label class="btn-label" for="chooseZone">&nbsp;</label>
                                 <br>
                                 <br>
@@ -35,17 +35,18 @@
                         <div class="col-lg-2" style="text-align: center;">
 
                             <div id="zoneGroupPlayoffToggle" class="btn-group btn-toggle" data-toggle="buttons">
-                                <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label><br>
-                                    <label class="zoneGroupPlayoffToggle btn btn-info">
-                                        <input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z">зона
-                                    </label>
-                                    <label class="zoneGroupPlayoffToggle btn btn-info">
-                                        <input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G">группа
-                                    </label>
-                                    <br>
-                                    <label class="zoneGroupPlayoffToggle btn btn-info">
-                                        <input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф
-                                    </label>
+                                <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label>
+                                <br>
+                                <label class="zoneGroupPlayoffToggle btn btn-info">
+                                    <input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z">зона
+                                </label>
+                                <label class="zoneGroupPlayoffToggle btn btn-info">
+                                    <input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G">группа
+                                </label>
+                                <br>
+                                <label class="zoneGroupPlayoffToggle btn btn-info">
+                                    <input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф
+                                </label>
                             </div>
                             {% for lst in listStage %}
                                 {% if lst.stageType == "P" %}
@@ -57,7 +58,7 @@
 
                         <div class="col-lg-5" style="text-align: left;">
 
-                            <div id="chooseGroupContainer" class="btn-group">
+                            <div class="btn-group">
                                 <label class="btn-label" for="chooseGroup">&nbsp;</label>
                                 <br>
                                 <br>
