@@ -258,52 +258,65 @@ def mainpage():
 @app.route('/city')
 def listCity():
     listCity = City.select().order_by(City.cityName)
+
     return render_template(
         'listCity.html', 
             listCity = listCity
     )
 
+### Добавление городов
 @app.route('/city/create', methods=['GET', 'POST'])
 def createCity():
-    if request.method == 'POST':
-        if  request.form['modify'] == 'create':
-            cityname  = request.form['cityName']
-            City.create(cityName   = cityname)
-            return redirect(
-                url_for('listCity')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        cityname = request.form['cityName']
 
+        City.create(cityName = cityname)
+
+        return redirect(
+            url_for('listCity')
+        )
+
+### Изменение городов
 @app.route('/city/<int:cityid>/update', methods = ['GET', 'POST'])
 def updateCity(cityid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'update':
-            cityname  = request.form['cityName']
-            City.update(cityName   = cityname).where(City.city_ID == cityid).execute()
-            return redirect(
-                url_for('listCity')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        cityname = request.form['cityName']
 
+        City.update(cityName = cityname).where(City.city_ID == cityid).execute()
+
+        city          = City()
+        city.city_ID  = cityid
+        city.cityName = cityname
+        city.save()
+
+        return redirect(
+            url_for('listCity')
+        )
+
+### Удаление городов
 @app.route('/city/<int:cityid>/delete', methods = ['GET', 'POST'])
 def deleteCity(cityid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'delete':
-            try:
-                City.get(city_ID   = cityid).delete_instance()
-            except IntegrityError:
-                flash('Вы не можете удалить этот город, пока с ним связана хотя бы одна спортивная школа')
-            return redirect(
-                url_for('listCity')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+        try:
+            City.get(city_ID = cityid).delete_instance()
+        except IntegrityError:
+            flash('Вы не можете удалить этот город, пока в него добавлена хотя бы одна спортивная школа')
+
+        return redirect(
+            url_for('listCity')
+        )
 
 ## Спортивные школы
 @app.route('/city/<int:cityid>/school')
 def listSchool(cityid):
-    listCity   = City.select().order_by(City.cityName)
+    listCity = City.select().order_by(City.cityName)
     try:
         cityname = City.get(city_ID = cityid).cityName
     except City.DoesNotExist:
         cityname = None
+
     listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.schoolName)
+
     return render_template(
         'listSchool.html', 
             listCity   = listCity, 
@@ -312,43 +325,54 @@ def listSchool(cityid):
             cityname   = cityname
     )
 
+### Добавление спортивных школ
 @app.route('/city/<int:cityid>/school/create', methods = ['GET', 'POST'])
 def createSchool(cityid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'create':
-            schoolname = request.form['schoolName']
-            School.create(city_ID  = cityid, schoolName  = schoolname)
-            return redirect(
-                url_for('listSchool', 
-                    cityid = cityid
-                )
-            )
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        schoolname = request.form['schoolName']
 
+        School.create(city_ID = cityid, schoolName = schoolname)
+
+        return redirect(
+            url_for('listSchool', 
+                cityid = cityid
+            )
+        )
+
+### Изменение споривных школ
 @app.route('/city/<int:cityid>/school/<int:schoolid>/update', methods = ['GET', 'POST'])
 def updateSchool(cityid, schoolid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'update':
-            schoolname = request.form['schoolName']
-            School.update(city_ID  = cityid, schoolName  = schoolname).where(School.school_ID == schoolid).execute()
-            return redirect(
-                url_for('listSchool', 
-                    cityid = cityid
-                )
-            )
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        schoolname = request.form['schoolName']
 
+        School.update(city_ID = cityid, schoolName = schoolname).where(School.school_ID == schoolid).execute()
+
+        school            = School()
+        school.school_ID  = schoolid
+        school.city_ID    = cityid
+        school.schoolName = schoolname
+        school.save()
+
+        return redirect(
+            url_for('listSchool', 
+                cityid = cityid
+            )
+        )
+
+### Удаление спортивных школ
 @app.route('/city/<int:cityid>/school/<int:schoolid>/delete', methods = ['GET', 'POST'])
 def deleteSchool(cityid, schoolid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'delete':
-            try:
-                School.get(city_ID = cityid, school_ID = schoolid).delete_instance()
-            except IntegrityError:
-                flash('Вы не можете удалить эту спортивную школу, пока с ней связана хотя бы одна команда')
-            return redirect(
-                url_for('listSchool', 
-                    cityid = cityid
-                )
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+        try:
+            School.get(city_ID = cityid, school_ID = schoolid).delete_instance()
+        except IntegrityError:
+            flash('Вы не можете удалить эту спортивную школу, пока в неё добавлена хотя бы одна команда')
+
+        return redirect(
+            url_for('listSchool', 
+                cityid = cityid
             )
+        )
 
 ## Команды
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team')
@@ -357,14 +381,17 @@ def listTeam(cityid, schoolid):
     try:
         cityname = City.get(city_ID = cityid).cityName
     except City.DoesNotExist:
-        cityname   = None
+        cityname = None
+
     listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.schoolName)
     try:
         schoolname = School.get(school_ID = schoolid).schoolName
     except School.DoesNotExist:
         schoolname = None
-    listAge    = Age.select().order_by(Age.ageName)
-    listTeam   = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).order_by(Team.teamName)
+
+    listAge  = Age.select().order_by(Age.ageName)
+    listTeam = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).order_by(Team.teamName)
+
     return render_template(
         'listTeam.html', 
             listCity   = listCity, 
@@ -377,133 +404,164 @@ def listTeam(cityid, schoolid):
             schoolname = schoolname
     )
 
+### Добавление команд
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/create', methods = ['GET', 'POST'])
 def createTeam(cityid, schoolid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'create':
-            teamname  = request.form['teamName']
-            ageid     = request.form['age_ID']
-            Team.create(school_ID  = schoolid, age_ID = ageid, teamName = teamname)
-            return redirect(
-                url_for('listTeam', 
-                    cityid   = cityid, 
-                    schoolid = schoolid
-                )
-            )
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        teamname = request.form['teamName']
+        ageid    = request.form['age_ID']
 
+        Team.create(school_ID = schoolid, age_ID = ageid, teamName = teamname)
+
+        return redirect(
+            url_for('listTeam', 
+                cityid   = cityid, 
+                schoolid = schoolid
+            )
+        )
+
+### Изменение команд
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/update', methods = ['GET', 'POST'])
 def updateTeam(cityid, schoolid, teamid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'update':
-            teamname  = request.form['teamName']
-            ageid     = request.form['age_ID']
-            Team.update(school_ID  = schoolid, age_ID = ageid, teamName = teamname).where(Team.team_ID == teamid).execute()
-            return redirect(
-                url_for('listTeam', 
-                    cityid   = cityid, 
-                    schoolid = schoolid,
-                    teamid   = teamid
-                )
-            )
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        teamname = request.form['teamName']
+        ageid    = request.form['age_ID']
 
+        team           = Team()
+        team.team_ID   = teamid
+        team.school_ID = schoolid
+        team.age_ID    = ageid
+        team.teamName  = teamname
+        team.save()
+
+        return redirect(
+            url_for('listTeam', 
+                cityid   = cityid, 
+                schoolid = schoolid,
+                teamid   = teamid
+            )
+        )
+
+### Удаленеи команд
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods = ['GET', 'POST'])
 def deleteTeam(cityid, schoolid, teamid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'delete':
-            Team.get(school_ID     = schoolid, team_ID = teamid).delete_instance()
-            return redirect(
-                url_for('listTeam', 
-                    cityid   = cityid, 
-                    schoolid = schoolid,
-                    teamid   = teamid
-                )
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+        Team.get(school_ID = schoolid, team_ID = teamid).delete_instance()
+
+        return redirect(
+            url_for('listTeam', 
+                cityid   = cityid, 
+                schoolid = schoolid,
+                teamid   = teamid
             )
+        )
 
 ## Игровые стадии
 @app.route('/stage')
 def listStage():
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
+
     return render_template(
         'listStage.html', 
             listStage = listStage
     )
 
-@app.route('/stage/create', methods=['GET', 'POST'])
+### Добавление игровых стадий
+@app.route('/stage/create', methods = ['GET', 'POST'])
 def createStage():
-    if request.method == 'POST':
-        if  request.form['modify'] == 'create':
-            stagetype  = request.form['stageType']
-            stagename  = request.form['stageName']
-            Stage.create(stageType = stagetype, stageName = stagename)
-            return redirect(
-                url_for('listStage')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        stagetype = request.form['stageType']
+        stagename = request.form['stageName']
 
+        Stage.create(stageType = stagetype, stageName = stagename)
+
+        return redirect(
+            url_for('listStage')
+        )
+
+### Изменение игровых стадий
 @app.route('/stage/<int:stageid>/update', methods = ['GET', 'POST'])
 def updateStage(stageid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'update':
-            stagetype  = request.form['stageType']
-            stagename  = request.form['stageName']
-            Stage.update(stageType = stagetype, stageName = stagename).where(Stage.stage_ID == stageid).execute()
-            return redirect(
-                url_for('listStage')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        stagetype = request.form['stageType']
+        stagename = request.form['stageName']
 
+        Stage.update(stageType = stagetype, stageName = stagename).where(Stage.stage_ID == stageid).execute()
+
+        stage           = Stage()
+        stage.stage_ID  = stageid
+        stage.stageType = stagetype
+        stage.stageName = stagename
+        stage.save()
+
+        return redirect(
+            url_for('listStage')
+        )
+
+### Удаление игровых стадий
 @app.route('/stage/<int:stageid>/delete', methods = ['GET', 'POST'])
 def deleteStage(stageid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'delete':
-            try:
-                Stage.get(stage_ID = stageid).delete_instance()
-            except IntegrityError:
-                flash('Вы не можете удалить эту игровую стадию, пока с ним связан хотя бы один игровой этап внутри сезона')
-            return redirect(
-                url_for('listStage')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+        try:
+            Stage.get(stage_ID = stageid).delete_instance()
+        except IntegrityError:
+            flash('Вы не можете удалить эту игровую стадию, пока с ней связан хотя бы один игровой этап внутри сезона')
+
+        return redirect(
+            url_for('listStage')
+        )
 
 ## Сезоны
 @app.route('/season')
 def listSeason():
     listSeason = Season.select().order_by(Season.seasonName)
+
     return render_template(
         'listSeason.html', 
             listSeason = listSeason
     )
 
-@app.route('/season/create', methods=['GET', 'POST'])
+### Добавление сезонов
+@app.route('/season/create', methods = ['GET', 'POST'])
 def createSeason():
-    if request.method == 'POST':
-        if  request.form['modify'] == 'create':
-            seasonname  = request.form['seasonName']
-            Season.create(seasonName = seasonname)
-            return redirect(
-                url_for('listSeason')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        seasonname = request.form['seasonName']
 
+        Season.create(seasonName = seasonname)
+
+        return redirect(
+            url_for('listSeason')
+        )
+
+### Изменение сезонов
 @app.route('/season/<int:seasonid>/update', methods = ['GET', 'POST'])
 def updateSeason(seasonid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'update':
-            seasonname  = request.form['seasonName']
-            Season.update(seasonName = seasonname).where(Season.season_ID == seasonid).execute()
-            return redirect(
-                url_for('listSeason')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        seasonname = request.form['seasonName']
 
+        season            = Season()
+        season.season_ID  = seasonid
+        season.seasonName = seasonname
+        season.save()
+
+        return redirect(
+            url_for('listSeason')
+        )
+
+### Удаление сезонов
 @app.route('/season/<int:seasonid>/delete', methods = ['GET', 'POST'])
 def deleteSeason(seasonid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'delete':
-            try:
-                Season.get(season_ID = seasonid).delete_instance()
-            except IntegrityError:
-                flash('Вы не можете удалить этот сезон, пока с ним связан хотя бы один внутрисезонный игровой этап')
-            return redirect(
-                url_for('listSeason')
-            )
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+        try:
+            Season.get(season_ID = seasonid).delete_instance()
+        except IntegrityError:
+            flash('Вы не можете удалить этот сезон, пока в нём добавлен хотя бы один игровой этап')
 
-## СезонВозрастСтадия
+        return redirect(
+            url_for('listSeason')
+        )
+
+## Игровые стадии
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage')
 def listSAS(seasonid, ageid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
@@ -511,13 +569,16 @@ def listSAS(seasonid, ageid):
         seasonname = Season.get(season_ID = seasonid).seasonName
     except Season.DoesNotExist:
         seasonname = None
-    listAge   = Age.select().order_by(Age.ageName)
+
+    listAge = Age.select().order_by(Age.ageName)
     try:
-        agename    = Age.get(age_ID = ageid).ageName
+        agename = Age.get(age_ID = ageid).ageName
     except Age.DoesNotExist:
-        agename    = None
+        agename = None
+
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
     listSAS   = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(SeasonAgeStage.stage_ID == Stage.stage_ID).order_by(Stage.stageName)
+
     return render_template(
         'SAS.html', 
             listSeason = listSeason,
@@ -530,170 +591,189 @@ def listSAS(seasonid, ageid):
             agename    = agename
     )
 
+### Добавление игровых стадий
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/create', methods=['GET', 'POST'])
 def createSAS(seasonid, ageid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'create':
-            ageid     = ageid
-            stageid   = request.form['stage_ID']
-            SeasonAgeStage.create(season_ID = seasonid, age_ID = ageid, stage_ID = stageid)
-            return redirect(
-                url_for('listSAS',
-                    seasonid = seasonid,
-                    ageid    = ageid
-                )
-            )
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        ageid   = ageid
+        stageid = request.form['stage_ID']
 
+        SeasonAgeStage.create(season_ID = seasonid, age_ID = ageid, stage_ID = stageid)
+
+        return redirect(
+            url_for('listSAS',
+                seasonid = seasonid,
+                ageid    = ageid
+            )
+        )
+
+### Изменение игровых стадий
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/update', methods = ['GET', 'POST'])
 def updateSAS(seasonid, ageid, sasid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'update':
-            ageid     = ageid
-            sasid     = sasid
-            stageid   = request.form['stage_ID']
-            SeasonAgeStage.update(season_ID = seasonid, age_ID = ageid, stage_ID = stageid).where(SeasonAgeStage.SAS_ID == sasid).execute()
-            return redirect(
-                url_for('listSAS',
-                    seasonid = seasonid,
-                    ageid    = ageid,
-                    sasid    = sasid
-                )
-            )
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        ageid   = ageid
+        sasid   = sasid
+        stageid = request.form['stage_ID']
+        
+        SAS           = SeasonAgeStage()
+        SAS.SAS_ID    = sasid
+        SAS.season_ID = seasonid
+        SAS.age_ID    = ageid
+        SAS.stage_ID  = stageid
+        SAS.save()
 
+        return redirect(
+            url_for('listSAS',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid
+            )
+        )
+
+### Удаление игровых стадий
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/delete', methods  = ['GET', 'POST'])
 def deleteSAS(seasonid, ageid, sasid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'delete':
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+        try:
             SeasonAgeStage.get(SAS_ID = sasid).delete_instance()
-            return redirect(
-                url_for('listSAS',
-                    seasonid = seasonid,
-                    ageid    = ageid,
-                    sasid    = sasid
-                )
-            )
+        except IntegrityError:
+            flash('Вы не можете удалить эту игровую стадию, пока в неё добавлена хотя бы одна команда')
 
-## СезонВозрастСтадияКоманда
+        return redirect(
+            url_for('listSAS',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid
+            )
+        )
+
+## Команды в игровых стадиях
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team')
 def listSAST(seasonid, ageid, sasid):
-    seasonid     = seasonid
-    sasid        = sasid
-    try:
-        sastype    = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
-    except SeasonAgeStage.DoesNotExist:
-        sastype    = None
-    ageid        = ageid
+    seasonid = seasonid
 
-    listSeason   = Season.select().order_by(Season.season_ID.asc())
+    sasid = sasid
+    try:
+        sastype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
+    except SeasonAgeStage.DoesNotExist:
+        sastype = None
+
+    ageid = ageid
+
+    listSeason = Season.select().order_by(Season.season_ID.asc())
     try:
         seasonname = Season.get(season_ID = seasonid).seasonName
     except Season.DoesNotExist:
         seasonname = None
 
-    listAge      = Age.select().order_by(Age.ageName)
+    listAge = Age.select().order_by(Age.ageName)
     try:
-        agename    = Age.get(age_ID = ageid).ageName
+        agename = Age.get(age_ID = ageid).ageName
     except Age.DoesNotExist:
-        agename    = None
+        agename = None
 
-    listSAS_Z    = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
-    listSAS_G    = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
-    listSAS_P    = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
+    listSAS_Z = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
+    listSAS_G = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
+    listSAS_P = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
 
     filterCity   =   City.select().order_by(City.cityName)
     filterSchool = School.select().order_by(School.schoolName)
     filterTeam   =   Team.select().order_by(Team.teamName)
 
-    listSAST     = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
-    listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName).order_by(Stage.stage_ID)
+    listSAST  = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
+    listStage = Stage.select().order_by(Stage.stageType, Stage.stageName).order_by(Stage.stage_ID)
 
     sastsubstagecount = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).where(Stage.stage_ID != None).count()
 
     return render_template(
         'SAST.html', 
-            listSeason   = listSeason,
-            listAge      = listAge,
-            listSAS_Z    = listSAS_Z,
-            listSAS_G    = listSAS_G,
-            listSAS_P    = listSAS_P,
-            filterCity   = filterCity,
-            filterSchool = filterSchool,
-            filterTeam   = filterTeam,
-            listSAST     = listSAST,
-            listStage    = listStage,
-            seasonid     = seasonid,
-            seasonname   = seasonname,
-            ageid        = ageid,
-            agename      = agename,
-            sasid        = sasid,
-            sastype      = sastype,
+            listSeason        = listSeason,
+            listAge           = listAge,
+            listSAS_Z         = listSAS_Z,
+            listSAS_G         = listSAS_G,
+            listSAS_P         = listSAS_P,
+            filterCity        = filterCity,
+            filterSchool      = filterSchool,
+            filterTeam        = filterTeam,
+            listSAST          = listSAST,
+            listStage         = listStage,
+            seasonid          = seasonid,
+            seasonname        = seasonname,
+            ageid             = ageid,
+            agename           = agename,
+            sasid             = sasid,
+            sastype           = sastype,
             sastsubstagecount = sastsubstagecount
     )
 
+### Добавление команд в игровые стадии
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/create', methods=['GET', 'POST'])
 def createSAST(seasonid, ageid, sasid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'create':
-            seasonid   = seasonid
-            ageid      = ageid
-            sasid      = sasid
-            teamid     = request.form['filterTeam']
-            substageid = request.form['substage_ID']
-            if substageid:
-                pass
-                substageid
-            else:
-                substageid = None
-            
-            SeasonAgeStageTeam.create(SAS_ID = sasid, team_ID = teamid, substage_ID = substageid)
-            return redirect(
-                url_for('listSAST',
-                    seasonid = seasonid,
-                    ageid    = ageid,
-                    sasid    = sasid
-                )
-            )
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        seasonid = seasonid
+        ageid    = ageid
+        sasid    = sasid
+        teamid   = request.form['filterTeam']
 
+        substageid = request.form['substage_ID']
+        # В шаблоне в input для значения NULL д.б. указано value=""
+        if substageid:
+            pass
+            substageid
+        else:
+            substageid = None
+        
+        SeasonAgeStageTeam.create(SAS_ID = sasid, team_ID = teamid, substage_ID = substageid)
+        return redirect(
+            url_for('listSAST',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid
+            )
+        )
+
+### Изменение команд в игровых стадиях
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/update', methods=['GET', 'POST'])
 def updateSAST(seasonid, ageid, sasid, sastid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'update':
-            seasonid   = seasonid
-            ageid      = ageid
-            sasid      = sasid
-            sastid     = sastid
-            teamid     = request.form['filterTeam']
-            substageid = request.form['substage_ID']
-            # В шаблоне для значения NULL указано value=""
-            if substageid:
-                pass
-                substageid
-            else:
-                substageid = None
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        seasonid = seasonid
+        ageid    = ageid
+        sasid    = sasid
+        sastid   = sastid
+        teamid   = request.form['filterTeam']
 
-            SAST             = SeasonAgeStageTeam()
-            SAST.SAST_ID     = sastid
-            SAST.team_ID     = teamid
-            SAST.substage_ID = substageid
-            SAST.save()
+        substageid = request.form['substage_ID']
+        # В шаблоне в input для значения NULL д.б. указано value=""
+        if substageid:
+            pass
+            substageid
+        else:
+            substageid = None
 
-            return redirect(
-                url_for('listSAST',
-                    seasonid = seasonid,
-                    ageid    = ageid,
-                    sasid    = sasid
-                )
+        SAST             = SeasonAgeStageTeam()
+        SAST.SAST_ID     = sastid
+        SAST.team_ID     = teamid
+        SAST.substage_ID = substageid
+        SAST.save()
+
+        return redirect(
+            url_for('listSAST',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid
             )
+        )
 
+### Удаление команд в игровых стадиях
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/delete', methods  = ['GET', 'POST'])
 def deleteSAST(seasonid, ageid, sasid, sastid):
-    if request.method == 'POST':
-        if  request.form['modify'] == 'delete':
-            SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
-            return redirect(
-                url_for('listSAST',
-                    seasonid = seasonid,
-                    ageid    = ageid,
-                    sasid    = sasid
-                )
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+        SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
+
+        return redirect(
+            url_for('listSAST',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid
             )
+        )
