@@ -27,7 +27,7 @@ DEBUG      = True
 # TRAP_BAD_REQUEST_ERRORS = True
 
 # Инициализация приложения
-app       = Flask(__name__)
+app = Flask(__name__)
 app.config.from_object(__name__) # доступ к переменным базовой конфигурации в верхнем регистре
 
 # Создание экземпляра базы данных Peewee.
@@ -36,137 +36,356 @@ younoshi_db = MySQLDatabase(app.config['DB_NAME'], **{'passwd': app.config['DB_P
 
 # Определение модели - базового класса модели, который определяет, какую БД использовать.
 # Все его подкласссы будут наследовать указанное в нём хранинище.
-class YounoshiModel(Model):
+class Younoshi(Model):
     class Meta:
         database = younoshi_db
 
 # Модели каждой таблицы в БД определяют их поля (столбцы) декларативно, в стиле Django.
 
 ## Пользователи
-class User(YounoshiModel):
-    user_ID      = PrimaryKeyField(db_column='user_ID')
-    userName     = CharField(db_column='userName',max_length=128,null=False)
-    userPassword = CharField(db_column='userPassword',max_length=128,null=False)
+class User(Younoshi):
+    user_ID = PrimaryKeyField(
+        db_column = 'user_ID'
+    )
+    userName = CharField(
+        db_column  = 'userName',
+        max_length = 128,
+        null       = False
+    )
+    userPassword = CharField(
+        db_column  = 'userPassword',
+        max_length = 128,
+        null       = False
+    )
 
     class Meta:
         db_table = 'User'
         order_by = ('user_ID',)
 
 ## Города
-class City(YounoshiModel):
-    city_ID      = PrimaryKeyField(db_column='city_ID')
-    cityName     = CharField(db_column='cityName',max_length=128,null=False)
+class City(Younoshi):
+    city_ID = PrimaryKeyField(
+        db_column = 'city_ID'
+    )
+    cityName = CharField(
+        db_column  = 'cityName',
+        max_length = 128,
+        null       = False
+    )
 
     class Meta:
         db_table = 'City'
         order_by = ('city_ID',)
 
 ## Спортивные школы
-class School(YounoshiModel):
-    school_ID    = PrimaryKeyField(db_column='school_ID')
-    city_ID      = ForeignKeyField(db_column='city_ID',rel_model=City,related_name='school_of_city',on_delete='NO ACTION',on_update='NO ACTION',to_field='city_ID',null=False)
-    schoolName   = CharField(db_column='schoolName',max_length=128,null=False)
+class School(Younoshi):
+    school_ID = PrimaryKeyField(
+        db_column = 'school_ID'
+    )
+    city_ID = ForeignKeyField(
+        db_column    = 'city_ID',
+        rel_model    = City,
+        related_name = 'school_of_city',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'city_ID',
+        null         = False
+    )
+    schoolName = CharField(
+        db_column  = 'schoolName',
+        max_length = 128,
+        null       = False
+    )
 
     class Meta:
         db_table = 'School'
         order_by = ('school_ID',)
         indexes  = (
-            (('school_ID', 'city_ID'),True),
+            (
+                ('school_ID', 'city_ID'),
+                True
+            ),
         )
 
 ## Возраста
-class Age(YounoshiModel):
-    age_ID       = PrimaryKeyField(db_column='age_ID')
-    ageName      = IntegerField(db_column='ageName',null=False)
+class Age(Younoshi):
+    age_ID = PrimaryKeyField(
+        db_column = 'age_ID'
+    )
+    ageName = IntegerField(
+        db_column = 'ageName',
+        null      = False
+    )
 
     class Meta:
         db_table = 'Age'
         order_by = ('age_ID',)
 
 ## Команды
-class Team(YounoshiModel):
-    team_ID      = PrimaryKeyField(db_column='team_ID')
-    school_ID    = ForeignKeyField(db_column='school_ID',rel_model=School,related_name='team_of_school',on_delete='NO ACTION',on_update='NO ACTION',to_field='school_ID',null=False)
-    age_ID       = ForeignKeyField(db_column='age_ID',rel_model=Age,related_name='age_of_team',on_delete='NO ACTION',on_update='NO ACTION',to_field='age_ID',null=False)
-    teamName     = CharField(db_column='teamName',max_length=128,null=False)
+class Team(Younoshi):
+    team_ID = PrimaryKeyField(
+        db_column = 'team_ID'
+    )
+    school_ID = ForeignKeyField(
+        db_column    = 'school_ID',
+        rel_model    = School,
+        related_name = 'team_of_school',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'school_ID',
+        null         = False
+    )
+    age_ID = ForeignKeyField(
+        db_column    = 'age_ID',
+        rel_model    = Age,
+        related_name = 'age_of_team',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'age_ID',
+        null         = False
+    )
+    teamName = CharField(
+        db_column  = 'teamName',
+        max_length = 128,
+        null       = False
+    )
 
     class Meta:
         db_table = 'Team'
         order_by = ('team_ID',)
         indexes  = (
-            (('team_ID', 'school_ID', 'age_ID'),True),
+            (
+                ('team_ID', 'school_ID', 'age_ID'),
+                True
+            ),
         )
 
 ## Сезоны
-class Season(YounoshiModel):
-    season_ID    = PrimaryKeyField(db_column='season_ID')
-    seasonName   = CharField(db_column='seasonName',max_length=128,null=False)
+class Season(Younoshi):
+    season_ID = PrimaryKeyField(
+        db_column = 'season_ID'
+    )
+    seasonName = CharField(
+        db_column  = 'seasonName',
+        max_length = 128,
+        null       = False
+    )
 
     class Meta:
         db_table = 'Season'
         order_by = ('season_ID',)
 
 ## Игровые стадии
-class Stage(YounoshiModel):
-    stage_ID     = PrimaryKeyField(db_column='stage_ID')
-    stageType    = CharField(db_column='stageType',max_length=1,null=False)
-    stageName    = CharField(db_column='stageName',max_length=128,null=False)
+class Stage(Younoshi):
+    stage_ID = PrimaryKeyField(
+        db_column = 'stage_ID'
+    )
+    stageType = CharField(
+        db_column  = 'stageType',
+        max_length = 1,
+        null       = False
+    )
+    stageName = CharField(
+        db_column  = 'stageName',
+        max_length = 128,
+        null       = False
+    )
 
     class Meta:
         db_table = 'Stage'
         order_by = ('stage_ID',)
 
+## Типы соревнований
+class GameType(Younoshi):
+    gameType_ID = PrimaryKeyField(
+        db_column = 'stage_ID'
+    )
+    gameTypeName = CharField(
+        db_column  = 'stageName',
+        max_length = 16,
+        null       = False
+    )
+
+    class Meta:
+        db_table = 'GameType'
+        order_by = ('gameType_ID',)
+
 ## СезонВозрастСтадия
-class SeasonAgeStage(YounoshiModel):
-    SAS_ID       = PrimaryKeyField(db_column='SAS_ID')
-    season_ID    = ForeignKeyField(db_column='season_ID',rel_model=Season,related_name='season_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='season_ID',null=False)
-    age_ID       = ForeignKeyField(db_column='age_ID',rel_model=Age,related_name='age_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='age_ID',null=False)
-    stage_ID     = ForeignKeyField(db_column='stage_ID',rel_model=Stage,related_name='stage_of_SAS',on_delete='NO ACTION',on_update='NO ACTION',to_field='stage_ID',null=False)
-    gameTitle    = CharField(db_column='gameTitle',max_length=16,null=False)
-    startDate    = DateField(db_column='startDate',formats='%Y-%m-%d',null=True)
-    finishDate   = DateField(db_column='finishDate',formats='%Y-%m-%d',null=True)
+class SeasonAgeStage(Younoshi):
+    SAS_ID = PrimaryKeyField(
+        db_column = 'SAS_ID'
+    )
+    season_ID = ForeignKeyField(
+        db_column    = 'season_ID',
+        rel_model    = Season,
+        related_name = 'season_of_SAS',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'season_ID',
+        null         = False
+    )
+    age_ID = ForeignKeyField(
+        db_column    = 'age_ID',
+        rel_model    = Age,
+        related_name = 'age_of_SAS',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'age_ID',
+        null         = False
+    )
+    stage_ID = ForeignKeyField(
+        db_column    = 'stage_ID',
+        rel_model    = Stage,
+        related_name = 'stage_of_SAS',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'stage_ID',
+        null         = False
+    )
+    gameType_ID = ForeignKeyField(
+        db_column    = 'gameType_ID',
+        rel_model    = GameType,
+        related_name = 'gameTitle_of_SAS',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'gameType_ID'
+    )
+    startDate = DateField(
+        db_column = 'startDate',
+        formats   = '%Y-%m-%d',
+        null      = True
+    )
+    finishDate = DateField(
+        db_column = 'finishDate',
+        formats   = '%Y-%m-%d',
+        null      = True
+    )
 
     class Meta:
         db_table = 'SeasonAgeStage'
         order_by = ('SAS_ID',)
         indexes  = (
-            (('SAS_ID', 'season_ID', 'age_ID', 'stage_ID'),True),
+            (
+                ('SAS_ID', 'season_ID', 'age_ID', 'stage_ID'),
+                True
+            ),
         )
 
 ## СезонВозрастСтадияКоманда
-class SeasonAgeStageTeam(YounoshiModel):
-    SAST_ID      = PrimaryKeyField(db_column='SAST_ID',)
-    SAS_ID       = ForeignKeyField(db_column='SAS_ID',rel_model=SeasonAgeStage,related_name='SAS_of_SAST',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
-    team_ID      = ForeignKeyField(db_column='team_ID',rel_model=Team,related_name='team_of_SAST',on_delete='NO ACTION',on_update='NO ACTION',to_field='team_ID',null=False)
-    substage_ID  = ForeignKeyField(db_column='substage_ID',rel_model=Stage,related_name='substage_of_SAST',on_delete='NO ACTION',on_update='NO ACTION',to_field='stage_ID',null=True)
+class SeasonAgeStageTeam(Younoshi):
+    SAST_ID = PrimaryKeyField(
+        db_column='SAST_ID'
+    )
+    SAS_ID = ForeignKeyField(
+        db_column    = 'SAS_ID',
+        rel_model    = SeasonAgeStage,
+        related_name = 'SAS_of_SAST',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'SAS_ID',
+        null         = False
+    )
+    team_ID = ForeignKeyField(
+        db_column    = 'team_ID',
+        rel_model    = Team,
+        related_name = 'team_of_SAST',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'team_ID',
+        null         = False
+    )
+    substage_ID = ForeignKeyField(
+        db_column    = 'substage_ID',
+        rel_model    = Stage,
+        related_name = 'substage_of_SAST',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'stage_ID',
+        null         = True
+    )
 
     class Meta:
         db_table = 'SeasonAgeStageTeam'
         order_by = ('SAST_ID',)
         indexes  = (
-            (('SAST_ID', 'SAS_ID', 'team_ID'),True),
+            (
+                ('SAST_ID', 'SAS_ID', 'team_ID'),
+                True
+            ),
         )
 
 ## Игровой протокол
-class GameProtocol(YounoshiModel):
-    GP_ID              = PrimaryKeyField(db_column='GP_ID')
-    gameNumber         = CharField(db_column='gameNumber',max_length=16,null=True)
-    tourNumber         = IntegerField(db_column='tourNumber',null=True)
-    gameDate           = DateField(db_column='gameDate',formats='%Y-%m-%d',null=False)
-    homeTeam_ID        = ForeignKeyField(db_column='homeTeam_ID',rel_model=SeasonAgeStageTeam,related_name='homeTeam_of_SAST',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
-    guestTeam_ID       = ForeignKeyField(db_column='guestTeam_ID', rel_model=SeasonAgeStageTeam,related_name='guestTeam_of_SAST',on_delete='NO ACTION',on_update='NO ACTION',to_field='SAS_ID',null=False)
-    homeTeamScoreGame  = IntegerField(db_column='homeTeamScoreGame',null=False)
-    guestTeamScoreGame = IntegerField(db_column='guestTeamScoreGame',null=False)
-    homeTeamScore11m   = IntegerField(db_column='homeTeamScore11m',null=True)
-    guestTeamScore11m  = IntegerField(db_column='guestTeamScore11m',null=True)
-    is_Semifinal       = BooleanField(db_column='is_Semifinal',default=False,null=False)
-    is_Final           = BooleanField(db_column='is_Final',default=False,null=False)
+class GameProtocol(Younoshi):
+    GP_ID = PrimaryKeyField(
+        db_column = 'GP_ID'
+    )
+    gameNumber = CharField(
+        db_column  = 'gameNumber',
+        max_length = 16,
+        null       = True
+    )
+    tourNumber = IntegerField(
+        db_column='tourNumber',
+        null=True
+    )
+    gameDate = DateField(
+        db_column = 'gameDate',
+        formats   = '%Y-%m-%d',
+        null      = False
+    )
+    homeTeam_ID = ForeignKeyField(
+        db_column    = 'homeTeam_ID',
+        rel_model    = SeasonAgeStageTeam,
+        related_name = 'homeTeam_of_SAST',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'SAS_ID',
+        null         = False
+    )
+    guestTeam_ID = ForeignKeyField(
+        db_column    = 'guestTeam_ID',
+        rel_model    = SeasonAgeStageTeam,
+        related_name = 'guestTeam_of_SAST',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'SAS_ID',
+        null         = False
+    )
+    homeTeamScoreGame = IntegerField(
+        db_column = 'homeTeamScoreGame',
+        null      = False
+    )
+    guestTeamScoreGame = IntegerField(
+        db_column = 'guestTeamScoreGame',
+        null      = False
+    )
+    homeTeamScore11m = IntegerField(
+        db_column = 'homeTeamScore11m',
+        null      = True
+    )
+    guestTeamScore11m = IntegerField(
+        db_column = 'guestTeamScore11m',
+        null      = True
+    )
+    is_Semifinal = BooleanField(
+        db_column = 'is_Semifinal',
+        default   = False,
+        null      = False
+    )
+    is_Final = BooleanField(
+        db_column = 'is_Final',
+        default   = False,
+        null      = False
+    )
 
     class Meta:
-        db_table       = 'GameProtocol'
-        order_by       = ('GP_ID',)
-        indexes        = (
-            (('GP_ID', 'homeTeam_ID', 'guestTeam_ID'),True),
+        db_table = 'GameProtocol'
+        order_by = ('GP_ID',)
+        indexes  = (
+            (
+                ('GP_ID', 'homeTeam_ID', 'guestTeam_ID'),
+                True
+            ),
         )
 
 # Авторизация
@@ -260,7 +479,7 @@ def listCity():
 
     return render_template(
         'City.html', 
-            listCity = listCity
+        listCity = listCity
     )
 
 ### Добавление городов
@@ -318,10 +537,10 @@ def listSchool(cityid):
 
     return render_template(
         'School.html', 
-            listCity   = listCity, 
-            listSchool = listSchool, 
-            cityid     = cityid, 
-            cityname   = cityname
+        listCity   = listCity, 
+        listSchool = listSchool, 
+        cityid     = cityid, 
+        cityname   = cityname
     )
 
 ### Добавление спортивных школ
@@ -393,14 +612,14 @@ def listTeam(cityid, schoolid):
 
     return render_template(
         'Team.html', 
-            listCity   = listCity, 
-            listSchool = listSchool, 
-            listAge    = listAge, 
-            listTeam   = listTeam, 
-            cityid     = cityid, 
-            cityname   = cityname, 
-            schoolid   = schoolid, 
-            schoolname = schoolname
+        listCity   = listCity, 
+        listSchool = listSchool, 
+        listAge    = listAge, 
+        listTeam   = listTeam, 
+        cityid     = cityid, 
+        cityname   = cityname, 
+        schoolid   = schoolid, 
+        schoolname = schoolname
     )
 
 ### Добавление команд
@@ -462,7 +681,7 @@ def listStage():
 
     return render_template(
         'Stage.html', 
-            listStage = listStage
+        listStage = listStage
     )
 
 ### Добавление игровых стадий
@@ -517,7 +736,7 @@ def listSeason():
 
     return render_template(
         'Season.html', 
-            listSeason = listSeason
+        listSeason = listSeason
     )
 
 ### Добавление сезонов
@@ -580,14 +799,14 @@ def listSAS(seasonid, ageid):
 
     return render_template(
         'SAS.html', 
-            listSeason = listSeason,
-            listAge    = listAge,
-            listStage  = listStage,
-            listSAS    = listSAS,
-            seasonid   = seasonid,
-            seasonname = seasonname,
-            ageid      = ageid,
-            agename    = agename
+        listSeason = listSeason,
+        listAge    = listAge,
+        listStage  = listStage,
+        listSAS    = listSAS,
+        seasonid   = seasonid,
+        seasonname = seasonname,
+        ageid      = ageid,
+        agename    = agename
     )
 
 ### Добавление игровых стадий
@@ -686,23 +905,23 @@ def listSAST(seasonid, ageid, sasid):
 
     return render_template(
         'SAST.html', 
-            listSeason        = listSeason,
-            listAge           = listAge,
-            listSAS_Z         = listSAS_Z,
-            listSAS_G         = listSAS_G,
-            listSAS_P         = listSAS_P,
-            filterCity        = filterCity,
-            filterSchool      = filterSchool,
-            filterTeam        = filterTeam,
-            listSAST          = listSAST,
-            listStage         = listStage,
-            seasonid          = seasonid,
-            seasonname        = seasonname,
-            ageid             = ageid,
-            agename           = agename,
-            sasid             = sasid,
-            sastype           = sastype,
-            sastsubstagecount = sastsubstagecount
+        listSeason        = listSeason,
+        listAge           = listAge,
+        listSAS_Z         = listSAS_Z,
+        listSAS_G         = listSAS_G,
+        listSAS_P         = listSAS_P,
+        filterCity        = filterCity,
+        filterSchool      = filterSchool,
+        filterTeam        = filterTeam,
+        listSAST          = listSAST,
+        listStage         = listStage,
+        seasonid          = seasonid,
+        seasonname        = seasonname,
+        ageid             = ageid,
+        agename           = agename,
+        sasid             = sasid,
+        sastype           = sastype,
+        sastsubstagecount = sastsubstagecount
     )
 
 ### Добавление команд в игровые стадии
