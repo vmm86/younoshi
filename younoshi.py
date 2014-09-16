@@ -29,7 +29,6 @@ DEBUG      = True
 # Инициализация приложения
 app       = Flask(__name__)
 app.config.from_object(__name__) # доступ к переменным базовой конфигурации в верхнем регистре
-app.debug = True
 
 # Создание экземпляра базы данных Peewee.
 # Все модели будут использовать его для сохранения информции.
@@ -260,7 +259,7 @@ def listCity():
     listCity = City.select().order_by(City.cityName)
 
     return render_template(
-        'listCity.html', 
+        'City.html', 
             listCity = listCity
     )
 
@@ -318,7 +317,7 @@ def listSchool(cityid):
     listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.schoolName)
 
     return render_template(
-        'listSchool.html', 
+        'School.html', 
             listCity   = listCity, 
             listSchool = listSchool, 
             cityid     = cityid, 
@@ -393,7 +392,7 @@ def listTeam(cityid, schoolid):
     listTeam = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).order_by(Team.teamName)
 
     return render_template(
-        'listTeam.html', 
+        'Team.html', 
             listCity   = listCity, 
             listSchool = listSchool, 
             listAge    = listAge, 
@@ -462,7 +461,7 @@ def listStage():
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
 
     return render_template(
-        'listStage.html', 
+        'Stage.html', 
             listStage = listStage
     )
 
@@ -517,7 +516,7 @@ def listSeason():
     listSeason = Season.select().order_by(Season.seasonName)
 
     return render_template(
-        'listSeason.html', 
+        'Season.html', 
             listSeason = listSeason
     )
 

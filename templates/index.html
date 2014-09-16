@@ -106,14 +106,14 @@
                 'infoFiltered': '(отобрано из _MAX_ записей)',
                 'paginate': {
                     'previous': '< назад',
-                    'next': 'вперёд >'
+                        'next': 'вперёд >'
                 }
             },
             'iDisplayLength': 10,
             'aLengthMenu': [ 5, 10, 20, 50, 100 ],
         });
 
-        $('select').selectpicker();
+           $('select').selectpicker();
 
         $('.checkbox').bootstrapSwitch();
     } );
@@ -121,4 +121,6 @@
 
 <script src="{{ url_for('static', filename='bootstrap-validator/js/bootstrap-validator.js') }}"></script>
 {% block scripts %}{% endblock %}
+
 </body>
+</html>
