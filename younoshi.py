@@ -198,10 +198,10 @@ class Stage(Younoshi):
 ## Типы соревнований
 class GameType(Younoshi):
     gameType_ID = PrimaryKeyField(
-        db_column = 'stage_ID'
+        db_column = 'gameType_ID'
     )
     gameTypeName = CharField(
-        db_column  = 'stageName',
+        db_column  = 'gameTypeName',
         max_length = 16,
         null       = False
     )
@@ -794,29 +794,31 @@ def listSAS(seasonid, ageid):
     except Age.DoesNotExist:
         agename = None
 
-    listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
-    listSAS   = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(SeasonAgeStage.stage_ID == Stage.stage_ID).order_by(Stage.stageName)
+    listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName)
+    listGameType = GameType.select().order_by(GameType.gameTypeName)
+    listSAS      = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(SeasonAgeStage.stage_ID == Stage.stage_ID).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
 
     return render_template(
         'SAS.html', 
-        listSeason = listSeason,
-        listAge    = listAge,
-        listStage  = listStage,
-        listSAS    = listSAS,
-        seasonid   = seasonid,
-        seasonname = seasonname,
-        ageid      = ageid,
-        agename    = agename
+        listSeason   = listSeason,
+        listAge      = listAge,
+        listStage    = listStage,
+        listGameType = listGameType,
+        listSAS      = listSAS,
+        seasonid     = seasonid,
+        seasonname   = seasonname,
+        ageid        = ageid,
+        agename      = agename
     )
 
 ### Добавление игровых стадий
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/create', methods=['GET', 'POST'])
 def createSAS(seasonid, ageid):
     if request.method == 'POST' and request.form['modify'] == 'create':
-        ageid   = ageid
-        stageid = request.form['stage_ID']
+        stageid  = request.form['stage_ID']
+        gametype = request.form['gameType_ID']
 
-        SeasonAgeStage.create(season_ID = seasonid, age_ID = ageid, stage_ID = stageid)
+        SeasonAgeStage.create(season_ID = seasonid, age_ID = ageid, stage_ID = stageid, gameType_ID = gametype)
 
         return redirect(
             url_for('listSAS',
@@ -829,15 +831,15 @@ def createSAS(seasonid, ageid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/update', methods = ['GET', 'POST'])
 def updateSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'update':
-        ageid   = ageid
-        sasid   = sasid
-        stageid = request.form['stage_ID']
+        stageid  = request.form['stage_ID']
+        gametype = request.form['gameType_ID']
         
-        SAS           = SeasonAgeStage()
-        SAS.SAS_ID    = sasid
-        SAS.season_ID = seasonid
-        SAS.age_ID    = ageid
-        SAS.stage_ID  = stageid
+        SAS             = SeasonAgeStage()
+        SAS.SAS_ID      = sasid
+        SAS.season_ID   = seasonid
+        SAS.age_ID      = ageid
+        SAS.stage_ID    = stageid
+        SAS.gameType_ID = gametype
         SAS.save()
 
         return redirect(
@@ -868,15 +870,10 @@ def deleteSAS(seasonid, ageid, sasid):
 ## Команды в игровых стадиях
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team')
 def listSAST(seasonid, ageid, sasid):
-    seasonid = seasonid
-
-    sasid = sasid
     try:
         sastype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
     except SeasonAgeStage.DoesNotExist:
         sastype = None
-
-    ageid = ageid
 
     listSeason = Season.select().order_by(Season.season_ID.asc())
     try:
@@ -928,12 +925,9 @@ def listSAST(seasonid, ageid, sasid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/create', methods=['GET', 'POST'])
 def createSAST(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'create':
-        seasonid = seasonid
-        ageid    = ageid
-        sasid    = sasid
-        teamid   = request.form['filterTeam']
-
+        teamid     = request.form['filterTeam']
         substageid = request.form['substage_ID']
+
         # В шаблоне в input для значения NULL д.б. указано value=""
         if substageid:
             pass
@@ -954,13 +948,9 @@ def createSAST(seasonid, ageid, sasid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/update', methods=['GET', 'POST'])
 def updateSAST(seasonid, ageid, sasid, sastid):
     if request.method == 'POST' and request.form['modify'] == 'update':
-        seasonid = seasonid
-        ageid    = ageid
-        sasid    = sasid
-        sastid   = sastid
-        teamid   = request.form['filterTeam']
-
+        teamid     = request.form['filterTeam']
         substageid = request.form['substage_ID']
+
         # В шаблоне в input для значения NULL д.б. указано value=""
         if substageid:
             pass

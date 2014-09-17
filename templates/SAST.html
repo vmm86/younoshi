@@ -61,13 +61,13 @@
 
     <div class="col-lg-5" style="text-align: right;">
 
-        <div id="chooseZoneContainer" class="form-group btn-group">
+        <div class="form-group btn-group">
             <label class="btn-label" for="chooseZone">&nbsp;</label>
             <br>
             <br>
-            <select id="chooseZone" name="stage_ID" class="selectpicker" data-style="btn-info" {% if sastype != "Z" or listSAS_Z.count() == 0 %}disabled{% endif %}>
+            <select id="chooseZone" name="stage_ID" class="chooseZone selectpicker" data-style="btn-info" {% if sastype != "Z" or listSAS_Z.count() == 0 %}disabled{% endif %}>
                 <option value="0" {% for lsasz in listSAS_Z %}{% if lsasz.SAS_ID == sasid %}selected{% endif %}{% endfor %}>
-                    {% if listSAS_Z.count() >  0 %}выберите стадию{% endif %}
+                    {% if listSAS_Z.count() >  0 %}выберите зону{% endif %}
                     {% if listSAS_Z.count() == 0 %}{% endif %}
                 </option>
             {% for lsasz in listSAS_Z %}
@@ -80,20 +80,20 @@
 
     <div class="col-lg-2" style="text-align: center;">
 
-        <div id="zoneGroupPlayoffToggle" class="btn-group btn-toggle" data-toggle="buttons">
+        <div id="zoneGroupPlayoffToggle" class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
             <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label><br>
-                <label class="zoneGroupPlayoffToggle btn btn-info {% if sastype == "Z" %}active{% endif %} {% if listSAS_Z.count() == 0 %}disabled{% endif %}">
+                <label class="btn btn-info {% if sastype == "Z" %}active{% endif %} {% if listSAS_Z.count() == 0 %}disabled{% endif %}">
                     <input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z" 
                     {% if sastype == "Z" %}checked{% endif %}
                     {% if listSAS_Z.count() == 0 %}disabled{% endif %}>зона
                 </label>
-                <label class="zoneGroupPlayoffToggle btn btn-info {% if sastype == "G" %}active{% endif %} {% if listSAS_G.count() == 0 %}disabled{% endif %}">
+                <label class="btn btn-info {% if sastype == "G" %}active{% endif %} {% if listSAS_G.count() == 0 %}disabled{% endif %}">
                     <input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G" 
                     {% if sastype == "G" %}checked{% endif %}
                     {% if listSAS_G.count() == 0 %}disabled{% endif %}>группа
                 </label>
                 <br>
-                <label class="zoneGroupPlayoffToggle btn btn-info {% if sastype == "P" %}active{% endif %} {% if listSAS_P.count() == 0 %}disabled{% endif %}">
+                <label class="btn btn-info {% if sastype == "P" %}active{% endif %} {% if listSAS_P.count() == 0 %}disabled{% endif %}">
                     <input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="{% for lsasp in listSAS_P %}{{ lsasp.SAS_ID }}{% endfor %}" 
                     {% if sastype == "P" %}checked{% endif %} 
                     {% if listSAS_P.count() == 0 %}disabled{% endif %}>плэй-офф
@@ -104,13 +104,13 @@
 
     <div class="col-lg-5" style="text-align: left;">
 
-        <div id="chooseGroupContainer" class="btn-group">
+        <div class="btn-group">
             <label class="btn-label" for="chooseGroup">&nbsp;</label>
             <br>
             <br>
-            <select id="chooseGroup" name="stage_ID" class="selectpicker" data-style="btn-info" {% if sastype != "G" or listSAS_G.count() == 0 %}disabled{% endif %}>
+            <select id="chooseGroup" name="stage_ID" class="chooseGroup selectpicker" data-style="btn-info" {% if sastype != "G" or listSAS_G.count() == 0 %}disabled{% endif %}>
                 <option value="0" {% for lsasg in listSAS_G %}{% if lsasg.SAS_ID == sasid %}selected{% endif %}{% endfor %}>
-                    {% if listSAS_G.count() >  0 %}выберите стадию{% endif %}
+                    {% if listSAS_G.count() >  0 %}выберите группу{% endif %}
                     {% if listSAS_G.count() == 0 %}{% endif %}
                 </option>
             {% for lsasg in listSAS_G %}

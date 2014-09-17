@@ -69,6 +69,7 @@
 <!--                 <td class="tableText">Сезон</td>
                 <td class="tableText">Возраст</td> -->
                 <td class="tableText">Игровая стадия</td>
+                <td class="tableText">Тип соревнования</td>
                 <td class="tableInputRight"></td>
             </tr>
         </thead>
@@ -87,6 +88,11 @@
                         {% if lsas.stage_ID.stageType == "G" %}группа {{ lsas.stage_ID.stageName }}{% endif %}
                         {% if lsas.stage_ID.stageType == "P" %}плэй-офф{% endif %}
                     </a>
+                    
+                </td>
+                <td class="tableText">
+                    {% if lsas.gameType_ID.gameTypeName == "CHA" %}Первенство{% endif %}
+                    {% if lsas.gameType_ID.gameTypeName == "CUP" %}Кубок{% endif %}
                 </td>
                 <td class="tableInputRight">
                     {% include "includes/deleteSAS.html" %}

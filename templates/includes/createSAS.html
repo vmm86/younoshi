@@ -15,24 +15,24 @@
 
                     <div class="row">
 
-                        <div class="col-lg-5" style="text-align: right;">
+                        <div class="col-lg-4" style="text-align: right;">
 
                             <div class="form-group btn-group">
                                 <label class="btn-label" for="chooseZone">&nbsp;</label>
                                 <br>
                                 <br>
-                                <select id="chooseZone" name="stage_ID" class="selectpicker" data-style="btn-info">
-                                {% for lst in listStage %}
-                                    {% if lst.stageType == "Z" %}
+                                <select id="chooseZone" name="stage_ID" class="chooseZone selectpicker" data-style="btn-info">
+                            {% for lst in listStage %}
+                                {% if lst.stageType == "Z" %}
                                     <option value="{{ lst.stage_ID }}">{{ lst.stageName }}</option>
-                                    {% endif %}
-                                {% endfor %}
+                                {% endif %}
+                            {% endfor %}
                                 </select>
                             </div>
 
                         </div>
 
-                        <div class="col-lg-2" style="text-align: center;">
+                        <div class="col-lg-4" style="text-align: center;">
 
                             <div id="zoneGroupPlayoffToggle" class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
                                 <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label>
@@ -48,30 +48,55 @@
                                     <input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф
                                 </label>
                             </div>
-                            {% for lst in listStage %}
-                                {% if lst.stageType == "P" %}
-                            <input id="choosePlayoff" type="hidden" name="stage_ID" value="{{ lst.stage_ID }}">
-                                {% endif %}
-                            {% endfor %}
+                    {% for lst in listStage %}
+                        {% if lst.stageType == "P" %}
+                            <input id="choosePlayoff" class="choosePlayoff" type="hidden" name="stage_ID" value="{{ lst.stage_ID }}">
+                        {% endif %}
+                    {% endfor %}
 
                         </div>
 
-                        <div class="col-lg-5" style="text-align: left;">
+                        <div class="col-lg-4" style="text-align: left;">
 
                             <div class="btn-group">
                                 <label class="btn-label" for="chooseGroup">&nbsp;</label>
                                 <br>
                                 <br>
-                                <select id="chooseGroup" name="stage_ID" class="selectpicker" data-style="btn-info">
-                                {% for lst in listStage %}
-                                    {% if lst.stageType == "G" %}
+                                <select id="chooseGroup" name="stage_ID" class="chooseGroup selectpicker" data-style="btn-info">
+                            {% for lst in listStage %}
+                                {% if lst.stageType == "G" %}
                                     <option value="{{ lst.stage_ID }}">{{ lst.stageName }}</option>
-                                    {% endif %}
-                                {% endfor %}
+                                {% endif %}
+                            {% endfor %}
                                 </select>
                             </div>
 
                         </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-lg-4" style="text-align: right;"></div>
+
+                        <div class="col-lg-4" style="text-align: center;">
+
+                            <div class="gameType btn-group btn-toggle" data-toggle="buttons">
+                                <label class="btn-label" for="gameType_ID" style="width: 100%; text-align: center;">Тип соревнования</label>
+                                <br>
+                            {% for lgt in listGameType %}
+                                <label class="btn btn-info">
+                                    <input type="radio" name="gameType_ID" value="{{ lgt.gameType_ID }}">
+                                    {% if lgt.gameTypeName == "CHA" %}Первенство{% endif %}
+                                    {% if lgt.gameTypeName == "CUP" %}Кубок{% endif %}
+                                </label>
+                            {% endfor %}
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-4" style="text-align: right;"></div>
+
                     </div>
 
                 </div>
