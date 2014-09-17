@@ -318,37 +318,69 @@ a.btn {
 
 /* Выбор игровой стадии */
 
-#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(3) {
-    border-radius: 1rem 0 0 0;
+.zoneGroupPlayoffToggle {
+    width: 60%;
+}
 
-    text-align: right;
+.zoneGroupPlayoffToggle label:nth-child(3) {
+    border-radius: 1rem 0 0 0 !important;
+
+    text-align: center;
 
     width: 50%;
 }
-#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(3).active {
+.zoneGroupPlayoffToggle label:nth-child(3).active {
     box-shadow: -4px -4px 4px -1px rgba(0, 0, 0, 0.2) inset;
 }
 
-#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(4) {
-    border-radius: 0 1rem 0 0;
+.zoneGroupPlayoffToggle label:nth-child(4) {
+    border-radius: 0 1rem 0 0 !important;
 
-    text-align: left;
+    text-align: center;
 
     width: 50%;
 }
-#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(4).active {
+.zoneGroupPlayoffToggle label:nth-child(4).active {
     box-shadow: 4px -4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
 
-#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(5),
-#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(6) {
-    border-radius: 0 0 1rem 1rem;
+.zoneGroupPlayoffToggle label:nth-child(5),
+.zoneGroupPlayoffToggle label:nth-child(6) {
+    border-radius: 0 0 1rem 1rem !important;
 
     width: 100%;
 }
-#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(5).active,
-#zoneGroupPlayoffToggle .zoneGroupPlayoffToggle:nth-child(6).active {
+.zoneGroupPlayoffToggle label:nth-child(5).active,
+.zoneGroupPlayoffToggle label:nth-child(6).active {
     box-shadow: 0 4px 4px -1px     rgba(0, 0, 0, 0.2) inset;
+}
+
+/* Выбор типа соревнований */
+
+.gameType {
+    width: 60%;
+}
+
+.gameType label:nth-child(3) {
+    border-radius: 1rem 0 0 1rem !important;
+
+    text-align: center;
+
+    width: 50%;
+}
+.gameType label:nth-child(3).active {
+    box-shadow: -4px -2px 4px -1px rgba(0, 0, 0, 0.2) inset;
+}
+
+.gameType label:nth-child(4) {
+    border-radius: 0 1rem 1rem 0 !important;
+
+    text-align: center;
+
+    width: 50%;
+}
+.gameType label:nth-child(4).active {
+    box-shadow: 4px -2px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
 
 /* Фиксы Bootstrap Switch */
@@ -389,6 +421,15 @@ fieldset[disabled] .btn {
 .selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.active > a.highlighted, 
 .selectpicker.btn-info + .dropdown-menu > .dropdown-menu li.selected > a.highlighted {
     background: #3498DB;
+}
+
+.dropdown-header {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #3498DB;
+    font-weight: bold;
+    line-height: inherit;
+    font-size: inherit;
 }
 
 .dropdown-menu {
@@ -457,7 +498,7 @@ fieldset[disabled] .btn {
     top: 3.2rem !important;
 }
 .nav .dropdown-menu {
-    top: 5.5rem !important;
+    top: 2.2rem !important;
 }
 
 .nav .dropdown-menu li:first-child > a {
