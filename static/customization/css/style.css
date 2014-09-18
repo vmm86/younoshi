@@ -179,7 +179,7 @@ table tr td {
     color: #3498DB;
 }
 
-.navbar-default .navbar-nav > .active > a .caret,
+.navbar-default .navbar-nav > .active   > a .caret,
 .navbar-default .navbar-nav > .dropdown > a:hover .caret, 
 .navbar-default .navbar-nav > .dropdown > a:focus .caret {
     border-top-color:    #3498DB;
@@ -196,22 +196,22 @@ table tr td {
     box-shadow: 0 0.15rem 0.2rem 0 rgba(0,0,0,0.5);
 }
 
-.dropdown-menu li.active > a, 
+.dropdown-menu li.active   > a, 
 .dropdown-menu li.selected > a, 
-.dropdown-menu li.active > a.highlighted, 
+.dropdown-menu li.active   > a.highlighted, 
 .dropdown-menu li.selected > a.highlighted {
     background: none repeat scroll 0% 0% #3498DB;
     color: #FFF;
     text-shadow: 1px 1px 0px rgba(0, 60, 100, 0.5);
 }
 
-.dropdown-menu li.active > a:hover, 
+.dropdown-menu li.active   > a:hover, 
 .dropdown-menu li.selected > a:hover, 
-.dropdown-menu li.active > a.highlighted:hover, 
+.dropdown-menu li.active   > a.highlighted:hover, 
 .dropdown-menu li.selected > a.highlighted:hover, 
-.dropdown-menu li.active > a:focus, 
+.dropdown-menu li.active   > a:focus, 
 .dropdown-menu li.selected > a:focus, 
-.dropdown-menu li.active > a.highlighted:focus, 
+.dropdown-menu li.active   > a.highlighted:focus, 
 .dropdown-menu li.selected > a.highlighted:focus {
     background: none repeat scroll 0% 0% #3498DB;
     color: #FFF;
@@ -221,6 +221,7 @@ table tr td {
     display: block;
     opacity: 1;
     visibility: visible;
+    transition: opacity 0.25s ease;
 }
 
 /* Формы */
@@ -243,8 +244,8 @@ input[type="number"] {
 
 .tableInputLeft > button > i,    .tableInputRight > button > i,
 .tableInputLeft > button > span, .tableInputRight > button > span,
-.tableInputLeft > a > i,         .tableInputLeft > a > i,
-.tableInputLeft > a > span,      .tableInputLeft > a > span {
+.tableInputLeft > a      > i,     .tableInputLeft > a      > i,
+.tableInputLeft > a      > span,  .tableInputLeft > a      > span {
     color: #FFF;
 }
 
@@ -425,11 +426,15 @@ fieldset[disabled] .btn {
 
 .dropdown-header {
     display: block;
-    padding: 0.5rem 1rem;
-    color: #3498DB;
+
+    padding: 1.65rem 0 1.65rem 2.2rem;
+
+    color: #34495E;
+    font-size: 1.55rem;
     font-weight: bold;
-    line-height: inherit;
-    font-size: inherit;
+}
+.dropdown-header.active {
+    color: #3498DB;
 }
 
 .dropdown-menu {
@@ -490,15 +495,15 @@ fieldset[disabled] .btn {
     width: 100%;
 }
 
-
 .open > .dropdown-menu {
     margin-top: 0 !important;
+    box-shadow: 0 0.15rem 0.2rem 0 rgba(0, 0, 0, 0.5);
 }
 .dropdown-menu.open {
     top: 3.2rem !important;
 }
 .nav .dropdown-menu {
-    top: 2.2rem !important;
+    top: 0 !important;
 }
 
 .nav .dropdown-menu li:first-child > a {
