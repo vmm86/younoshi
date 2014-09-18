@@ -1,4 +1,4 @@
-{% extends "index.html" %}
+{% extends "index.jinja.html" %}
 
 {% set active_group = "Source" %}
 {% set active_page  = "Team"   %}
@@ -7,7 +7,7 @@
 
 {% block body %}
 
-{% include 'header.html' with context %}
+{% include 'header.jinja.html' with context %}
 
 <div class="row" style="margin-left: 35rem;">
     <div class="col-md-4">

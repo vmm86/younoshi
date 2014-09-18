@@ -1,20 +1,20 @@
-{% extends "index.html" %}
+{% extends "index.jinja.html" %}
 
 {% set active_group = "Source" %}
-{% set active_page  = "Stage"  %}
+{% set active_page  = "City"   %}
 
-{% set title = "Игровые стадии, в рамках которых проходят соревнования" %}
+{% set title = "Города, в которых расположены юношеские спортивные школы" %}
 
 {% block body %}
 
-{% include 'header.html' with context %}
+{% include 'header.jinja.html' with context %}
 
 <div class="row">
 
     <div class="col-lg-1"></div>
 
     <div class="col-lg-10">
-        <table id="listStage" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+        <table id="listCity" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
                 <td class="tableInputLeft">
@@ -23,43 +23,38 @@
                     </a>
                 </td>
                 <td class="tableNumber">#</td>
-                <td class="tableText">Стадия</td>
-                <td class="tableText">Название стадии</td>
+                <td class="tableText">Город</td>
                 <td class="tableInputRight"></td>
             </tr>
         </thead>
         <tbody>
-            {% for lst in listStage %}
+            {% for lc in listCity %}
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lst.stage_ID }}">
+                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lc.city_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText">
-                    {% if lst.stageType == "Z" %}зона{% endif %}
-                    {% if lst.stageType == "G" %}группа{% endif %}
-                    {% if lst.stageType == "P" %}плэй-офф{% endif %}
-                </td>
-                <td class="tableText">{{ lst.stageName }}</td>
+                <td class="tableText"><a href="/city/{{ lc.city_ID }}/school">{{ lc.cityName }}</a></td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteStage.html" %}
+                    {% include "includes/deleteCity.html" %}
                 </td>
             </tr>
             {% endfor %}
         </tbody>
         </table>
+
     </div>
 
     <div class="col-lg-1"></div>
 
 </div>
 
-{% include "includes/createStage.html" %}
+{% include "includes/createCity.html" %}
 
-{% for lst in listStage %}
-    {% include "includes/updateStage.html" %}
+{% for lc in listCity %}
+    {% include "includes/updateCity.html" %}
 {% endfor %}
 
 {% endblock %}
