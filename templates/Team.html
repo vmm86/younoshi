@@ -3,9 +3,11 @@
 {% set active_group = "Source" %}
 {% set active_page  = "Team"   %}
 
-{% block title %}Юношеские команды из разных спортивных школ и их распределение по возрастам{% endblock %}
+{% set title = "Юношеские команды из разных спортивных школ и их распределение по возрастам" %}
 
 {% block body %}
+
+{% include 'header.html' with context %}
 
 <div class="row" style="margin-left: 35rem;">
     <div class="col-md-4">

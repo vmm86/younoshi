@@ -3,9 +3,11 @@
 {% set active_group = "Source" %}
 {% set active_page  = "Stage"  %}
 
-{% block title %}Стадии, в рамках которых проходят соревнования{% endblock %}
+{% set title = "Игровые стадии, в рамках которых проходят соревнования" %}
 
 {% block body %}
+
+{% include 'header.html' with context %}
 
 <div class="row">
 

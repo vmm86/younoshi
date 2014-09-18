@@ -3,9 +3,11 @@
 {% set active_group = "Source" %}
 {% set active_page  = "School" %}
 
-{% block title %}Школы, в которых находятся юношеские команды разных возрастов{% endblock %}
+{% set title = "Школы, в которых находятся юношеские команды разных возрастов" %}
 
 {% block body %}
+
+{% include 'header.html' with context %}
 
 <form id="filterCity" class="flat-form" name="filterCity">
     <div class="row" style="margin-left: 15rem;">

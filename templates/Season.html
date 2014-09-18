@@ -3,9 +3,11 @@
 {% set active_group = "Source" %}
 {% set active_page  = "Season" %}
 
-{% block title %}Сезоны, в рамках которых проводятся соревнования{% endblock %}
+{% set title = "Сезоны, в рамках которых проводятся соревнования" %}
 
 {% block body %}
+
+{% include 'header.html' with context %}
 
 <div class="row">
 

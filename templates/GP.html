@@ -1,14 +1,18 @@
 {% extends "index.html" %}
 
+{% set active_group = "Calendar" %}
+{% set active_page  = "GP"       %}
+
+{% set title = "Результаты матчей" %}
+
 {% block body %}
-<div class="page-header">
-    <h3 class="header">Результаты матчей</h3>
-</div>
+
+{% include 'header.html' with context %}
 
 <form id="filterGP" class="flat-form">
 
 <div class="row" style="text-align: center;">
-    <div class="btn-group">
+    <div class="btn-group">{{ title }}
         <label class="btn-label" for="chooseSeason">Выберите сезон</label>
         <select id="chooseSeason" name="chooseSeason" class="selectpicker" data-style="btn-info" data-toggle="">
             <option value="1">2014</option>

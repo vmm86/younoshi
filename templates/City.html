@@ -3,9 +3,11 @@
 {% set active_group = "Source" %}
 {% set active_page  = "City"   %}
 
-{% block title %}Города, в которых расположены юношеские спортивные школы{% endblock %}
+{% set title = "Города, в которых расположены юношеские спортивные школы" %}
 
 {% block body %}
+
+{% include 'header.html' with context %}
 
 <div class="row">
 

@@ -3,9 +3,11 @@
 {% set active_group = "Calendar" %}
 {% set active_page  = "SAS"      %}
 
-{% block title %}Игровые стадии в выбранном сезоне{% endblock %}
+{% set title = "Игровые стадии в выбранном сезоне" %}
 
 {% block body %}
+
+{% include 'header.html' with context %}
 
 <div class="row" style="margin-left: 35rem;">
 
