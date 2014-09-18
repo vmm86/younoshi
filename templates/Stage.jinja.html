@@ -44,7 +44,7 @@
                 </td>
                 <td class="tableText">{{ lst.stageName }}</td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteStage.html" %}
+                    {% include "includes/deleteStage.jinja.html" %}
                 </td>
             </tr>
             {% endfor %}
@@ -56,10 +56,10 @@
 
 </div>
 
-{% include "includes/createStage.html" %}
+{% include "includes/createStage.jinja.html" %}
 
 {% for lst in listStage %}
-    {% include "includes/updateStage.html" %}
+    {% include "includes/updateStage.jinja.html" %}
 {% endfor %}
 
 {% endblock %}

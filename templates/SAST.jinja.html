@@ -166,7 +166,7 @@
                  </td>
             {% endif %}
                 <td class="tableInputRight">
-                    {% include "includes/deleteSAST.html" %}
+                    {% include "includes/deleteSAST.jinja.html" %}
                 </td>
             </tr>
             {% endfor %}
@@ -181,10 +181,10 @@
 
 </div>
 
-{% include "includes/createSAST.html" %}
+{% include "includes/createSAST.jinja.html" %}
 
 {% for lsast in listSAST %}
-    {% include "includes/updateSAST.html" %}
+    {% include "includes/updateSAST.jinja.html" %}
 {% endfor %}
 
 {% endblock %}

@@ -97,7 +97,7 @@
                     {% if lsas.gameType_ID.gameTypeName == "CUP" %}Кубок{% endif %}
                 </td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteSAS.html" %}
+                    {% include "includes/deleteSAS.jinja.html" %}
                 </td>
             </tr>
             {% endfor %}
@@ -111,10 +111,10 @@
 
 </div>
 
-{% include "includes/createSAS.html" %}
+{% include "includes/createSAS.jinja.html" %}
 
 {% for lsas in listSAS %}
-    {% include "includes/updateSAS.html" %}
+    {% include "includes/updateSAS.jinja.html" %}
 {% endfor %}
 
 {% endblock %}

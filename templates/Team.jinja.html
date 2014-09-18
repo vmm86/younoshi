@@ -71,7 +71,7 @@
                 <td class="tableText">{{ lt.teamName }}</td>
                 <td class="tableText">{{ lt.age_ID.ageName }} лет</td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteTeam.html" %}
+                    {% include "includes/deleteTeam.jinja.html" %}
                 </td>
             </tr>
             {% endfor %}
@@ -85,10 +85,10 @@
 
 </div>
 
-{% include "includes/createTeam.html" %}
+{% include "includes/createTeam.jinja.html" %}
 
 {% for lt in listTeam %}
-    {% include "includes/updateTeam.html" %}
+    {% include "includes/updateTeam.jinja.html" %}
 {% endfor %}
 
 {% endblock %}

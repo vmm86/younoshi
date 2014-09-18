@@ -38,7 +38,7 @@
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">{{ lse.seasonName }}</td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteSeason.html" %}
+                    {% include "includes/deleteSeason.jinja.html" %}
                 </td>
             </tr>
             {% endfor %}
@@ -50,10 +50,10 @@
 
 </div>
 
-{% include "includes/createSeason.html" %}
+{% include "includes/createSeason.jinja.html" %}
 
 {% for lse in listSeason %}
-    {% include "includes/updateSeason.html" %}
+    {% include "includes/updateSeason.jinja.html" %}
 {% endfor %}
 
 {% endblock %}

@@ -49,7 +49,7 @@
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText"><a href="/city/{{ ls.city_ID.city_ID }}/school/{{ ls.school_ID }}/team">{{ ls.schoolName }}</a></td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteSchool.html" %}
+                    {% include "includes/deleteSchool.jinja.html" %}
                 </td>
             </tr>
             {% endfor %}
@@ -62,10 +62,10 @@
 
 </div>
 
-{% include "includes/createSchool.html" %}
+{% include "includes/createSchool.jinja.html" %}
 
 {% for ls in listSchool %}
-    {% include "includes/updateSchool.html" %}
+    {% include "includes/updateSchool.jinja.html" %}
 {% endfor %}
 
 {% endblock %}
