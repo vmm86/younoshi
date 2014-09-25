@@ -35,6 +35,12 @@ h3 {
     font-size: 2rem;
 }
 
+p {
+    margin: 0;
+    font-size: inherit;
+    line-height: inherit;
+}
+
 form {
     width: 100%;
 }
@@ -155,6 +161,10 @@ table tr td {
 
     padding: 0;
     margin: 0;
+}
+
+.row {
+    margin: 0.5rem !important;
 }
 
 /* Верхнее меню навигации */
@@ -430,7 +440,7 @@ fieldset[disabled] .btn {
     padding: 1.65rem 0 1.65rem 2.2rem;
 
     color: #34495E;
-    font-size: 1.55rem;
+    font-size: 1.6rem;
     font-weight: bold;
 }
 .dropdown-header.active {
@@ -439,6 +449,7 @@ fieldset[disabled] .btn {
 
 .dropdown-menu {
     display: none;
+    background-color: #FBFBFB;
     border-radius: 0 0 1rem 1rem;
     width: 100%;
     top: 15%;
@@ -476,12 +487,12 @@ fieldset[disabled] .btn {
 }
 
 .bootstrap-select > .btn.dropdown-toggle {
-    border-radius: 1rem;
+    border-radius: 1rem !important;
 
     text-transform: none;
 }
 .bootstrap-select.open > .btn.dropdown-toggle {
-    border-radius: 1rem 1rem 0 0;
+    border-radius: 1rem 1rem 0 0 !important;
 }
 
 .bootstrap-select-searchbox, 
@@ -596,6 +607,7 @@ fieldset[disabled] .btn {
 
 .modal-header {
     padding: 0 15px;
+    box-shadow: 0 -1rem 1rem -1rem rgba(0, 0, 0, 0.1) inset;
 }
 
 .close {
@@ -611,6 +623,7 @@ fieldset[disabled] .btn {
     text-align: center;
     padding: 7px 0;
     margin: 0;
+    box-shadow: 0 1.25rem 1rem -1rem rgba(0, 0, 0, 0.1) inset;
 }
 
 .modal-footer .btn-success {
