@@ -8,6 +8,7 @@ from werkzeug.wsgi import responder
 from werkzeug.exceptions import default_exceptions, HTTPException, NotFound
 
 from flask import Flask, g, redirect, request, session, url_for, abort, render_template, flash, jsonify
+from jinja2 import TemplateNotFound
 import json
 from functools import wraps
 from hashlib import md5
@@ -418,6 +419,7 @@ def get_object_or_404(model, **kwargs):
         return model.get(**kwargs)
     except model.DoesNotExist:
         abort(404)
+        return render_template('404.jinja.html')
 
 # Сздание и удаление подключения к БД по каждому запросу.
 # @app.before_request
@@ -431,6 +433,13 @@ def get_object_or_404(model, **kwargs):
 #     return response
 
 # Виды
+
+# Обработка ошибки 404
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template(
+        '404.jinja.html'
+    ), 404
 
 ## Главная страница
 @app.route('/')

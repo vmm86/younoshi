@@ -1,0 +1,13 @@
+{% extends "index.jinja.html" %}
+
+{% set title = "Страница не найдена" %}
+
+{% block body %}
+
+    {% include 'header.jinja.html' with context %}
+    <p>
+        К сожалению, мы не нашли то, что Вы искали.
+        Попробуйте начать поиск с <b><a href="{{ url_for('mainpage') }}">главной страницы</a></b>.
+    </p>
+
+{% endblock %}
