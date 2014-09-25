@@ -454,7 +454,9 @@ def mainpage():
     # else:
     #     return city()
 
-    return render_template('index.html')
+    return render_template(
+        'index.jinja.html'
+    )
 
 ## Вход в систему
 # @app.route('/login/', methods=['GET', 'POST'])
@@ -491,7 +493,7 @@ def listCity():
     listCity = City.select().order_by(City.cityName)
 
     return render_template(
-        'City.html', 
+        'City.jinja.html', 
         listCity = listCity
     )
 
@@ -549,7 +551,7 @@ def listSchool(cityid):
     listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.schoolName)
 
     return render_template(
-        'School.html', 
+        'School.jinja.html', 
         listCity   = listCity, 
         listSchool = listSchool, 
         cityid     = cityid, 
@@ -624,7 +626,7 @@ def listTeam(cityid, schoolid):
     listTeam = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).order_by(Team.teamName)
 
     return render_template(
-        'Team.html', 
+        'Team.jinja.html', 
         listCity   = listCity, 
         listSchool = listSchool, 
         listAge    = listAge, 
@@ -693,7 +695,7 @@ def listStage():
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
 
     return render_template(
-        'Stage.html', 
+        'Stage.jinja.html', 
         listStage = listStage
     )
 
@@ -748,7 +750,7 @@ def listSeason():
     listSeason = Season.select().order_by(Season.seasonName)
 
     return render_template(
-        'Season.html', 
+        'Season.jinja.html', 
         listSeason = listSeason
     )
 
@@ -812,7 +814,7 @@ def listSAS(seasonid, ageid):
     listSAS      = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(SeasonAgeStage.stage_ID == Stage.stage_ID).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
 
     return render_template(
-        'SAS.html', 
+        'SAS.jinja.html', 
         listSeason   = listSeason,
         listAge      = listAge,
         listStage    = listStage,
@@ -914,7 +916,7 @@ def listSAST(seasonid, ageid, sasid):
     sastsubstagecount = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).where(Stage.stage_ID != None).count()
 
     return render_template(
-        'SAST.html', 
+        'SAST.jinja.html', 
         listSeason        = listSeason,
         listAge           = listAge,
         listSAS_Z         = listSAS_Z,
