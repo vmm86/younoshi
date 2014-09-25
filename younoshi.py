@@ -326,8 +326,12 @@ class GameProtocol(Younoshi):
         null       = True
     )
     tourNumber = IntegerField(
-        db_column='tourNumber',
-        null=True
+        db_column = 'tourNumber',
+        null      = True
+    )
+    stageNumber = IntegerField(
+        db_column = 'stageNumber',
+        null      = True
     )
     gameDate = DateField(
         db_column = 'gameDate',
@@ -337,28 +341,28 @@ class GameProtocol(Younoshi):
     homeTeam_ID = ForeignKeyField(
         db_column    = 'homeTeam_ID',
         rel_model    = SeasonAgeStageTeam,
-        related_name = 'homeTeam_of_SAST',
+        related_name = 'homeTeam_of_GP',
         on_delete    = 'NO ACTION',
         on_update    = 'NO ACTION',
-        to_field     = 'SAS_ID',
+        to_field     = 'team_ID',
         null         = False
     )
     guestTeam_ID = ForeignKeyField(
         db_column    = 'guestTeam_ID',
         rel_model    = SeasonAgeStageTeam,
-        related_name = 'guestTeam_of_SAST',
+        related_name = 'guestTeam_of_GP',
         on_delete    = 'NO ACTION',
         on_update    = 'NO ACTION',
-        to_field     = 'SAS_ID',
+        to_field     = 'team_ID',
         null         = False
     )
     homeTeamScoreGame = IntegerField(
         db_column = 'homeTeamScoreGame',
-        null      = False
+        null      = True
     )
     guestTeamScoreGame = IntegerField(
         db_column = 'guestTeamScoreGame',
-        null      = False
+        null      = True
     )
     homeTeamScore11m = IntegerField(
         db_column = 'homeTeamScore11m',
