@@ -553,9 +553,9 @@ def listSchool(cityid):
     return render_template(
         'School.jinja.html', 
         listCity   = listCity, 
-        listSchool = listSchool, 
         cityid     = cityid, 
-        cityname   = cityname
+        cityname   = cityname, 
+        listSchool = listSchool
     )
 
 ### Добавление спортивных школ
@@ -628,13 +628,13 @@ def listTeam(cityid, schoolid):
     return render_template(
         'Team.jinja.html', 
         listCity   = listCity, 
-        listSchool = listSchool, 
-        listAge    = listAge, 
-        listTeam   = listTeam, 
         cityid     = cityid, 
         cityname   = cityname, 
+        listSchool = listSchool, 
         schoolid   = schoolid, 
         schoolname = schoolname
+        listAge    = listAge, 
+        listTeam   = listTeam
     )
 
 ### Добавление команд
@@ -816,14 +816,14 @@ def listSAS(seasonid, ageid):
     return render_template(
         'SAS.jinja.html', 
         listSeason   = listSeason,
-        listAge      = listAge,
-        listStage    = listStage,
-        listGameType = listGameType,
-        listSAS      = listSAS,
         seasonid     = seasonid,
         seasonname   = seasonname,
+        listAge      = listAge,
         ageid        = ageid,
         agename      = agename
+        listStage    = listStage,
+        listGameType = listGameType,
+        listSAS      = listSAS
     )
 
 ### Добавление игровых стадий
@@ -885,11 +885,6 @@ def deleteSAS(seasonid, ageid, sasid):
 ## Команды в игровых стадиях
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team')
 def listSAST(seasonid, ageid, sasid):
-    try:
-        sastype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
-    except SeasonAgeStage.DoesNotExist:
-        sastype = None
-
     listSeason = Season.select().order_by(Season.season_ID.asc())
     try:
         seasonname = Season.get(season_ID = seasonid).seasonName
@@ -901,6 +896,11 @@ def listSAST(seasonid, ageid, sasid):
         agename = Age.get(age_ID = ageid).ageName
     except Age.DoesNotExist:
         agename = None
+
+    try:
+        sastype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
+    except SeasonAgeStage.DoesNotExist:
+        sastype = None
 
     listSAS_Z = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
     listSAS_G = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
@@ -918,21 +918,21 @@ def listSAST(seasonid, ageid, sasid):
     return render_template(
         'SAST.jinja.html', 
         listSeason        = listSeason,
+        seasonid          = seasonid,
+        seasonname        = seasonname,
         listAge           = listAge,
+        ageid             = ageid,
+        agename           = agename,
         listSAS_Z         = listSAS_Z,
         listSAS_G         = listSAS_G,
         listSAS_P         = listSAS_P,
+        sasid             = sasid,
+        sastype           = sastype,
         filterCity        = filterCity,
         filterSchool      = filterSchool,
         filterTeam        = filterTeam,
         listSAST          = listSAST,
         listStage         = listStage,
-        seasonid          = seasonid,
-        seasonname        = seasonname,
-        ageid             = ageid,
-        agename           = agename,
-        sasid             = sasid,
-        sastype           = sastype,
         sastsubstagecount = sastsubstagecount
     )
 
