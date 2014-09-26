@@ -10,9 +10,10 @@
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='bootstrap/ico/favicon.ico') }}">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-select/css/bootstrap-select.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-switch/css/bootstrap-switch.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-touchspin/css/bootstrap-touchspin.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-validator/css/bootstrap-validator.css') }}">
 <!--
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap-theme.min.css') }}">
@@ -87,6 +88,7 @@
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-select/js/bootstrap-select.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-switch/bootstrap-switch.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-touchspin/js/bootstrap-touchspin.js') }}"></script>
 
     <script src="{{ url_for('static', filename='flat-ui/js/flatui-checkbox.js') }}"></script>
     <script src="{{ url_for('static', filename='flat-ui/js/flatui-radio.js') }}"></script>
@@ -148,6 +150,14 @@ $(document).ready(function() {
 
     $('select').selectpicker();
     $('.checkbox').bootstrapSwitch();
+
+    $('input[type="number"]').TouchSpin({
+        min: 0,
+        max: 100,
+        step: 1,
+        decimals: 0,
+        verticalbuttons: true
+    });
 } );
 </script>
 
