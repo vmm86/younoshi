@@ -244,7 +244,24 @@ button {
 }
 
 input[type="number"] {
-    width: 7rem;
+    border-radius: 1rem 0 0 1rem;
+    width: 5rem;
+}
+
+input::-o-outer-spin-button,
+input::-o-inner-spin-button {
+    -o-appearance: none;
+    margin: 0;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .tableInputLeft > button,
@@ -262,6 +279,7 @@ input[type="number"] {
 .form-control {
     font-size: 1.5rem;
     padding: 0.5rem 1rem;
+    border: 0.2rem solid #3498DB;
     border-radius: 1rem;
 }
 
@@ -288,6 +306,11 @@ input[type="number"] {
     background: #E74C3C;
 }
 
+.input-group {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .btn-group, 
 .btn-group-vertical {
     vertical-align: top;
@@ -302,6 +325,14 @@ input[type="number"] {
 
     padding: 0.5rem 1rem 0.5rem 0;
     margin: 0;
+}
+
+.btn-group > label.btn-label.disabled {
+    color: #AFAFAF;
+}
+
+.btn-group > .btn-group {
+    float: none;
 }
 
 .btn {
@@ -530,6 +561,7 @@ fieldset[disabled] .btn {
 
 .form-group.focus .form-control, 
 .form-control:focus {
+/*    background: rgba(255, 200, 0, 0.5);*/
     border-color: #3498DB;
 }
 
@@ -805,4 +837,16 @@ input.error {
     background-color: #FFF;
     border-color: #BDC3C7;
     cursor: not-allowed;
+}
+
+/* Кнопки Bootstrap Touchspin */
+/*
+.bootstrap-touchspin-up,
+.bootstrap-touchspin-down {
+    display: none !important;
+}*/
+
+.form-group.focus .form-control + .input-group-btn-vertical .bootstrap-touchspin-up, 
+.form-control:focus + .input-group-btn-vertical .bootstrap-touchspin-up{
+    background-color: #3498DB;
 }
