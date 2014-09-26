@@ -3,7 +3,7 @@
 {% set active_group = "Calendar" %}
 {% set active_page  = "GP"       %}
 
-{% set title = "Результаты матчей" %}
+{% set title = "Список матчей в выбранной игровой стадии" %}
 
 {% block body %}
 
@@ -16,7 +16,7 @@
         <div class="btn-group">
             <label class="btn-label" for="chooseSeason">Выберите сезон</label>
             <br>
-            <select id="filterSeasonforSAST" name="filterSeasonforSAST" class="selectpicker" data-live-search="true" data-style="btn-info">
+            <select id="filterSeasonforGP" name="filterSeasonforGP" class="selectpicker" data-live-search="true" data-style="btn-info">
                 <option value="0" {% for lse in listSeason %}{% if lse.season_ID == seasonid %}selected{% endif %}{% endfor %}>
                     {% if listSeason.count() >  0 %}выберите сезон{% endif %}
                     {% if listSeason.count() == 0 %}{% endif %}
@@ -37,7 +37,7 @@
             {% for la in listAge %}
                 {% if loop.index in range(1,5) %}
                 <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAST" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforGP" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
                 </label>
                 {% endif %}
             {% endfor %}
@@ -46,7 +46,7 @@
             {% for la in listAge %}
                 {% if loop.index in range(5,9) %}
                 <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAST" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforGP" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
                 </label>
                 {% endif %}
             {% endfor %}
@@ -134,55 +134,57 @@
         <table id="listGP" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a></td>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a>
+                </td>
                 <td class="tableNumber">#</td>
-                <td class="tableText" style="">Команда хозяев</td>
-                <td class="tableScore" style="width: 3rem;">Счёт</td>
-                <td class="tableText" style="">Команда гостей</td>
+                <td class="tableNumber">Тур</td>
+            {% if sasgametype == "CHA" %}
+                <td class="tableNumber">Круг</td>
+            {% endif %}
+                <td class="tableText">Дата матча</td>
+                <td class="tableText">Команда хозяев</td>
+                <td class="tableScore">Счёт</td>
+                <td class="tableText">Команда гостей</td>
+                <td class="tableNumber">пф</td>
+                <td class="tableNumber">ф</td>
                 <td class="tableInputRight"></td>
             </tr>
         </thead>
         <tbody>
+            {% for lgp in listGP %}
             <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">1</td>
-                <td class="tableText">Раз команда</td>
-                <td class="tableScore">1 : 0</td>
-                <td class="tableText">Два команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
+                <td class="tableInputLeft">
+                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lgp.GP_ID }}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a>
+                </td>
+                <td class="tableNumber">{{ lgp.gameNumber }}</td>
+                <td class="tableNumber">{{ lgp.tourNumber }}</td>
+            {% if sasgametype == "CHA" %}
+                <td class="tableNumber">{{ lgp.stageNumber }}</td>
+            {% endif %}
+                <td class="tableText">{{ lgp.gameDate.strftime('%d.%m.%Y') }}</td>
+                <td class="tableText">{{ lgp.homeTeam_ID.team_ID.teamName }}</td>
+                <td class="tableScore">
+                    {% if not lgp.homeTeamScoreGame or not lgp.guestTeamScoreGame %}
+                    {% endif %}
+                    {% if lgp.homeTeamScoreGame or lgp.guestTeamScoreGame %}
+                        {{ lgp.homeTeamScoreGame }} : {{ lgp.guestTeamScoreGame }}
+                    {% endif %}
+
+                    {% if not lgp.homeTeamScore11m or not lgp.guestTeamScore11m %}
+                    {% endif %}
+                    {% if lgp.homeTeamScore11m or lgp.guestTeamScore11m %}
+                        ({{ lgp.homeTeamScore11m }} : {{ lgp.guestTeamScore11m }})
+                    {% endif %}
+                </td>
+                <td class="tableText">{{ lgp.guestTeam_ID.team_ID.teamName }}</td>
+                <td class="tableNumber">{{ lgp.is_Semifinal }}</td>
+                <td class="tableNumber">{{ lgp.is_Final }}</td>
+                <td class="tableInputRight">
+                    {% include "includes/deleteGP.jinja.html" %}
+                </td>
             </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">2</td>
-                <td class="tableText">Два команда</td>
-                <td class="tableScore">3 : 2</td>
-                <td class="tableText">Три команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">3</td>
-                <td class="tableText">Три команда</td>
-                <td class="tableScore"></td>
-                <td class="tableText">Четыре команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_editGP"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">4</td>
-                <td class="tableText">Четыре команда</td>
-                <td class="tableScore"></td>
-                <td class="tableText">Пять команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
-            <tr>
-                <td class="tableInputLeft"><a class="form-control flat btn-warning input-sm" type="submit" name="edit"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a></td>
-                <td class="tableNumber">5</td>
-                <td class="tableText">Пять команда</td>
-                <td class="tableScore"></td>
-                <td class="tableText">Раз команда</td>
-                <td class="tableInputRight"><button class="form-control flat btn-danger input-sm" type="submit" name="delete"><span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i></button></td>
-            </tr>
+            {% endfor %}
         </tbody>
         </table>
     </div>
@@ -191,78 +193,16 @@
 
 </div>
 
-<div id="Modal_editGP" class="modal fade modal-lg" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+{% include "includes/createGP.jinja.html" %}
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="modal-title" aria-labelledby="Modal_editGP_Label">Добавить/изменить результаты матча</h3>
-            </div>
+{% for lgp in listGP %}
+    {% include "includes/updateGP.jinja.html" %}
+{% endfor %}
 
-            <div class="modal-body">
-                <div class="btn-group">
-                    <label class="btn-label" for="editGP_gameNumber">Номер матча</label> <input id="editGP_gameNumber" class="form-control" name="editGP_gameNumber" type="number">
-                    <br>
-                    <label class="btn-label" for="editGP_tourNumber">Номер тура</label> <input id="editGP_tourNumber" class="form-control" name="editGP_tourNumber" type="number">
-                    <br>
-                    <label class="btn-label" for="editGP_gameDate">Дата матча</label> <input id="editGP_gameDate" class="form-control" name="editGP_gameDate" type="date">
-                    <br>
-                    <div class="btn-group">
-                        <label class="btn-label" for="editGP_homeTeam">Команда хозяев</label>
-                        <select id="editGP_homeTeam" class="selectpicker" name="editGP_homeTeam" data-live-search="true" data-style="btn-info" data-width="auto">
-                            <option value="1">Первая школа</option>
-                            <option value="2">Вторая школа</option>
-                            <option value="3">Третья школа</option>
-                            <option value="4">Четвёртая школа</option>
-                            <option value="5">Пятая школа</option>
-                        </select>
-                    </div>
-                    <div class="btn-group">
-                        <label class="btn-label" for="editGP_guestTeam">Команда гостей</label>
-                        <select id="editGP_guestTeam" class="selectpicker" name="editGP_guestTeam" data-live-search="true" data-style="btn-info" data-width="auto">
-                            <option value="1">Первая школа</option>
-                            <option value="2">Вторая школа</option>
-                            <option value="3">Третья школа</option>
-                            <option value="4">Четвёртая школа</option>
-                            <option value="5">Пятая школа</option>
-                        </select>
-                    </div>
-                    <br>
-                    <div class="btn-group">
-                        <label class="btn-label" for="editGP_homeTeamScoreGame editGP_guestTeamScoreGame">Счёт матча <input id="editGP_homeTeamScoreGame" class="form-control" name="editGP_homeTeamScoreGame" type="number"> <input id="editGP_guestTeamScoreGame" class="form-control" name="editGP_guestTeamScoreGame" type="number"></label>
-                    </div>
-                    <br>
-                    <br>
-                    <br>
-                    <!-- поля внутри д.б. доступны только в матчах стадии плэй-офф -->
-                    <div class="btn-group">
-                        <input id="editGP_is11m" class="checkbox" name="editGP_is11m" type="checkbox" />
-                        <label class="btn-label" for="editGP_homeTeamScore11m editGP_guestTeamScore11m">Счёт серии 11-метровых <input id="editGP_homeTeamScore11m" class="form-control" name="editGP_homeTeamScore11m" type="number"><input id="editGP_guestTeamScore11m" class="form-control" name="editGP_guestTeamScore11m" type="number"></label>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="btn-group">
-                        <input id="editGP_isSemifinal" class="checkbox" name="editGP_isSemifinal" type="checkbox" />
-                        <label class="btn-label" for="editGP_isSemifinal">полуфинальный матч плэй-офф</label>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="btn-group">
-                        <input id="editGP_isFinal" class="checkbox" name="editGP_isFinal" type="checkbox" />
-                        <label class="btn-label" for="editGP_isSemifinal">финальный матч плэй-офф</label>
-                    </div>
-                    <!-- поля внутри д.б. доступны только в матчах стадии плэй-офф -->
-                </div>
-            </div>
+{% endblock %}
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-success">Сохранить</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
+{% block scripts %}
+    <script src="{{ url_for('static', filename='customization/js/selectAction_GP.js') }}"></script>
+    <script src="{{ url_for('static', filename='customization/js/zoneGroupPlayoffToggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='customization/js/formValidation.js') }}"></script>
 {% endblock %}

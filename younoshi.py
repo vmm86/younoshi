@@ -320,9 +320,8 @@ class GameProtocol(Younoshi):
     GP_ID = PrimaryKeyField(
         db_column = 'GP_ID'
     )
-    gameNumber = CharField(
+    gameNumber = IntegerField(
         db_column  = 'gameNumber',
-        max_length = 16,
         null       = True
     )
     tourNumber = IntegerField(
@@ -632,7 +631,7 @@ def listTeam(cityid, schoolid):
         cityname   = cityname, 
         listSchool = listSchool, 
         schoolid   = schoolid, 
-        schoolname = schoolname
+        schoolname = schoolname,
         listAge    = listAge, 
         listTeam   = listTeam
     )
@@ -820,7 +819,7 @@ def listSAS(seasonid, ageid):
         seasonname   = seasonname,
         listAge      = listAge,
         ageid        = ageid,
-        agename      = agename
+        agename      = agename,
         listStage    = listStage,
         listGameType = listGameType,
         listSAS      = listSAS
@@ -995,6 +994,224 @@ def deleteSAST(seasonid, ageid, sasid, sastid):
 
         return redirect(
             url_for('listSAST',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid
+            )
+        )
+
+## Игровые протоколы
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp')
+def listGP(seasonid, ageid, sasid):
+    listSeason = Season.select().order_by(Season.season_ID.asc())
+    try:
+        seasonname = Season.get(season_ID = seasonid).seasonName
+    except Season.DoesNotExist:
+        seasonname = None
+
+    listAge = Age.select().order_by(Age.ageName)
+    try:
+        agename = Age.get(age_ID = ageid).ageName
+    except Age.DoesNotExist:
+        agename = None
+
+    sasid = sasid
+    try:
+        sastype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
+    except SeasonAgeStage.DoesNotExist:
+        sastype = None
+
+    try:
+        sasgametype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).gameType_ID.gameTypeName
+    except SeasonAgeStage.DoesNotExist:
+        sasgametype = None
+
+    listSAS_Z = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
+    listSAS_G = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
+    listSAS_P = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
+
+    listSAST = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Team).switch(SeasonAgeStageTeam).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
+    listGP   = GameProtocol.select().join(SeasonAgeStageTeam).where(SeasonAgeStageTeam.SAS_ID == sasid).order_by(GameProtocol.GP_ID)
+
+    gnmax = int(GameProtocol.select(fn.Max(GameProtocol.gameNumber)).scalar())
+    gnmax += 1
+    tnmax = int(GameProtocol.select(fn.Max(GameProtocol.tourNumber)).scalar())
+    dmax  = GameProtocol.select(fn.Max(GameProtocol.gameDate)).scalar()
+
+    return render_template(
+        'GP.jinja.html', 
+        listSeason  = listSeason,
+        seasonid    = seasonid,
+        listAge     = listAge,
+        ageid       = ageid,
+        listSAS_Z   = listSAS_Z,
+        listSAS_G   = listSAS_G,
+        listSAS_P   = listSAS_P,
+        sasid       = sasid,
+        sastype     = sastype,
+        sasgametype = sasgametype,
+        listSAST    = listSAST,
+        listGP      = listGP,
+        gnmax       = gnmax,
+        tnmax       = tnmax,
+        dmax        = dmax
+    )
+
+### Добавление игрового протокола
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/create', methods=['GET', 'POST'])
+def createGP(seasonid, ageid, sasid):
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        gamenumber = request.form['gameNumber']
+        tournumber = request.form['tourNumber']
+ 
+        try:
+            stagenumber = request.form['stageNumber']
+        except KeyError:
+            stagenumber = None
+        if stagenumber == '':
+            stagenumber = None
+
+        gamedate = request.form['gameDate']
+        htid     = request.form['filterHT']
+        gtid     = request.form['filterGT']
+
+        htscoregame = request.form['HTscoreGame']
+        if htscoregame == '':
+            htscoregame = None
+
+        gtscoregame = request.form['GTscoreGame']
+        if gtscoregame == '':
+            gtscoregame = None
+
+        try:
+            htscore11m = request.form['HTscore11m']
+        except KeyError:
+            htscore11m = None
+        if htscore11m == '':
+            htscore11m = None
+
+        try:
+            gtscore11m = request.form['GTscore11m']
+        except KeyError:
+            gtscore11m = None
+        if gtscore11m == '':
+            gtscore11m = None
+
+        try:
+            issemifinal = bool(int(request.form['is_Semifinal']))
+        except KeyError:
+            issemifinal = False
+
+        try:
+            isfinal = bool(int(request.form['is_Final']))
+        except KeyError:
+            isfinal = False
+
+        GameProtocol.create(
+            gameNumber         = gamenumber, 
+            tourNumber         = tournumber, 
+            stageNumber        = stagenumber, 
+            gameDate           = gamedate, 
+            homeTeam_ID        = htid, 
+            guestTeam_ID       = gtid, 
+            homeTeamScoreGame  = htscoregame, 
+            guestTeamScoreGame = gtscoregame, 
+            homeTeamScore11m   = htscore11m, 
+            guestTeamScore11m  = gtscore11m, 
+            is_Semifinal       = issemifinal, 
+            is_Final           = isfinal
+        )
+
+        return redirect(
+            url_for('listGP',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid
+            )
+        )
+
+### Изменение игрового протокола
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/update', methods=['GET', 'POST'])
+def updateGP(seasonid, ageid, sasid, gpid):
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        gamenumber = request.form['gameNumber']
+        tournumber = request.form['tourNumber']
+ 
+        try:
+            stagenumber = request.form['stageNumber']
+        except KeyError:
+            stagenumber = None
+        if stagenumber == '':
+            stagenumber = None
+
+        gamedate = request.form['gameDate']
+        htid     = request.form['filterHT']
+        gtid     = request.form['filterGT']
+
+        htscoregame = request.form['HTscoreGame']
+        if htscoregame == '':
+            htscoregame = None
+
+        gtscoregame = request.form['GTscoreGame']
+        if gtscoregame == '':
+            gtscoregame = None
+
+        try:
+            htscore11m = request.form['HTscore11m']
+        except KeyError:
+            htscore11m = None
+        if htscore11m == '':
+            htscore11m = None
+
+        try:
+            gtscore11m = request.form['GTscore11m']
+        except KeyError:
+            gtscore11m = None
+        if gtscore11m == '':
+            gtscore11m = None
+
+        try:
+            issemifinal = bool(int(request.form['is_Semifinal']))
+        except KeyError:
+            issemifinal = False
+
+        try:
+            isfinal = bool(int(request.form['is_Final']))
+        except KeyError:
+            isfinal = False
+
+        GP                    = GameProtocol()
+        GP.GP_ID              = gpid
+        GP.gameNumber         = gamenumber
+        GP.tourNumber         = tournumber
+        GP.stageNumber        = stagenumber
+        GP.gameDate           = gamedate
+        GP.homeTeam_ID        = htid
+        GP.guestTeam_ID       = gtid
+        GP.homeTeamScoreGame  = htscoregame
+        GP.guestTeamScoreGame = gtscoregame
+        GP.homeTeamScore11m   = htscore11m
+        GP.guestTeamScore11m  = gtscore11m
+        GP.is_Semifinal       = issemifinal
+        GP.is_Final           = isfinal
+        GP.save()
+
+        return redirect(
+            url_for('listGP',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid
+            )
+        )
+
+### Удаление игрового протокола
+@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/delete', methods  = ['GET', 'POST'])
+def deleteGP(seasonid, ageid, sasid, gpid):
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+        GameProtocol.get(GP_ID = gpid).delete_instance()
+
+        return redirect(
+            url_for('listGP',
                 seasonid = seasonid,
                 ageid    = ageid,
                 sasid    = sasid
