@@ -85,7 +85,7 @@
 <!--                 <td class="tableText">{{ lsas.season_ID.seasonName }}</td>
                 <td class="tableText">{{ lsas.age_ID.ageName }}</td> -->
                 <td class="tableText">
-                    <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/team">
+                    <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
                         {% if lsas.stage_ID.stageType == "Z" %}зона {{ lsas.stage_ID.stageName }}{% endif %}
                         {% if lsas.stage_ID.stageType == "G" %}группа {{ lsas.stage_ID.stageName }}{% endif %}
                         {% if lsas.stage_ID.stageType == "P" %}плэй-офф{% endif %}
