@@ -167,6 +167,15 @@ table tr td {
     margin: 0.5rem !important;
 }
 
+/* Имя текущего пользователя */
+
+.userName {
+    float: left;
+    position: absolute;
+    left: 1.5%;
+    top: 25%;
+}
+
 /* Верхнее меню навигации */
 
 #top-menu {
@@ -307,8 +316,18 @@ input[type=number] {
 }
 
 .input-group {
-    display: inline-block;
+/*    display: inline-block;*/
     vertical-align: middle;
+}
+
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 15px;
+    color: #FFF;
+    text-align: center;
+    background-color: #3498DB;
+    border: 1px solid #3498DB;
+    border-radius: 1rem;
 }
 
 .btn-group, 
@@ -349,6 +368,7 @@ a.btn {
 }
 
 .btn-info {
+    background-color: #3498DB;
     color: #FFF;
     text-shadow: 1px 1px 0 rgba(0, 60, 100, 0.5);
 }
@@ -356,6 +376,11 @@ a.btn {
 .btn-info.disabled {
     color: #FFF;
     text-shadow: 1px 1px 0 rgba(100, 100, 100, 0.5);
+}
+
+.btn-info:hover {
+    background-color: #5DADE2;
+    border-color: #5DADE2;
 }
 
 /* Выбор игровой стадии */
@@ -849,4 +874,19 @@ input.error {
 .form-group.focus .form-control + .input-group-btn-vertical .bootstrap-touchspin-up, 
 .form-control:focus + .input-group-btn-vertical .bootstrap-touchspin-up{
     background-color: #3498DB;
+}
+
+/* Flashed Messages */
+
+.alert {
+    border: 1px solid transparent;
+    border-radius: 1rem;
+
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.close {
+    font-size: 3rem;
+    line-height: 1;
 }

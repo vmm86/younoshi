@@ -1,31 +1,35 @@
 {% extends "index.jinja.html" %}
 
+{% set active_page  = "Login" %}
+
 {% block title %}Войти в систему{% endblock %}
 
 {% block body %}
 
-    {% if error %}
-        <p class=error><strong>Ошибка входа:</strong> {{ error }}
-    {% endif %}
+<form name="login" action="{{ url_for('login') }}" method="POST" class="flat-form">
 
-    <div class="row" style="text-align: center; margin: 0 auto; width: 25%;">
+    <div class="row">
 
-        <form id="loginForm" class="flat-form form-group" name="loginForm" action="{{ url_for('login') }}" method="post" style="text-align: center;">
-            <div class="input-group">
+        <div class="col-lg-3 col-lg-offset-4">
+
+            <div class="input-group" style="height: 100%;">
                 <div class="input-group">
-                    <i class="input-group-addon glyphicon glyphicon-user"></i>
-                    <input id="authFormLogin" class="form-control" type="text" name="userName" placeholder="Имя">
+                    <i class="input-group-addon glyphicon glyphicon-user" style="border-radius: 1rem 0 0 0;"></i>
+                    <input type="text" name="userLogin" placeholder="Имя" class="form-control" style="border-bottom: 0.15rem solid #3498DB; border-radius: 0; font-weight: bold;">
                 </div>
                 <div class="input-group">
-                    <i class="input-group-addon glyphicon glyphicon-lock"></i>
-                    <input id="authFormPassword" class="form-control"  type="password" name="userPassword" placeholder="Пароль">
+                    <i class="input-group-addon glyphicon glyphicon-lock" style="border-radius: 0 0 0 1rem;"></i>
+                    <input type="password" name="userPassword" placeholder="Пароль" class="form-control" style="border-top: 0.15rem solid #3498DB; border-radius: 0; font-weight: bold;">
                 </div>
-                <span class="input-group-btn">
-                    <input id="authFormSubmit" class="btn btn-primary btn-wide" type="submit" name="loginFormSubmit" value="Зарегистрироваться">
+                <span class="input-group-btn" style="height: 100%;">
+                    <input type="submit" name="login" value="Войти" class="btn btn-info btn-wide" style="height: 100%;">
                 </span>
             </div>
-        </form>
+
+        </div>
 
     </div>
+
+</form>
 
 {% endblock %}

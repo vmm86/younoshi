@@ -25,12 +25,17 @@
 </head>
 <body role="document">
 
-{% set active_group = active_group|default('Source') -%}
-{% set active_page  =  active_page|default('/') -%}
+{% set active_group = active_group|default('') -%}
+{% set active_page  =  active_page|default('') -%}
 
 <div id="top-menu" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-collapse collapse">
+
+        {% if session['logged_in'] %}
+
+            <div class="userName">{{ session['userName'] }}</div>
+
             <ul class="nav navbar-nav">
                 <li class="dropdown {% if active_group == 'Source' %}active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Исходные данные <b class="caret"></b></a>
@@ -61,18 +66,34 @@
                         <li {% if active_page == 'TeamRating'   %}class="active"{% endif %}><a href="/teamrating">Команды</a></li>
                     </ul>
                 </li>
+                <li {% if active_page == 'Logout' %}class="active"{% endif %}><a href="/logout">Выйти</a></li>
             </ul>
+        {% endif %}
+
         </div>
     </div>
 </div>
 
 <div class="container wrapper" role="main">
 
-{% for message in get_flashed_messages() %}
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть это сообщение</span></button>
-        {{ message }}
-    </div>
+{% for category, message in get_flashed_messages(with_categories=true) %}
+
+    {% if category == 'success' %}
+        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endif %}
+
+    {% if category == 'info' %}
+        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endif %}
+
+    {% if category == 'warning' %}
+        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endif %}
+
+    {% if category == 'danger' %}
+        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endif %}
+
 {% endfor %}
 
 {% block body scoped %}{% endblock %}

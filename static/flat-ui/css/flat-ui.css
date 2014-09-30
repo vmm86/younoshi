@@ -1616,12 +1616,12 @@ fieldset[disabled] .input-group.focus .input-group-btn .btn-default.active {
   background-color: #1abc9c;
   border-color: #1abc9c;
 }
-.input-group-btn .btn {
+/*.input-group-btn .btn {
   background-color: #ffffff;
   border: 2px solid #bdc3c7;
   color: #bdc3c7;
   line-height: 18px;
-}
+}*/
 .input-group-btn .btn-default {
   color: #ffffff;
   background-color: #bdc3c7;

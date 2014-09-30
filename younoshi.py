@@ -19,9 +19,6 @@ DB_NAME    = 'younoshi'
 DB_USER    = 'root'
 DB_PASSWD  = 'ckpvmm86'
 
-USER       = 'test'
-PASSWD     = 'test'
-
 SECRET_KEY = '~a8a<uccng{,3}fr$[#n5\*s=h7"2n=}jhd-?y6dbb8a(n6+esykqy'
 DEBUG      = True
 
@@ -48,14 +45,19 @@ class User(Younoshi):
     user_ID = PrimaryKeyField(
         db_column = 'user_ID'
     )
-    userName = CharField(
-        db_column  = 'userName',
-        max_length = 128,
+    userLogin = CharField(
+        db_column  = 'userLogin',
+        max_length = 32,
         null       = False
     )
     userPassword = CharField(
         db_column  = 'userPassword',
-        max_length = 128,
+        max_length = 32,
+        null       = False
+    )
+    userName = CharField(
+        db_column  = 'userName',
+        max_length = 32,
         null       = False
     )
 
@@ -392,27 +394,16 @@ class GameProtocol(Younoshi):
             ),
         )
 
-# Авторизация
-# def auth_user(user):
-#     session['logged_in'] = True
-#     session['user_ID']   = User.user_ID
-#     session['userName']  = User.userName
-#     flash('Вы вошли в систему как %s' % (user.userName))
+# Создание и удаление подключения к БД по каждому запросу.
+# @app.before_request
+# def before_request():
+#     g.db = younoshi_db
+#     g.db.connect()
 
-# Получить данные о пользователе из сессии
-# def get_current_user():
-#     if session.get('logged_in'):
-#         return User.get(User.id == session['user_ID'])
-
-# Задаётся декоратор вида, указывающий пользователю, что он должен войти в систему для того, чтобы получить доступ к виду.
-# Декоратор проверяет сессию, и если пользователь не вошёл в систему, он перенаправляется на вид login.
-# def login_required(f):
-#     @wraps(f)
-#     def inner(*args, **kwargs):
-#         if not session.get('logged_in'):
-#             return redirect(url_for('login'))
-#         return f(*args, **kwargs)
-#     return inner
+# @app.after_request
+# def after_request(response):
+#     g.db.close()
+#     return response
 
 # Получаем одиночный объект, соответствующий запросу или страницу ошибки 404.
 # Используется алиас вызова метода "GET" из модели, который получает одиночный объект 
@@ -424,67 +415,83 @@ def get_object_or_404(model, **kwargs):
         abort(404)
         return render_template('404.jinja.html')
 
-# Сздание и удаление подключения к БД по каждому запросу.
-# @app.before_request
-# def before_request():
-#     g.db = younoshi_db
-#     g.db.connect()
-
-# @app.after_request
-# def after_request(response):
-#     g.db.close()
-#     return response
-
-# Виды
-
-# Обработка ошибки 404
+## Обработка ошибки 404
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template(
         '404.jinja.html'
     ), 404
 
-## Главная страница
-@app.route('/')
-def mainpage():
-    # # В зависимости от того, вошёл пользователь в систему или нет, ему показывается стартовая страница.
-    # if session.get('logged_in'):
-    #     return join()
-    # else:
-    #     return city()
-
-    return render_template(
-        'index.jinja.html'
-    )
-
-## Вход в систему
-# @app.route('/login/', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'POST' and request.form['loginForm']:
-#         try:
-#             user = User.get(
-#                 userName=request.form['userName'],
-#                 userPassword=md5(request.form['userPassword']).hexdigest()
-#             )
-#         except User.DoesNotExist:
-#             flash('Пароль введён некорректно - попробуйте ещё раз')
-#         else:
-#             auth_user(user)
-#             return redirect(url_for('homepage'))
-
-#     return render_template('login.html')
-
-## Выход из системы
-# @app.route('/logout/')
-# def logout():
-#     session.pop('logged_in', None)
-#     flash('Вы вышли из системы')
-#     return redirect(url_for('homepage'))
-
 # @app.errorhandler(400)
 # def key_error(e):
-#     flash('К сожалению, ваш запрос не удалось выполнить. Попробуйте сделать это ещё раз, введя все необходимые данные.')
+#     flash('К сожалению, ваш запрос не удалось выполнить. Попробуйте сделать это ещё раз, введя все необходимые данные.', 'danger')
 #     return render_template('index.html'), 400
+
+# Авторизация
+def auth_user(user):
+    session['logged_in'] = True
+    session['user_ID']   = user.user_ID
+    session['userLogin'] = user.userLogin
+    session['userName']  = user.userName
+    flash('Вы успешно вошли в систему как %s' % (user.userName), 'success')
+
+# Получить данные о пользователе из сессии
+# def get_current_user():
+#     if session.get('logged_in'):
+#         return User.get(user_ID = session['user_ID'])
+
+# Декоратор проверяет сессию, и если пользователь не вошёл в систему, он перенаправляется на вид login.
+def login_required(f):
+    @wraps(f)
+    def inner(*args, **kwargs):
+        if not session.get('logged_in'):
+            return redirect(
+                url_for('login')
+            )
+        return f(*args, **kwargs)
+    return inner
+
+# Виды
+
+## Главная страница
+@app.route('/')
+def index():
+    ### В зависимости от того, вошёл пользователь в систему или нет, ему показывается стартовая страница.
+    if session.get('logged_in'):
+        return render_template(
+            'index.jinja.html'
+        )
+    else:
+        return redirect(
+            url_for('login')
+        )
+
+## Вход в систему
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST' and request.form['login']:
+        try:
+            userlogin = request.form['userLogin']
+            userpassw = md5(request.form['userPassword']).hexdigest()
+            user      = User.get(userLogin = userlogin, userPassword = userpassw)
+        except User.DoesNotExist:
+            flash('Имя или пароль введёны неправильно - попробуйте ещё раз', 'danger')
+        else:
+            auth_user(user)
+            return redirect(
+                url_for('index')
+            )
+
+    return render_template('login.jinja.html')
+
+## Выход из системы
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash('Вы вышли из системы', 'warning')
+    return redirect(
+        url_for('index')
+    )
 
 ## Города
 @app.route('/city')
@@ -532,7 +539,7 @@ def deleteCity(cityid):
         try:
             City.get(city_ID = cityid).delete_instance()
         except IntegrityError:
-            flash('Вы не можете удалить этот город, пока в него добавлена хотя бы одна спортивная школа')
+            flash('Вы не можете удалить этот город, пока в него добавлена хотя бы одна спортивная школа', 'danger')
 
         return redirect(
             url_for('listCity')
@@ -598,7 +605,7 @@ def deleteSchool(cityid, schoolid):
         try:
             School.get(city_ID = cityid, school_ID = schoolid).delete_instance()
         except IntegrityError:
-            flash('Вы не можете удалить эту спортивную школу, пока в неё добавлена хотя бы одна команда')
+            flash('Вы не можете удалить эту спортивную школу, пока в неё добавлена хотя бы одна команда', 'danger')
 
         return redirect(
             url_for('listSchool', 
@@ -737,7 +744,7 @@ def deleteStage(stageid):
         try:
             Stage.get(stage_ID = stageid).delete_instance()
         except IntegrityError:
-            flash('Вы не можете удалить эту игровую стадию, пока с ней связан хотя бы один игровой этап внутри сезона')
+            flash('Вы не можете удалить эту игровую стадию, пока с ней связан хотя бы один игровой этап внутри сезона', 'danger')
 
         return redirect(
             url_for('listStage')
@@ -787,7 +794,7 @@ def deleteSeason(seasonid):
         try:
             Season.get(season_ID = seasonid).delete_instance()
         except IntegrityError:
-            flash('Вы не можете удалить этот сезон, пока в нём добавлен хотя бы один игровой этап')
+            flash('Вы не можете удалить этот сезон, пока в нём добавлен хотя бы один игровой этап', 'danger')
 
         return redirect(
             url_for('listSeason')
@@ -871,7 +878,7 @@ def deleteSAS(seasonid, ageid, sasid):
         try:
             SeasonAgeStage.get(SAS_ID = sasid).delete_instance()
         except IntegrityError:
-            flash('Вы не можете удалить эту игровую стадию, пока в неё добавлена хотя бы одна команда')
+            flash('Вы не можете удалить эту игровую стадию, пока в неё добавлена хотя бы одна команда', 'danger')
 
         return redirect(
             url_for('listSAS',
