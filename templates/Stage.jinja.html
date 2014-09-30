@@ -2,8 +2,7 @@
 
 {% set active_group = "Source" %}
 {% set active_page  = "Stage"  %}
-
-{% set title = "Игровые стадии, в рамках которых проходят соревнования" %}
+{% set title        = "Игровые стадии, в рамках которых проходят соревнования" %}
 
 {% block body %}
 
@@ -18,7 +17,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -32,7 +31,7 @@
             {% for lst in listStage %}
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lst.stage_ID }}">
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lst.stage_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>

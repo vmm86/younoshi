@@ -2,8 +2,7 @@
 
 {% set active_group = "Calendar" %}
 {% set active_page  = "SAS"      %}
-
-{% set title = "Игровые стадии в выбранном сезоне" %}
+{% set title        = "Игровые стадии в выбранном сезоне" %}
 
 {% block body %}
 
@@ -65,7 +64,9 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a>
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
+                    </a>
                 </td>
                 <td class="tableNumber">#</td>
 <!--                 <td class="tableText">Сезон</td>
@@ -79,7 +80,9 @@
             {% for lsas in listSAS %}
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lsas.SAS_ID }}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a>
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lsas.SAS_ID }}">
+                        <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
+                    </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
 <!--                 <td class="tableText">{{ lsas.season_ID.seasonName }}</td>

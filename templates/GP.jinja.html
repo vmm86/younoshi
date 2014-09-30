@@ -2,8 +2,7 @@
 
 {% set active_group = "Calendar" %}
 {% set active_page  = "GP"       %}
-
-{% set title = "Список матчей в выбранной игровой стадии" %}
+{% set title        = "Список матчей в выбранной игровой стадии" %}
 
 {% block body %}
 
@@ -135,7 +134,9 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a>
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
+                    </a>
                 </td>
                 <td class="tableNumber">#</td>
                 <td class="tableNumber">Тур</td>
@@ -155,7 +156,9 @@
             {% for lgp in listGP %}
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lgp.GP_ID }}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a>
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lgp.GP_ID }}">
+                        <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
+                    </a>
                 </td>
                 <td class="tableNumber">{{ lgp.gameNumber }}</td>
                 <td class="tableNumber">{{ lgp.tourNumber }}</td>

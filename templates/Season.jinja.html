@@ -2,8 +2,7 @@
 
 {% set active_group = "Source" %}
 {% set active_page  = "Season" %}
-
-{% set title = "Сезоны, в рамках которых проводятся соревнования" %}
+{% set title        = "Сезоны, в рамках которых проводятся соревнования" %}
 
 {% block body %}
 
@@ -18,7 +17,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -31,7 +30,7 @@
             {% for lse in listSeason %}
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lse.season_ID }}">
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lse.season_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>

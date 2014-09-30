@@ -2,8 +2,7 @@
 
 {% set active_group = "Calendar" %}
 {% set active_page  = "SAST"     %}
-
-{% set title = "Команды, участвующие в выбранной игровой стадии" %}
+{% set title        = "Команды, участвующие в выбранной игровой стадии" %}
 
 {% block body %}
 
@@ -138,7 +137,9 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" type="submit" name="new" data-toggle="modal" data-target="#Modal_create"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span></a>
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
+                    </a>
                 </td>
                 <td class="tableNumber">#</td>
                 <td class="tableText">Команда</td>
@@ -152,7 +153,9 @@
             {% for lsast in listSAST %}
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" type="submit" name="edit" data-toggle="modal" data-target="#Modal_update_{{ lsast.SAST_ID }}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span></a>
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lsast.SAST_ID }}">
+                        <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
+                    </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">{{ lsast.team_ID.teamName }}</td>

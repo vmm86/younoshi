@@ -432,13 +432,12 @@ def auth_user(user):
     session['logged_in'] = True
     session['user_ID']   = user.user_ID
     session['userLogin'] = user.userLogin
+    if session['userLogin'] == 'demo':
+        session['demo'] = True
+    else:
+        session['demo'] = None
     session['userName']  = user.userName
     flash('Вы успешно вошли в систему как %s' % (user.userName), 'success')
-
-# Получить данные о пользователе из сессии
-# def get_current_user():
-#     if session.get('logged_in'):
-#         return User.get(user_ID = session['user_ID'])
 
 # Декоратор проверяет сессию, и если пользователь не вошёл в систему, он перенаправляется на вид login.
 def login_required(f):
@@ -509,7 +508,12 @@ def createCity():
     if request.method == 'POST' and request.form['modify'] == 'create':
         cityname = request.form['cityName']
 
-        City.create(cityName = cityname)
+        if session['demo']:
+            pass
+        else:
+            City.create(
+                cityName = cityname
+            )
 
         return redirect(
             url_for('listCity')
@@ -521,12 +525,13 @@ def updateCity(cityid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         cityname = request.form['cityName']
 
-        City.update(cityName = cityname).where(City.city_ID == cityid).execute()
-
-        city          = City()
-        city.city_ID  = cityid
-        city.cityName = cityname
-        city.save()
+        if session['demo']:
+            pass
+        else:
+            city          = City()
+            city.city_ID  = cityid
+            city.cityName = cityname
+            city.save()
 
         return redirect(
             url_for('listCity')
@@ -536,10 +541,14 @@ def updateCity(cityid):
 @app.route('/city/<int:cityid>/delete', methods = ['GET', 'POST'])
 def deleteCity(cityid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
-        try:
-            City.get(city_ID = cityid).delete_instance()
-        except IntegrityError:
-            flash('Вы не можете удалить этот город, пока в него добавлена хотя бы одна спортивная школа', 'danger')
+
+        if session['demo']:
+            pass
+        else:
+            try:
+                City.get(city_ID = cityid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить этот город, пока в него добавлена хотя бы одна спортивная школа', 'danger')
 
         return redirect(
             url_for('listCity')
@@ -570,7 +579,13 @@ def createSchool(cityid):
     if request.method == 'POST' and request.form['modify'] == 'create':
         schoolname = request.form['schoolName']
 
-        School.create(city_ID = cityid, schoolName = schoolname)
+        if session['demo']:
+            pass
+        else:
+            School.create(
+                city_ID = cityid, 
+                schoolName = schoolname
+            )
 
         return redirect(
             url_for('listSchool', 
@@ -584,13 +599,14 @@ def updateSchool(cityid, schoolid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         schoolname = request.form['schoolName']
 
-        School.update(city_ID = cityid, schoolName = schoolname).where(School.school_ID == schoolid).execute()
-
-        school            = School()
-        school.school_ID  = schoolid
-        school.city_ID    = cityid
-        school.schoolName = schoolname
-        school.save()
+        if session['demo']:
+            pass
+        else:
+            school            = School()
+            school.school_ID  = schoolid
+            school.city_ID    = cityid
+            school.schoolName = schoolname
+            school.save()
 
         return redirect(
             url_for('listSchool', 
@@ -602,10 +618,14 @@ def updateSchool(cityid, schoolid):
 @app.route('/city/<int:cityid>/school/<int:schoolid>/delete', methods = ['GET', 'POST'])
 def deleteSchool(cityid, schoolid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
-        try:
-            School.get(city_ID = cityid, school_ID = schoolid).delete_instance()
-        except IntegrityError:
-            flash('Вы не можете удалить эту спортивную школу, пока в неё добавлена хотя бы одна команда', 'danger')
+
+        if session['demo']:
+            pass
+        else:
+            try:
+                School.get(city_ID = cityid, school_ID = schoolid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить эту спортивную школу, пока в неё добавлена хотя бы одна команда', 'danger')
 
         return redirect(
             url_for('listSchool', 
@@ -650,7 +670,14 @@ def createTeam(cityid, schoolid):
         teamname = request.form['teamName']
         ageid    = request.form['age_ID']
 
-        Team.create(school_ID = schoolid, age_ID = ageid, teamName = teamname)
+        if session['demo']:
+            pass
+        else:
+            Team.create(
+                school_ID = schoolid, 
+                age_ID = ageid, 
+                teamName = teamname
+            )
 
         return redirect(
             url_for('listTeam', 
@@ -666,12 +693,15 @@ def updateTeam(cityid, schoolid, teamid):
         teamname = request.form['teamName']
         ageid    = request.form['age_ID']
 
-        team           = Team()
-        team.team_ID   = teamid
-        team.school_ID = schoolid
-        team.age_ID    = ageid
-        team.teamName  = teamname
-        team.save()
+        if session['demo']:
+            pass
+        else:
+            team           = Team()
+            team.team_ID   = teamid
+            team.school_ID = schoolid
+            team.age_ID    = ageid
+            team.teamName  = teamname
+            team.save()
 
         return redirect(
             url_for('listTeam', 
@@ -685,7 +715,11 @@ def updateTeam(cityid, schoolid, teamid):
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods = ['GET', 'POST'])
 def deleteTeam(cityid, schoolid, teamid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
-        Team.get(school_ID = schoolid, team_ID = teamid).delete_instance()
+
+        if session['demo']:
+            pass
+        else:
+            Team.get(school_ID = schoolid, team_ID = teamid).delete_instance()
 
         return redirect(
             url_for('listTeam', 
@@ -712,7 +746,13 @@ def createStage():
         stagetype = request.form['stageType']
         stagename = request.form['stageName']
 
-        Stage.create(stageType = stagetype, stageName = stagename)
+        if session['demo']:
+            pass
+        else:
+            Stage.create(
+                stageType = stagetype, 
+                stageName = stagename
+            )
 
         return redirect(
             url_for('listStage')
@@ -725,13 +765,14 @@ def updateStage(stageid):
         stagetype = request.form['stageType']
         stagename = request.form['stageName']
 
-        Stage.update(stageType = stagetype, stageName = stagename).where(Stage.stage_ID == stageid).execute()
-
-        stage           = Stage()
-        stage.stage_ID  = stageid
-        stage.stageType = stagetype
-        stage.stageName = stagename
-        stage.save()
+        if session['demo']:
+            pass
+        else:
+            stage           = Stage()
+            stage.stage_ID  = stageid
+            stage.stageType = stagetype
+            stage.stageName = stagename
+            stage.save()
 
         return redirect(
             url_for('listStage')
@@ -741,10 +782,14 @@ def updateStage(stageid):
 @app.route('/stage/<int:stageid>/delete', methods = ['GET', 'POST'])
 def deleteStage(stageid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
-        try:
-            Stage.get(stage_ID = stageid).delete_instance()
-        except IntegrityError:
-            flash('Вы не можете удалить эту игровую стадию, пока с ней связан хотя бы один игровой этап внутри сезона', 'danger')
+
+        if session['demo']:
+            pass
+        else:
+            try:
+                Stage.get(stage_ID = stageid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить эту игровую стадию, пока с ней связан хотя бы один игровой этап внутри сезона', 'danger')
 
         return redirect(
             url_for('listStage')
@@ -766,7 +811,12 @@ def createSeason():
     if request.method == 'POST' and request.form['modify'] == 'create':
         seasonname = request.form['seasonName']
 
-        Season.create(seasonName = seasonname)
+        if session['demo']:
+            pass
+        else:
+            Season.create(
+                seasonName = seasonname
+            )
 
         return redirect(
             url_for('listSeason')
@@ -778,10 +828,13 @@ def updateSeason(seasonid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         seasonname = request.form['seasonName']
 
-        season            = Season()
-        season.season_ID  = seasonid
-        season.seasonName = seasonname
-        season.save()
+        if session['demo']:
+            pass
+        else:
+            season            = Season()
+            season.season_ID  = seasonid
+            season.seasonName = seasonname
+            season.save()
 
         return redirect(
             url_for('listSeason')
@@ -791,10 +844,14 @@ def updateSeason(seasonid):
 @app.route('/season/<int:seasonid>/delete', methods = ['GET', 'POST'])
 def deleteSeason(seasonid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
-        try:
-            Season.get(season_ID = seasonid).delete_instance()
-        except IntegrityError:
-            flash('Вы не можете удалить этот сезон, пока в нём добавлен хотя бы один игровой этап', 'danger')
+
+        if session['demo']:
+            pass
+        else:
+            try:
+                Season.get(season_ID = seasonid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить этот сезон, пока в нём добавлен хотя бы один игровой этап', 'danger')
 
         return redirect(
             url_for('listSeason')
@@ -839,7 +896,15 @@ def createSAS(seasonid, ageid):
         stageid  = request.form['stage_ID']
         gametype = request.form['gameType_ID']
 
-        SeasonAgeStage.create(season_ID = seasonid, age_ID = ageid, stage_ID = stageid, gameType_ID = gametype)
+        if session['demo']:
+            pass
+        else:
+            SeasonAgeStage.create(
+                season_ID   = seasonid, 
+                age_ID      = ageid, 
+                stage_ID    = stageid, 
+                gameType_ID = gametype
+            )
 
         return redirect(
             url_for('listSAS',
@@ -854,14 +919,17 @@ def updateSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         stageid  = request.form['stage_ID']
         gametype = request.form['gameType_ID']
-        
-        SAS             = SeasonAgeStage()
-        SAS.SAS_ID      = sasid
-        SAS.season_ID   = seasonid
-        SAS.age_ID      = ageid
-        SAS.stage_ID    = stageid
-        SAS.gameType_ID = gametype
-        SAS.save()
+
+        if session['demo']:
+            pass
+        else:
+            SAS             = SeasonAgeStage()
+            SAS.SAS_ID      = sasid
+            SAS.season_ID   = seasonid
+            SAS.age_ID      = ageid
+            SAS.stage_ID    = stageid
+            SAS.gameType_ID = gametype
+            SAS.save()
 
         return redirect(
             url_for('listSAS',
@@ -875,10 +943,14 @@ def updateSAS(seasonid, ageid, sasid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/delete', methods  = ['GET', 'POST'])
 def deleteSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
-        try:
-            SeasonAgeStage.get(SAS_ID = sasid).delete_instance()
-        except IntegrityError:
-            flash('Вы не можете удалить эту игровую стадию, пока в неё добавлена хотя бы одна команда', 'danger')
+
+        if session['demo']:
+            pass
+        else:
+            try:
+                SeasonAgeStage.get(SAS_ID = sasid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить эту игровую стадию, пока в неё добавлена хотя бы одна команда', 'danger')
 
         return redirect(
             url_for('listSAS',
@@ -955,8 +1027,16 @@ def createSAST(seasonid, ageid, sasid):
             substageid
         else:
             substageid = None
-        
-        SeasonAgeStageTeam.create(SAS_ID = sasid, team_ID = teamid, substage_ID = substageid)
+
+        if session['demo']:
+            pass
+        else:
+            SeasonAgeStageTeam.create(
+                SAS_ID      = sasid, 
+                team_ID     = teamid, 
+                substage_ID = substageid
+            )
+
         return redirect(
             url_for('listSAST',
                 seasonid = seasonid,
@@ -979,11 +1059,14 @@ def updateSAST(seasonid, ageid, sasid, sastid):
         else:
             substageid = None
 
-        SAST             = SeasonAgeStageTeam()
-        SAST.SAST_ID     = sastid
-        SAST.team_ID     = teamid
-        SAST.substage_ID = substageid
-        SAST.save()
+        if session['demo']:
+            pass
+        else:
+            SAST             = SeasonAgeStageTeam()
+            SAST.SAST_ID     = sastid
+            SAST.team_ID     = teamid
+            SAST.substage_ID = substageid
+            SAST.save()
 
         return redirect(
             url_for('listSAST',
@@ -997,7 +1080,11 @@ def updateSAST(seasonid, ageid, sasid, sastid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/delete', methods  = ['GET', 'POST'])
 def deleteSAST(seasonid, ageid, sasid, sastid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
-        SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
+
+        if session['demo']:
+            pass
+        else:
+            SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
 
         return redirect(
             url_for('listSAST',
@@ -1114,20 +1201,23 @@ def createGP(seasonid, ageid, sasid):
         except KeyError:
             isfinal = False
 
-        GameProtocol.create(
-            gameNumber         = gamenumber, 
-            tourNumber         = tournumber, 
-            stageNumber        = stagenumber, 
-            gameDate           = gamedate, 
-            homeTeam_ID        = htid, 
-            guestTeam_ID       = gtid, 
-            homeTeamScoreGame  = htscoregame, 
-            guestTeamScoreGame = gtscoregame, 
-            homeTeamScore11m   = htscore11m, 
-            guestTeamScore11m  = gtscore11m, 
-            is_Semifinal       = issemifinal, 
-            is_Final           = isfinal
-        )
+        if session['demo']:
+            pass
+        else:
+            GameProtocol.create(
+                gameNumber         = gamenumber, 
+                tourNumber         = tournumber, 
+                stageNumber        = stagenumber, 
+                gameDate           = gamedate, 
+                homeTeam_ID        = htid, 
+                guestTeam_ID       = gtid, 
+                homeTeamScoreGame  = htscoregame, 
+                guestTeamScoreGame = gtscoregame, 
+                homeTeamScore11m   = htscore11m, 
+                guestTeamScore11m  = gtscore11m, 
+                is_Semifinal       = issemifinal, 
+                is_Final           = isfinal
+            )
 
         return redirect(
             url_for('listGP',
@@ -1187,21 +1277,24 @@ def updateGP(seasonid, ageid, sasid, gpid):
         except KeyError:
             isfinal = False
 
-        GP                    = GameProtocol()
-        GP.GP_ID              = gpid
-        GP.gameNumber         = gamenumber
-        GP.tourNumber         = tournumber
-        GP.stageNumber        = stagenumber
-        GP.gameDate           = gamedate
-        GP.homeTeam_ID        = htid
-        GP.guestTeam_ID       = gtid
-        GP.homeTeamScoreGame  = htscoregame
-        GP.guestTeamScoreGame = gtscoregame
-        GP.homeTeamScore11m   = htscore11m
-        GP.guestTeamScore11m  = gtscore11m
-        GP.is_Semifinal       = issemifinal
-        GP.is_Final           = isfinal
-        GP.save()
+        if session['demo']:
+            pass
+        else:
+            GP                    = GameProtocol()
+            GP.GP_ID              = gpid
+            GP.gameNumber         = gamenumber
+            GP.tourNumber         = tournumber
+            GP.stageNumber        = stagenumber
+            GP.gameDate           = gamedate
+            GP.homeTeam_ID        = htid
+            GP.guestTeam_ID       = gtid
+            GP.homeTeamScoreGame  = htscoregame
+            GP.guestTeamScoreGame = gtscoregame
+            GP.homeTeamScore11m   = htscore11m
+            GP.guestTeamScore11m  = gtscore11m
+            GP.is_Semifinal       = issemifinal
+            GP.is_Final           = isfinal
+            GP.save()
 
         return redirect(
             url_for('listGP',
@@ -1215,7 +1308,11 @@ def updateGP(seasonid, ageid, sasid, gpid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/delete', methods  = ['GET', 'POST'])
 def deleteGP(seasonid, ageid, sasid, gpid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
-        GameProtocol.get(GP_ID = gpid).delete_instance()
+
+        if session['demo']:
+            pass
+        else:
+            GameProtocol.get(GP_ID = gpid).delete_instance()
 
         return redirect(
             url_for('listGP',
