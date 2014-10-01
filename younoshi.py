@@ -878,7 +878,7 @@ def listSAS(seasonid, ageid):
 
     listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName)
     listGameType = GameType.select().order_by(GameType.gameTypeName)
-    listSAS      = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
+    listSAS      = SeasonAgeStage.select(SeasonAgeStage, fn.Count(SeasonAgeStageTeam.SAS_ID).alias('countSAST')).where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(SeasonAgeStageTeam, JOIN_LEFT_OUTER).switch(SeasonAgeStage).join(Stage).group_by(SeasonAgeStage).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
 
     return render_template(
         'SAS.jinja.html', 
