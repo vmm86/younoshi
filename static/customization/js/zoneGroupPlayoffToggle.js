@@ -1,5 +1,14 @@
 $(document).ready(function() {
 
+// Первоначальное отключение полей для выбора группы/зоны в окне создания
+
+       $('.create-form .chooseZone').prop('disabled', true);
+      $('.create-form .chooseGroup').prop('disabled', true);
+    $('.create-form .choosePlayoff').prop('disabled', true);
+    $('.selectpicker').selectpicker('refresh');
+
+// Динамическое включение/выключение полей для выбора группы/зоны/плэй-офф при выборе отфильтовывающих их радиокнопок
+
     $('.zoneGroupPlayoffToggle > label').click(function() {
 
         var activeLabel      = $(this).hasClass('active');
