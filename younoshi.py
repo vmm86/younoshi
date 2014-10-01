@@ -545,6 +545,7 @@ def deleteCity(cityid):
         if session['demo']:
             pass
         else:
+            # Ограничение по внешнему ключу FK_School_City не позволяет удалить населённый пункт при наличии связанных с ним спортивных школ.
             try:
                 City.get(city_ID = cityid).delete_instance()
             except IntegrityError:
@@ -622,6 +623,7 @@ def deleteSchool(cityid, schoolid):
         if session['demo']:
             pass
         else:
+            # Ограничение по внешнему ключу FK_Team_School не позволяет удалить спортивную школу при наличии связанных с ней команд.
             try:
                 School.get(city_ID = cityid, school_ID = schoolid).delete_instance()
             except IntegrityError:
@@ -729,7 +731,7 @@ def deleteTeam(cityid, schoolid, teamid):
             )
         )
 
-## Игровые стадии
+## Стадии
 @app.route('/stage')
 def listStage():
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
@@ -739,7 +741,7 @@ def listStage():
         listStage = listStage
     )
 
-### Добавление игровых стадий
+### Добавление стадий
 @app.route('/stage/create', methods = ['GET', 'POST'])
 def createStage():
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -758,7 +760,7 @@ def createStage():
             url_for('listStage')
         )
 
-### Изменение игровых стадий
+### Изменение стадий
 @app.route('/stage/<int:stageid>/update', methods = ['GET', 'POST'])
 def updateStage(stageid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -778,7 +780,7 @@ def updateStage(stageid):
             url_for('listStage')
         )
 
-### Удаление игровых стадий
+### Удаление стадий
 @app.route('/stage/<int:stageid>/delete', methods = ['GET', 'POST'])
 def deleteStage(stageid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -786,10 +788,11 @@ def deleteStage(stageid):
         if session['demo']:
             pass
         else:
+            # Ограничение по внешнему ключу FK_SAS_Stage не позволяет удалить стадию при наличии связанных с ней игровых этапов в определённом сезоне и возрасте.
             try:
                 Stage.get(stage_ID = stageid).delete_instance()
             except IntegrityError:
-                flash('Вы не можете удалить эту игровую стадию, пока с ней связан хотя бы один игровой этап внутри сезона', 'danger')
+                flash('Вы не можете удалить эту стадию, пока с ней связан хотя бы один игровой этап внутри сезона', 'danger')
 
         return redirect(
             url_for('listStage')
@@ -848,6 +851,7 @@ def deleteSeason(seasonid):
         if session['demo']:
             pass
         else:
+            # Ограничение по внешнему ключу FK_SAS_Season не позволяет удалить стадию при наличии связанных с ней игровых этапов в определённом сезоне и возрасте.
             try:
                 Season.get(season_ID = seasonid).delete_instance()
             except IntegrityError:
@@ -889,7 +893,7 @@ def listSAS(seasonid, ageid):
         listSAS      = listSAS
     )
 
-### Добавление игровых стадий
+### Добавление игровых этапов
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/create', methods=['GET', 'POST'])
 def createSAS(seasonid, ageid):
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -899,8 +903,8 @@ def createSAS(seasonid, ageid):
         if session['demo']:
             pass
         else:
-            # Ключ UNIQUE_Season_Age_Stage не позволяет добавить повторяющуюся комбинацию сезон/возраст/стадия.
-            # Например, нельзя добавить вторую стадию плэй-офф в одном и том же сезоне и возрасте.
+            # Ограничение по ключу UNIQUE_Season_Age_Stage не позволяет добавить повторяющуюся комбинацию сезон/возраст/стадия в рамках игрового этапа.
+            # Например, нельзя добавить второй этап плэй-офф в одном и том же сезоне и возрасте.
             try:
                 SeasonAgeStage.create(
                     season_ID   = seasonid, 
@@ -909,7 +913,7 @@ def createSAS(seasonid, ageid):
                     gameType_ID = gametype
                 )
             except IntegrityError:
-                flash('Вы не можете добавить ещё одну такую же игровую стадию в одном и том же сезоне и возрасте', 'danger')
+                flash('Вы не можете добавить ещё один такой же игровой этап в одном и том же сезоне и возрасте', 'danger')
 
         return redirect(
             url_for('listSAS',
@@ -918,7 +922,7 @@ def createSAS(seasonid, ageid):
             )
         )
 
-### Изменение игровых стадий
+### Изменение игровых этапов
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/update', methods = ['GET', 'POST'])
 def updateSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -944,7 +948,7 @@ def updateSAS(seasonid, ageid, sasid):
             )
         )
 
-### Удаление игровых стадий
+### Удаление игровых этапов
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/delete', methods  = ['GET', 'POST'])
 def deleteSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -952,10 +956,11 @@ def deleteSAS(seasonid, ageid, sasid):
         if session['demo']:
             pass
         else:
+            # Ограничение по внешнему ключу FK_SAST_SAS не позволяет удалить игровой этап при наличии связанных с ним дочерних команд.
             try:
                 SeasonAgeStage.get(SAS_ID = sasid).delete_instance()
             except IntegrityError:
-                flash('Вы не можете удалить эту игровую стадию, пока в неё добавлена хотя бы одна команда', 'danger')
+                flash('Вы не можете удалить этот игровой этап, пока в него добавлена хотя бы одна команда', 'danger')
 
         return redirect(
             url_for('listSAS',
@@ -965,7 +970,7 @@ def deleteSAS(seasonid, ageid, sasid):
             )
         )
 
-## Команды в игровых стадиях
+## Команды в игровых этапах
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team')
 def listSAST(seasonid, ageid, sasid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
@@ -1019,7 +1024,7 @@ def listSAST(seasonid, ageid, sasid):
         sastsubstagecount = sastsubstagecount
     )
 
-### Добавление команд в игровые стадии
+### Добавление команд в игровые этапы
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/create', methods=['GET', 'POST'])
 def createSAST(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -1050,7 +1055,7 @@ def createSAST(seasonid, ageid, sasid):
             )
         )
 
-### Изменение команд в игровых стадиях
+### Изменение команд в игровых этапах
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/update', methods=['GET', 'POST'])
 def updateSAST(seasonid, ageid, sasid, sastid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -1081,7 +1086,7 @@ def updateSAST(seasonid, ageid, sasid, sastid):
             )
         )
 
-### Удаление команд в игровых стадиях
+### Удаление команд в игровых этапах
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/delete', methods  = ['GET', 'POST'])
 def deleteSAST(seasonid, ageid, sasid, sastid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
