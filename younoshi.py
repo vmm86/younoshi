@@ -874,7 +874,7 @@ def listSAS(seasonid, ageid):
 
     listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName)
     listGameType = GameType.select().order_by(GameType.gameTypeName)
-    listSAS      = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(SeasonAgeStage.stage_ID == Stage.stage_ID).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
+    listSAS      = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
 
     return render_template(
         'SAS.jinja.html', 
@@ -899,12 +899,17 @@ def createSAS(seasonid, ageid):
         if session['demo']:
             pass
         else:
-            SeasonAgeStage.create(
-                season_ID   = seasonid, 
-                age_ID      = ageid, 
-                stage_ID    = stageid, 
-                gameType_ID = gametype
-            )
+            # Ключ UNIQUE_Season_Age_Stage не позволяет добавить повторяющуюся комбинацию сезон/возраст/стадия.
+            # Например, нельзя добавить вторую стадию плэй-офф в одном и том же сезоне и возрасте.
+            try:
+                SeasonAgeStage.create(
+                    season_ID   = seasonid, 
+                    age_ID      = ageid, 
+                    stage_ID    = stageid, 
+                    gameType_ID = gametype
+                )
+            except IntegrityError:
+                flash('Вы не можете добавить ещё одну такую же игровую стадию в одном и том же сезоне и возрасте', 'danger')
 
         return redirect(
             url_for('listSAS',
