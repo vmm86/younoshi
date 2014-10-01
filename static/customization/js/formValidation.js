@@ -1,44 +1,73 @@
 $(document).ready(function() {
-    $('.create-form, .update-form').bootstrapValidator(
-        {
-            message: 'This value is not valid',
+    $('.create-form, .update-form').bootstrapValidator({
+        excluded: [':disabled'],
+        message: 'This value is not valid',
         fields: {
-            cityName: {
-                message: 'cityName is not valid',
+            'cityName': {
                 validators: {
-                    notEmpty: {message: 'Не забудьте указать город'}
+                    notEmpty: {
+                        message: 'Не забудьте указать город'
+                    }
                 }
             },
-            schoolName: {
-                message: 'schoolName is not valid',
+            'schoolName': {
                 validators: {
-                    notEmpty: {message: 'Не забудьте указать название спортивной школы'}
+                    notEmpty: {
+                        message: 'Не забудьте указать название спортивной школы'
+                    }
                 }
             },
-            teamName: {
-                message: 'teamName is not valid',
+            'teamName': {
                 validators: {
-                    notEmpty: {message: 'Не забудьте указать название команды'}
+                    notEmpty: {
+                        message: 'Не забудьте указать название команды'
+                    }
                 }
             },
-            age_ID: {
+            'age_ID': {
                 validators: {
-                    notEmpty: {message: 'Не забудьте указать возраст игроков команды'}
+                    notEmpty: {
+                        message: 'Не забудьте указать возраст игроков команды'
+                    }
                 }
             },
-            seasonName: {
+            'seasonName': {
                 validators: {
-                    notEmpty: {message: 'Не забудьте указать сезон'}
+                    notEmpty: {
+                        message: 'Не забудьте указать сезон'
+                    }
                 }
             },
-            stageType: {
+            'stageType': {
                 validators: {
-                    notEmpty: {message: 'Не забудьте указать тип игровой стадии'}
+                    notEmpty: {
+                        message: 'Не забудьте указать тип игровой стадии'
+                    }
                 }
             },
-            stageName: {
+            'stageName': {
                 validators: {
-                    notEmpty: {message: 'Не забудьте указать название игровой стадии'}
+                    notEmpty: {
+                        message: 'Не забудьте указать название игровой стадии'
+                    }
+                }
+            },
+            'zoneGroupPlayoffToggle': {
+                validators: {
+                    choice: {
+                        min: 1, 
+                        max: 1, 
+                        message: 'Не забудьте выбрать тип игровой стадии'
+                    }
+                }
+            },
+            'gameType': {
+                validators: {
+                    choice: {
+                        min: 1, 
+                        max: 1, 
+                        message: 'Не забудьте выбрать тип соревнований'
+                    }
                 }
             }
         }

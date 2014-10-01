@@ -565,8 +565,6 @@ def listSchool(cityid):
 
     listSchool = School.select(School, fn.Count(Team.school_ID).alias('countTeams')).join(Team, JOIN_LEFT_OUTER).switch(School).join(City).where(City.city_ID == cityid).group_by(School).order_by(School.schoolName)
 
-# 
-
     return render_template(
         'School.jinja.html', 
         listCity   = listCity, 
@@ -895,8 +893,8 @@ def listSAS(seasonid, ageid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/create', methods=['GET', 'POST'])
 def createSAS(seasonid, ageid):
     if request.method == 'POST' and request.form['modify'] == 'create':
-        stageid  = request.form['stage_ID']
-        gametype = request.form['gameType_ID']
+        stageid  = request.form['stage']
+        gametype = request.form['gameType']
 
         if session['demo']:
             pass
@@ -919,8 +917,8 @@ def createSAS(seasonid, ageid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/update', methods = ['GET', 'POST'])
 def updateSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'update':
-        stageid  = request.form['stage_ID']
-        gametype = request.form['gameType_ID']
+        stageid  = request.form['stage']
+        gametype = request.form['gameType']
 
         if session['demo']:
             pass

@@ -1,5 +1,5 @@
 
-<form class="flat-form create-form" name="update" method="POST" action="{{ url_for('updateSAS', seasonid = lsas.season_ID.season_ID, ageid = lsas.age_ID.age_ID, sasid = lsas.SAS_ID) }}">
+<form class="flat-form update-form" name="update" method="POST" action="{{ url_for('updateSAS', seasonid = lsas.season_ID.season_ID, ageid = lsas.age_ID.age_ID, sasid = lsas.SAS_ID) }}">
     <div id="Modal_update_{{ lsas.SAS_ID }}" class="modal fade modal-lg" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -21,7 +21,7 @@
                                 <label class="btn-label" for="chooseZone">&nbsp;</label>
                                 <br>
                                 <br>
-                                <select id="chooseZone_{{ lsas.SAS_ID }}" name="stage_ID" class="chooseZone selectpicker" data-style="btn-info" {% if lsas.stage_ID.stageType != "Z" %}disabled{% endif %}>
+                                <select name="stage" class="chooseZone selectpicker" data-style="btn-info" {% if lsas.stage_ID.stageType != "Z" %}disabled{% endif %}>
                             {% for lst in listStage %}
                                 {% if lst.stageType == "Z" %}
                                     <option value="{{ lst.stage_ID }}" {% if lsas.stage_ID.stage_ID == lst.stage_ID %}selected{% endif %}>{{ lst.stageName }}</option>
@@ -34,23 +34,23 @@
 
                         <div class="col-lg-4" style="text-align: center;">
 
-                            <div id="zoneGroupPlayoffToggle_{{ lsas.SAS_ID }}" class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
-                                <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label>
+                            <div class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
+                                <label class="btn-label" style="width: 100%; text-align: center;">Выберите стадию</label>
                                 <br>
                                 <label class="btn btn-info {% if lsas.stage_ID.stageType == "Z" %}active{% endif %}">
-                                    <input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z" {% if lsas.stage_ID.stageType == "Z" %}checked{% endif %}>зона
+                                    <input type="radio" name="zoneGroupPlayoffToggle" value="Z" {% if lsas.stage_ID.stageType == "Z" %}checked{% endif %}>зона
                                 </label>
                                 <label class="btn btn-info {% if lsas.stage_ID.stageType == "G" %}active{% endif %}">
-                                    <input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G" {% if lsas.stage_ID.stageType == "G" %}checked{% endif %}>группа
+                                    <input type="radio" name="zoneGroupPlayoffToggle" value="G" {% if lsas.stage_ID.stageType == "G" %}checked{% endif %}>группа
                                 </label>
                                 <br>
                                 <label class="btn btn-info {% if lsas.stage_ID.stageType == "P" %}active{% endif %}">
-                                    <input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P" {% if lsas.stage_ID.stageType == "P" %}checked{% endif %}>плэй-офф
+                                    <input type="radio" name="zoneGroupPlayoffToggle" value="P" {% if lsas.stage_ID.stageType == "P" %}checked{% endif %}>плэй-офф
                                 </label>
                             </div>
                     {% for lst in listStage %}
                         {% if lst.stageType == "P" %}
-                            <input id="choosePlayoff" class="choosePlayoff" type="hidden" name="stage_ID" value="{{ lst.stage_ID }}" {% if lsas.stage_ID.stage_ID == lst.stage_ID %}selected{% endif %} {% if lsas.stage_ID.stageType != "P" %}disabled{% endif %}>
+                            <input class="choosePlayoff" type="hidden" name="stage" value="{{ lst.stage_ID }}" {% if lsas.stage_ID.stage_ID == lst.stage_ID %}selected{% endif %} {% if lsas.stage_ID.stageType != "P" %}disabled{% endif %}>
                         {% endif %}
                     {% endfor %}
 
@@ -62,7 +62,7 @@
                                 <label class="btn-label" for="chooseGroup">&nbsp;</label>
                                 <br>
                                 <br>
-                                <select id="chooseGroup_{{ lsas.SAS_ID }}" name="stage_ID" class="chooseGroup selectpicker" data-style="btn-info" {% if lsas.stage_ID.stageType != "G" %}disabled{% endif %}>
+                                <select name="stage" class="chooseGroup selectpicker" data-style="btn-info" {% if lsas.stage_ID.stageType != "G" %}disabled{% endif %}>
                             {% for lst in listStage %}
                                 {% if lst.stageType == "G" %}
                                     <option value="{{ lst.stage_ID }}" {% if lsas.stage_ID.stage_ID == lst.stage_ID %}selected{% endif %}>{{ lst.stageName }}</option>
@@ -82,11 +82,11 @@
                         <div class="col-lg-4" style="text-align: center;">
 
                             <div class="gameType btn-group btn-toggle" data-toggle="buttons">
-                                <label class="btn-label" for="gameType_ID" style="width: 100%; text-align: center;">Тип соревнования</label>
+                                <label class="btn-label" for="gameType" style="width: 100%; text-align: center;">Тип соревнования</label>
                                 <br>
                             {% for lgt in listGameType %}
                                 <label class="btn btn-info {% if lgt.gameType_ID == lsas.gameType_ID.gameType_ID %}active{% endif %}">
-                                    <input type="radio" name="gameType_ID" value="{{ lgt.gameType_ID }}" {% if lgt.gameType_ID == lsas.gameType_ID.gameType_ID %}checked{% endif %}>
+                                    <input type="radio" name="gameType" value="{{ lgt.gameType_ID }}" {% if lgt.gameType_ID == lsas.gameType_ID.gameType_ID %}checked{% endif %}>
                                     {% if lgt.gameTypeName == "CHA" %}Первенство{% endif %}
                                     {% if lgt.gameTypeName == "CUP" %}Кубок{% endif %}
                                 </label>

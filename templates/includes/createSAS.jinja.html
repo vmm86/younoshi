@@ -21,7 +21,7 @@
                                 <label class="btn-label" for="chooseZone">&nbsp;</label>
                                 <br>
                                 <br>
-                                <select id="chooseZone" name="stage_ID" class="chooseZone selectpicker" data-style="btn-info">
+                                <select name="stage" class="chooseZone selectpicker" data-style="btn-info">
                             {% for lst in listStage %}
                                 {% if lst.stageType == "Z" %}
                                     <option value="{{ lst.stage_ID }}">{{ lst.stageName }}</option>
@@ -34,23 +34,23 @@
 
                         <div class="col-lg-4" style="text-align: center;">
 
-                            <div id="zoneGroupPlayoffToggle" class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
-                                <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label>
+                            <div class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
+                                <label class="btn-label" style="width: 100%; text-align: center;">Выберите стадию</label>
                                 <br>
                                 <label class="btn btn-info">
-                                    <input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z">зона
+                                    <input type="radio" name="zoneGroupPlayoffToggle" value="Z">зона
                                 </label>
                                 <label class="btn btn-info">
-                                    <input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G">группа
+                                    <input type="radio" name="zoneGroupPlayoffToggle" value="G">группа
                                 </label>
                                 <br>
                                 <label class="btn btn-info">
-                                    <input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф
+                                    <input type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф
                                 </label>
                             </div>
                     {% for lst in listStage %}
                         {% if lst.stageType == "P" %}
-                            <input id="choosePlayoff" class="choosePlayoff" type="hidden" name="stage_ID" value="{{ lst.stage_ID }}">
+                            <input class="choosePlayoff" type="hidden" name="stage" value="{{ lst.stage_ID }}">
                         {% endif %}
                     {% endfor %}
 
@@ -62,7 +62,7 @@
                                 <label class="btn-label" for="chooseGroup">&nbsp;</label>
                                 <br>
                                 <br>
-                                <select id="chooseGroup" name="stage_ID" class="chooseGroup selectpicker" data-style="btn-info">
+                                <select name="stage" class="chooseGroup selectpicker" data-style="btn-info">
                             {% for lst in listStage %}
                                 {% if lst.stageType == "G" %}
                                     <option value="{{ lst.stage_ID }}">{{ lst.stageName }}</option>
@@ -82,11 +82,11 @@
                         <div class="col-lg-4" style="text-align: center;">
 
                             <div class="gameType btn-group btn-toggle" data-toggle="buttons">
-                                <label class="btn-label" for="gameType_ID" style="width: 100%; text-align: center;">Тип соревнования</label>
+                                <label class="btn-label" for="gameType" style="width: 100%; text-align: center;">Тип соревнования</label>
                                 <br>
                             {% for lgt in listGameType %}
                                 <label class="btn btn-info">
-                                    <input type="radio" name="gameType_ID" value="{{ lgt.gameType_ID }}">
+                                    <input type="radio" name="gameType" value="{{ lgt.gameType_ID }}">
                                     {% if lgt.gameTypeName == "CHA" %}Первенство{% endif %}
                                     {% if lgt.gameTypeName == "CUP" %}Кубок{% endif %}
                                 </label>

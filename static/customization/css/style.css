@@ -383,6 +383,13 @@ a.btn {
     border-color: #5DADE2;
 }
 
+/* Валидация форм */
+
+.bv-form .help-block {
+    margin: 0;
+    color: #E74C3C;
+}
+
 /* Выбор игровой стадии */
 
 .zoneGroupPlayoffToggle {
