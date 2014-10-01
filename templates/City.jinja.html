@@ -23,6 +23,7 @@
                 </td>
                 <td class="tableNumber">#</td>
                 <td class="tableText">Город</td>
+                <td class="tableText">Спортивные школы</td>
                 <td class="tableInputRight"></td>
             </tr>
         </thead>
@@ -35,7 +36,15 @@
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText"><a href="/city/{{ lc.city_ID }}/school">{{ lc.cityName }}</a></td>
+                <td class="tableText">
+                    {% if lc.countSchools > 0 %}<a href="/city/{{ lc.city_ID }}/school">{% endif %}
+                        {{ lc.cityName }}
+                    {% if lc.countSchools > 0 %}</a>{% endif %}
+                </td>
+                <td class="tableText">
+                    {% if lc.countSchools == 0 %}нет{% endif %}
+                    {% if lc.countSchools > 0 %}{{ lc.countSchools }}{% endif %}
+                </td>
                 <td class="tableInputRight">
                     {% include "includes/deleteCity.jinja.html" %}
                 </td>

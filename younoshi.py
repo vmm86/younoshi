@@ -495,7 +495,7 @@ def logout():
 ## Города
 @app.route('/city')
 def listCity():
-    listCity = City.select().order_by(City.cityName)
+    listCity = City.select(City, fn.Count(School.city_ID).alias('countSchools')).join(School, JOIN_LEFT_OUTER).group_by(City).order_by(City.cityName)
 
     return render_template(
         'City.jinja.html', 
@@ -563,7 +563,9 @@ def listSchool(cityid):
     except City.DoesNotExist:
         cityname = None
 
-    listSchool = School.select().join(City).where(City.city_ID == cityid).order_by(School.schoolName)
+    listSchool = School.select(School, fn.Count(Team.school_ID).alias('countTeams')).join(Team, JOIN_LEFT_OUTER).switch(School).join(City).where(City.city_ID == cityid).group_by(School).order_by(School.schoolName)
+
+# 
 
     return render_template(
         'School.jinja.html', 
