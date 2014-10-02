@@ -405,28 +405,6 @@ class GameProtocol(Younoshi):
 #     g.db.close()
 #     return response
 
-# Получаем одиночный объект, соответствующий запросу или страницу ошибки 404.
-# Используется алиас вызова метода "GET" из модели, который получает одиночный объект 
-# или выдаёт исключение DoesNotExist, если ни одного такого объекта не найдено.
-def get_object_or_404(model, **kwargs):
-    try:
-        return model.get(**kwargs)
-    except model.DoesNotExist:
-        abort(404)
-        return render_template('404.jinja.html')
-
-## Обработка ошибки 404
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template(
-        '404.jinja.html'
-    ), 404
-
-# @app.errorhandler(400)
-# def key_error(e):
-#     flash('К сожалению, ваш запрос не удалось выполнить. Попробуйте сделать это ещё раз, введя все необходимые данные.', 'danger')
-#     return render_template('index.html'), 400
-
 # Авторизация
 def auth_user(user):
     session['logged_in'] = True
@@ -450,10 +428,33 @@ def login_required(f):
         return f(*args, **kwargs)
     return inner
 
+# Получаем одиночный объект, соответствующий запросу или страницу ошибки 404.
+# Используется алиас вызова метода "GET" из модели, который получает одиночный объект 
+# или выдаёт исключение DoesNotExist, если ни одного такого объекта не найдено.
+def get_object_or_404(model, **kwargs):
+    try:
+        return model.get(**kwargs)
+    except model.DoesNotExist:
+        abort(404)
+        return render_template('404.jinja.html')
+
+## Обработка ошибки 404
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template(
+        '404.jinja.html'
+    ), 404
+
+# @app.errorhandler(400)
+def key_error(e):
+    flash('К сожалению, ваш запрос не удалось выполнить. Попробуйте сделать это ещё раз, введя все необходимые данные.', 'danger')
+    return render_template('index.html'), 400
+
 # Виды
 
 ## Главная страница
 @app.route('/')
+@login_required
 def index():
     ### В зависимости от того, вошёл пользователь в систему или нет, ему показывается стартовая страница.
     if session.get('logged_in'):
@@ -494,6 +495,7 @@ def logout():
 
 ## Города
 @app.route('/city')
+@login_required
 def listCity():
     listCity = City.select(City, fn.Count(School.city_ID).alias('countSchools')).join(School, JOIN_LEFT_OUTER).group_by(City).order_by(City.cityName)
 
@@ -557,6 +559,7 @@ def deleteCity(cityid):
 
 ## Спортивные школы
 @app.route('/city/<int:cityid>/school')
+@login_required
 def listSchool(cityid):
     listCity = City.select().order_by(City.cityName)
     try:
@@ -637,6 +640,7 @@ def deleteSchool(cityid, schoolid):
 
 ## Команды
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team')
+@login_required
 def listTeam(cityid, schoolid):
     listCity = City.select().order_by(City.cityName)
     try:
@@ -713,7 +717,7 @@ def updateTeam(cityid, schoolid, teamid):
             )
         )
 
-### Удаленеи команд
+### Удаление команд
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods = ['GET', 'POST'])
 def deleteTeam(cityid, schoolid, teamid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -733,6 +737,7 @@ def deleteTeam(cityid, schoolid, teamid):
 
 ## Стадии
 @app.route('/stage')
+@login_required
 def listStage():
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
 
@@ -800,6 +805,7 @@ def deleteStage(stageid):
 
 ## Сезоны
 @app.route('/season')
+@login_required
 def listSeason():
     listSeason = Season.select().order_by(Season.seasonName)
 
@@ -863,6 +869,7 @@ def deleteSeason(seasonid):
 
 ## Игровые стадии
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage')
+@login_required
 def listSAS(seasonid, ageid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
     try:
@@ -972,6 +979,7 @@ def deleteSAS(seasonid, ageid, sasid):
 
 ## Команды в игровых этапах
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team')
+@login_required
 def listSAST(seasonid, ageid, sasid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
     try:
@@ -1108,6 +1116,7 @@ def deleteSAST(seasonid, ageid, sasid, sastid):
 
 ## Игровые протоколы
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp')
+@login_required
 def listGP(seasonid, ageid, sasid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
     try:
