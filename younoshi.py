@@ -1139,10 +1139,26 @@ def listGP(seasonid, ageid, sasid):
     listSAST = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Team).switch(SeasonAgeStageTeam).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
     listGP   = GameProtocol.select().join(SeasonAgeStageTeam).where(SeasonAgeStageTeam.SAS_ID == sasid).order_by(GameProtocol.GP_ID)
 
-    gnmax = int(GameProtocol.select(fn.Max(GameProtocol.gameNumber)).scalar())
-    gnmax += 1
-    tnmax = int(GameProtocol.select(fn.Max(GameProtocol.tourNumber)).scalar())
-    dmax  = GameProtocol.select(fn.Max(GameProtocol.gameDate)).scalar()
+    # Удобства при создании новых матчей
+    ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
+    try:
+        gnmax = int(GameProtocol.select(fn.Max(GameProtocol.gameNumber)).scalar())
+    except TypeError:
+        gnmax = 0
+    finally:
+        gnmax += 1
+    ## Номер тура - по умолчанию такой же, как последний добавленный либо 1
+    try:
+        tnmax = int(GameProtocol.select(fn.Max(GameProtocol.tourNumber)).scalar())
+    except TypeError:
+        tnmax = 1
+    ## Дата матча - по умолчанию такая же, как последняя добавленная либо сегодняшняя
+    ## Дата в форме выводится в формате ДД.ММ.ГГГГ, а в БД записывается в формате ГГГГ-ММ-ДД
+    try:
+        dmax = GameProtocol.select(fn.Max(GameProtocol.gameDate)).scalar()
+        dmax = dmax.strftime('%d.%m.%Y')
+    except AttributeError:
+        dmax = datetime.datetime.now().strftime('%d.%m.%Y')
 
     return render_template(
         'GP.jinja.html', 
@@ -1177,7 +1193,8 @@ def createGP(seasonid, ageid, sasid):
         if stagenumber == '':
             stagenumber = None
 
-        gamedate = request.form['gameDate']
+        gamedate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+
         htid     = request.form['filterHT']
         gtid     = request.form['filterGT']
 
@@ -1253,7 +1270,8 @@ def updateGP(seasonid, ageid, sasid, gpid):
         if stagenumber == '':
             stagenumber = None
 
-        gamedate = request.form['gameDate']
+        gamedate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+
         htid     = request.form['filterHT']
         gtid     = request.form['filterGT']
 

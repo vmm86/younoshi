@@ -60,7 +60,7 @@
                         <div class="btn-group">
                             <label class="btn-label" for="gameDate">Дата матча </label>
                             <div class="btn-group">
-                                <input type="date" name="gameDate" value="{{ lgp.gameDate }}" size="10" class="datetimepicker form-control">
+                                <input type="date" name="gameDate" value="{{ lgp.gameDate.strftime('%d.%m.%Y') }}" size="10" class="datetimepicker form-control">
                             </div>
                         </div>
 
