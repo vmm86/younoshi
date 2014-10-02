@@ -316,7 +316,7 @@ input[type=number] {
 }
 
 .input-group {
-/*    display: inline-block;*/
+    display: inline-block;
     vertical-align: middle;
 }
 
