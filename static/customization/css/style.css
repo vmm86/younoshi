@@ -198,7 +198,7 @@ table tr td {
     color: #3498DB;
 }
 
-.navbar-default .navbar-nav > .active   > a .caret,
+.navbar-default .navbar-nav > .active   > a       .caret,
 .navbar-default .navbar-nav > .dropdown > a:hover .caret, 
 .navbar-default .navbar-nav > .dropdown > a:focus .caret {
     border-top-color:    #3498DB;
@@ -373,14 +373,26 @@ a.btn {
     text-shadow: 1px 1px 0 rgba(0, 60, 100, 0.5);
 }
 
+.btn-info.active {
+    background: #1986CF;
+}
+
 .btn-info.disabled {
     color: #FFF;
     text-shadow: 1px 1px 0 rgba(100, 100, 100, 0.5);
 }
 
 .btn-info:hover {
-    background-color: #5DADE2;
-    border-color: #5DADE2;
+    background-color: #53A7DF;
+}
+
+.btn-info:focus,
+.btn-info:active {
+    background-color: #3498DB;
+}
+
+.btn-info.active:hover {
+    background-color: #3498DB;
 }
 
 /* Валидация форм */
@@ -727,10 +739,6 @@ fieldset[disabled] .btn {
 
 /* Список возрастов */
 
-.btn-info.active {
-    background: #268BCF;
-}
-
 [data-toggle="buttons"] label input[type="radio"] {
     display: inline-block;
     visibility: hidden !important;
@@ -750,10 +758,10 @@ fieldset[disabled] .btn {
     width: 100% !important;
 }
 
-.listAgeTop       label,
-.listAgeBottom    label,
-.stageTypeTop     label,
-.stageTypeBottom  label {
+.listAgeTop      label,
+.listAgeBottom   label,
+.stageTypeTop    label,
+.stageTypeBottom label {
     font-weight: bold !important;
 }
 
@@ -782,25 +790,25 @@ fieldset[disabled] .btn {
     border-radius: 0 0 1rem 1rem !important;
 }
 
-.listAgeTop     label.active {
+.listAgeTop      label.active {
     box-shadow: 0 -4px 4px -1px    rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeTop     label:first-child.active,
-.stageTypeTop   label:first-child.active {
+.listAgeTop      label:first-child.active,
+.stageTypeTop    label:first-child.active {
     box-shadow: -4px -4px 4px -1px rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeTop     label:last-child.active,
-.stageTypeTop   label:last-child.active {
+.listAgeTop      label:last-child.active,
+.stageTypeTop    label:last-child.active {
     box-shadow: 4px -4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom     label.active,
-.stageTypeBottom   label.active {
+.listAgeBottom   label.active,
+.stageTypeBottom label.active {
     box-shadow: 0 4px 4px -1px     rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom     label:first-child.active {
+.listAgeBottom   label:first-child.active {
     box-shadow: -4px 4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom     label:last-child.active {
+.listAgeBottom   label:last-child.active {
     box-shadow: 4px 4px 4px -1px   rgba(0, 0, 0, 0.2) inset;
 }
 
