@@ -1260,70 +1260,78 @@ def createGP(seasonid, ageid, sasid):
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/update', methods=['GET', 'POST'])
 def updateGP(seasonid, ageid, sasid, gpid):
     if request.method == 'POST' and request.form['modify'] == 'update':
-        gamenumber = request.form['gameNumber']
-        tournumber = request.form['tourNumber']
+        gameNumber = request.form['gameNumber']
+        tourNumber = request.form['tourNumber']
  
         try:
-            stagenumber = request.form['stageNumber']
+            stageNumber = request.form['stageNumber']
         except KeyError:
-            stagenumber = None
-        if stagenumber == '':
-            stagenumber = None
+            stageNumber = None
+        if stageNumber == '':
+            stageNumber = None
 
-        gamedate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+        gameDate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
 
-        htid     = request.form['filterHT']
-        gtid     = request.form['filterGT']
+        homeTeam_ID  = request.form['filterHT']
+        guestTeam_ID = request.form['filterGT']
 
-        htscoregame = request.form['HTscoreGame']
-        if htscoregame == '':
-            htscoregame = None
+        homeTeamScoreGame = request.form['HTscoreGame']
+        if homeTeamScoreGame == '':
+            homeTeamScoreGame = None
 
-        gtscoregame = request.form['GTscoreGame']
-        if gtscoregame == '':
-            gtscoregame = None
+        guestTeamScoreGame = request.form['GTscoreGame']
+        if guestTeamScoreGame == '':
+            guestTeamScoreGame = None
 
         try:
-            htscore11m = request.form['HTscore11m']
+            homeTeamScore11m = request.form['HTscore11m']
         except KeyError:
-            htscore11m = None
-        if htscore11m == '':
-            htscore11m = None
+            homeTeamScore11m = None
+        if homeTeamScore11m == '':
+            homeTeamScore11m = None
 
         try:
-            gtscore11m = request.form['GTscore11m']
+            guestTeamScore11m = request.form['GTscore11m']
         except KeyError:
-            gtscore11m = None
-        if gtscore11m == '':
-            gtscore11m = None
+            guestTeamScore11m = None
+        if guestTeamScore11m == '':
+            guestTeamScore11m = None
 
         try:
-            issemifinal = bool(int(request.form['is_Semifinal']))
+            is_Semifinal = bool(int(request.form['is_Semifinal']))
         except KeyError:
-            issemifinal = False
+            is_Semifinal = False
 
         try:
-            isfinal = bool(int(request.form['is_Final']))
+            is_Final = bool(int(request.form['is_Final']))
         except KeyError:
-            isfinal = False
+            is_Final = False
 
         if session['demo']:
             pass
         else:
-            GP                    = GameProtocol()
-            GP.GP_ID              = gpid
-            GP.gameNumber         = gamenumber
-            GP.tourNumber         = tournumber
-            GP.stageNumber        = stagenumber
-            GP.gameDate           = gamedate
-            GP.homeTeam_ID        = htid
-            GP.guestTeam_ID       = gtid
-            GP.homeTeamScoreGame  = htscoregame
-            GP.guestTeamScoreGame = gtscoregame
-            GP.homeTeamScore11m   = htscore11m
-            GP.guestTeamScore11m  = gtscore11m
-            GP.is_Semifinal       = issemifinal
-            GP.is_Final           = isfinal
+            GP        = GameProtocol()
+            GP.GP_ID  = gpid
+
+            # Заготовка для отслеживания только отличающихся значений полей при обновлении
+            # GPfields  = GameProtocol._meta.fields
+            # currentGP = GameProtocol.get(GP_ID = gpid)
+            # for field in GPfields:
+            #     if '{0}.{1}'.format(currentGP, field) != field:
+            #         '{0}.{1}'.format(GP, field) = field
+
+            GP.gameNumber         = gameNumber
+            GP.tourNumber         = tourNumber
+            GP.stageNumber        = stageNumber
+            GP.gameDate           = gameDate
+            GP.homeTeam_ID        = homeTeam_ID
+            GP.guestTeam_ID       = guestTeam_ID
+            GP.homeTeamScoreGame  = homeTeamScoreGame
+            GP.guestTeamScoreGame = guestTeamScoreGame
+            GP.homeTeamScore11m   = homeTeamScore11m
+            GP.guestTeamScore11m  = guestTeamScore11m
+            GP.is_Semifinal       = is_Semifinal
+            GP.is_Final           = is_Final
             GP.save()
 
         return redirect(
