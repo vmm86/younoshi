@@ -74,6 +74,7 @@
                 <td class="tableText">Игровая стадия</td>
                 <td class="tableText">Тип соревнования</td>
                 <td class="tableText">Команды</td>
+                <td class="tableText">Матчи</td>
                 <td class="tableInputRight"></td>
             </tr>
         </thead>
@@ -89,23 +90,39 @@
 <!--                 <td class="tableText">{{ lsas.season_ID.seasonName }}</td>
                 <td class="tableText">{{ lsas.age_ID.ageName }}</td> -->
                 <td class="tableText">
-                {% if lsas.countSAST > 0 %}
-                    <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
-                {% endif %}
+                    {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
+                        <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
+                    {% endif %}
                         {% if lsas.stage_ID.stageType == "Z" %}зона {{ lsas.stage_ID.stageName }}{% endif %}
                         {% if lsas.stage_ID.stageType == "G" %}группа {{ lsas.stage_ID.stageName }}{% endif %}
                         {% if lsas.stage_ID.stageType == "P" %}плэй-офф{% endif %}
-                {% if lsas.countSAST > 0 %}
-                    </a>
-                {% endif %}
+                    {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
+                        </a>
+                    {% endif %}
                 </td>
                 <td class="tableText">
                     {% if lsas.gameType_ID.gameTypeName == "CHA" %}Первенство{% endif %}
                     {% if lsas.gameType_ID.gameTypeName == "CUP" %}Кубок{% endif %}
                 </td>
                 <td class="tableText">
-                    {% if lsas.countSAST == 0 %}нет{% endif %}
-                    {% if lsas.countSAST > 0 %}{{ lsas.countSAST }}{% endif %}
+                    {% if lsas.countSAST > 0 %}
+                        <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/team">
+                    {% endif %}
+                        {% if lsas.countSAST == 0 %}нет{% endif %}
+                        {% if lsas.countSAST > 0 %}{{ lsas.countSAST }}{% endif %}
+                    {% if lsas.countSAST > 0 %}
+                        </a>
+                    {% endif %}
+                </td>
+               <td class="tableText">
+                    {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
+                        <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
+                    {% endif %}
+                        {% if lsas.countHT == 0 and lsas.countGT == 0 %}нет{% endif %}
+                        {% if lsas.countHT >  0 or  lsas.countGT >  0 %}{{ lsas.countHT + lsas.countGT }}{% endif %}
+                    {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
+                        </a>
+                    {% endif %}
                 </td>
                 <td class="tableInputRight">
                     {% include "includes/deleteSAS.jinja.html" %}

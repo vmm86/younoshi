@@ -878,7 +878,7 @@ def listSAS(seasonid, ageid):
 
     listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName)
     listGameType = GameType.select().order_by(GameType.gameTypeName)
-    listSAS      = SeasonAgeStage.select(SeasonAgeStage, fn.Count(SeasonAgeStageTeam.SAS_ID).alias('countSAST')).where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(SeasonAgeStageTeam, JOIN_LEFT_OUTER).switch(SeasonAgeStage).join(Stage).group_by(SeasonAgeStage).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
+    listSAS      = SeasonAgeStage.select(SeasonAgeStage, fn.Count(SeasonAgeStageTeam.SAS_ID).alias('countSAST'), fn.Count(GameProtocol.homeTeam_ID).alias('countHT'), fn.Count(GameProtocol.guestTeam_ID).alias('countGT')).where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(SeasonAgeStageTeam, JOIN_LEFT_OUTER).join(GameProtocol, JOIN_LEFT_OUTER).switch(SeasonAgeStage).join(Stage).group_by(SeasonAgeStage).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
 
     return render_template(
         'SAS.jinja.html', 
@@ -1001,27 +1001,29 @@ def listSAST(seasonid, ageid, sasid):
     listSAST  = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName).order_by(Stage.stage_ID)
 
-    sastsubstagecount = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).where(Stage.stage_ID != None).count()
+    is_SASTsubstage  = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage).exists()
+    listSASTsubstage = SeasonAgeStageTeam.select(SeasonAgeStageTeam.substage_ID).distinct().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER)
 
     return render_template(
         'SAST.jinja.html', 
-        listSeason        = listSeason,
-        seasonid          = seasonid,
-        seasonname        = seasonname,
-        listAge           = listAge,
-        ageid             = ageid,
-        agename           = agename,
-        listSAS_Z         = listSAS_Z,
-        listSAS_G         = listSAS_G,
-        listSAS_P         = listSAS_P,
-        sasid             = sasid,
-        sastype           = sastype,
-        filterCity        = filterCity,
-        filterSchool      = filterSchool,
-        filterTeam        = filterTeam,
-        listSAST          = listSAST,
-        listStage         = listStage,
-        sastsubstagecount = sastsubstagecount
+        listSeason       = listSeason,
+        seasonid         = seasonid,
+        seasonname       = seasonname,
+        listAge          = listAge,
+        ageid            = ageid,
+        agename          = agename,
+        listSAS_Z        = listSAS_Z,
+        listSAS_G        = listSAS_G,
+        listSAS_P        = listSAS_P,
+        sasid            = sasid,
+        sastype          = sastype,
+        filterCity       = filterCity,
+        filterSchool     = filterSchool,
+        filterTeam       = filterTeam,
+        listSAST         = listSAST,
+        listStage        = listStage,
+        is_SASTsubstage  = is_SASTsubstage,
+        listSASTsubstage = listSASTsubstage
     )
 
 ### Добавление команд в игровые этапы

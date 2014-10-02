@@ -131,8 +131,8 @@
 
     <div class="col-lg-10">
 {% if not seasonid == 0 %}
-    {% if not ageid    == 0 %}
-        {% if not sasid    == 0 %}
+    {% if not ageid == 0 %}
+        {% if not sasid == 0 %}
         <table id="listSAST" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
@@ -143,8 +143,8 @@
                 </td>
                 <td class="tableNumber">#</td>
                 <td class="tableText">Команда</td>
-            {% if sastsubstagecount >= 1 %}
-                <td class="tableText">Подгруппа</td>
+            {% if is_SASTsubstage == True %}
+                 <td class="tableText">Подгруппа</td>
             {% endif %}
                 <td class="tableInputRight"></td>
             </tr>
@@ -159,14 +159,10 @@
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">{{ lsast.team_ID.teamName }}</td>
-            {% if sastsubstagecount >= 1 %}
+            {% if is_SASTsubstage == True %}
                 <td class="tableText">
-                    {% if lsast.substage_ID.stageType == "G" %}
-                        {% if lsast.substage_ID.stageName == "А" or lsast.substage_ID.stageName == "Б" or lsast.substage_ID.stageName == "В" or lsast.substage_ID.stageName == "Г" or lsast.substage_ID.stageName == "Д" %}
-                            группа {{ lsast.substage_ID.stageName }}
-                        {% endif %}
-                    {% endif %}
-                 </td>
+                    {{ lsast.substage_ID.stageName }}
+                </td>
             {% endif %}
                 <td class="tableInputRight">
                     {% include "includes/deleteSAST.jinja.html" %}
@@ -178,6 +174,7 @@
         {% endif %}
     {% endif %}
 {% endif %}
+
     </div>
 
     <div class="col-lg-1"></div>
