@@ -1086,11 +1086,15 @@ def createSAST(seasonid, ageid, sasid):
         if session['demo']:
             pass
         else:
-            SeasonAgeStageTeam.create(
-                SAS_ID      = sasid, 
-                team_ID     = teamid, 
-                substage_ID = substageid
-            )
+            # Ограничение по ключу UNIQUE_SAS_Team не позволяет добавить одну и ту же команду дважды в один и тот же игровой этап.
+            try:
+                SeasonAgeStageTeam.create(
+                    SAS_ID      = sasid, 
+                    team_ID     = teamid, 
+                    substage_ID = substageid
+                )
+            except IntegrityError:
+                flash('Вы не можете ещё раз добавить эту же команду в игровой этап', 'danger')
 
         return redirect(
             url_for('listSAST',
