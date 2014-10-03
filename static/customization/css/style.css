@@ -20,6 +20,10 @@ a:focus {
     transition: all 0.25s ease 0s;
 }
 
+.center {
+    text-align: center;
+}
+
 /* Заголовки */
 
 h1, h2, h3, h4, h5, h6 {
