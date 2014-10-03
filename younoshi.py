@@ -440,6 +440,7 @@ def get_object_or_404(model, **kwargs):
 
 ## Обработка ошибки 404
 @app.errorhandler(404)
+@login_required
 def page_not_found(error):
     return render_template(
         '404.jinja.html'
@@ -457,14 +458,18 @@ def key_error(e):
 @login_required
 def index():
     ### В зависимости от того, вошёл пользователь в систему или нет, ему показывается стартовая страница.
-    if session.get('logged_in'):
-        return render_template(
-            'index.jinja.html'
-        )
-    else:
-        return redirect(
-            url_for('login')
-        )
+    return render_template(
+        'index.jinja.html'
+    )
+
+    # if session.get('logged_in'):
+    #     return render_template(
+    #         'index.jinja.html'
+    #     )
+    # else:
+    #     return redirect(
+    #         url_for('login')
+    #     )
 
 ## Вход в систему
 @app.route('/login', methods=['GET', 'POST'])
@@ -486,6 +491,7 @@ def login():
 
 ## Выход из системы
 @app.route('/logout')
+@login_required
 def logout():
     session.pop('logged_in', None)
     flash('Вы вышли из системы', 'warning')
@@ -506,6 +512,7 @@ def listCity():
 
 ### Добавление городов
 @app.route('/city/create', methods=['GET', 'POST'])
+@login_required
 def createCity():
     if request.method == 'POST' and request.form['modify'] == 'create':
         cityname = request.form['cityName']
@@ -523,6 +530,7 @@ def createCity():
 
 ### Изменение городов
 @app.route('/city/<int:cityid>/update', methods = ['GET', 'POST'])
+@login_required
 def updateCity(cityid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         cityname = request.form['cityName']
@@ -541,6 +549,7 @@ def updateCity(cityid):
 
 ### Удаление городов
 @app.route('/city/<int:cityid>/delete', methods = ['GET', 'POST'])
+@login_required
 def deleteCity(cityid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
 
@@ -579,6 +588,7 @@ def listSchool(cityid):
 
 ### Добавление спортивных школ
 @app.route('/city/<int:cityid>/school/create', methods = ['GET', 'POST'])
+@login_required
 def createSchool(cityid):
     if request.method == 'POST' and request.form['modify'] == 'create':
         schoolname = request.form['schoolName']
@@ -599,6 +609,7 @@ def createSchool(cityid):
 
 ### Изменение споривных школ
 @app.route('/city/<int:cityid>/school/<int:schoolid>/update', methods = ['GET', 'POST'])
+@login_required
 def updateSchool(cityid, schoolid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         schoolname = request.form['schoolName']
@@ -620,6 +631,7 @@ def updateSchool(cityid, schoolid):
 
 ### Удаление спортивных школ
 @app.route('/city/<int:cityid>/school/<int:schoolid>/delete', methods = ['GET', 'POST'])
+@login_required
 def deleteSchool(cityid, schoolid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
 
@@ -671,6 +683,7 @@ def listTeam(cityid, schoolid):
 
 ### Добавление команд
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/create', methods = ['GET', 'POST'])
+@login_required
 def createTeam(cityid, schoolid):
     if request.method == 'POST' and request.form['modify'] == 'create':
         teamname = request.form['teamName']
@@ -694,6 +707,7 @@ def createTeam(cityid, schoolid):
 
 ### Изменение команд
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/update', methods = ['GET', 'POST'])
+@login_required
 def updateTeam(cityid, schoolid, teamid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         teamname = request.form['teamName']
@@ -719,6 +733,7 @@ def updateTeam(cityid, schoolid, teamid):
 
 ### Удаление команд
 @app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods = ['GET', 'POST'])
+@login_required
 def deleteTeam(cityid, schoolid, teamid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
 
@@ -748,6 +763,7 @@ def listStage():
 
 ### Добавление стадий
 @app.route('/stage/create', methods = ['GET', 'POST'])
+@login_required
 def createStage():
     if request.method == 'POST' and request.form['modify'] == 'create':
         stagetype = request.form['stageType']
@@ -767,6 +783,7 @@ def createStage():
 
 ### Изменение стадий
 @app.route('/stage/<int:stageid>/update', methods = ['GET', 'POST'])
+@login_required
 def updateStage(stageid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         stagetype = request.form['stageType']
@@ -787,6 +804,7 @@ def updateStage(stageid):
 
 ### Удаление стадий
 @app.route('/stage/<int:stageid>/delete', methods = ['GET', 'POST'])
+@login_required
 def deleteStage(stageid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
 
@@ -816,6 +834,7 @@ def listSeason():
 
 ### Добавление сезонов
 @app.route('/season/create', methods = ['GET', 'POST'])
+@login_required
 def createSeason():
     if request.method == 'POST' and request.form['modify'] == 'create':
         seasonname = request.form['seasonName']
@@ -833,6 +852,7 @@ def createSeason():
 
 ### Изменение сезонов
 @app.route('/season/<int:seasonid>/update', methods = ['GET', 'POST'])
+@login_required
 def updateSeason(seasonid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         seasonname = request.form['seasonName']
@@ -851,6 +871,7 @@ def updateSeason(seasonid):
 
 ### Удаление сезонов
 @app.route('/season/<int:seasonid>/delete', methods = ['GET', 'POST'])
+@login_required
 def deleteSeason(seasonid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
 
@@ -902,6 +923,7 @@ def listSAS(seasonid, ageid):
 
 ### Добавление игровых этапов
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/create', methods=['GET', 'POST'])
+@login_required
 def createSAS(seasonid, ageid):
     if request.method == 'POST' and request.form['modify'] == 'create':
         stageid  = request.form['stage']
@@ -931,6 +953,7 @@ def createSAS(seasonid, ageid):
 
 ### Изменение игровых этапов
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/update', methods = ['GET', 'POST'])
+@login_required
 def updateSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         stageid  = request.form['stage']
@@ -957,6 +980,7 @@ def updateSAS(seasonid, ageid, sasid):
 
 ### Удаление игровых этапов
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/delete', methods  = ['GET', 'POST'])
+@login_required
 def deleteSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
 
@@ -1036,6 +1060,7 @@ def listSAST(seasonid, ageid, sasid):
 
 ### Добавление команд в игровые этапы
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/create', methods=['GET', 'POST'])
+@login_required
 def createSAST(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'create':
         teamid     = request.form['filterTeam']
@@ -1067,6 +1092,7 @@ def createSAST(seasonid, ageid, sasid):
 
 ### Изменение команд в игровых этапах
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/update', methods=['GET', 'POST'])
+@login_required
 def updateSAST(seasonid, ageid, sasid, sastid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         teamid     = request.form['filterTeam']
@@ -1098,6 +1124,7 @@ def updateSAST(seasonid, ageid, sasid, sastid):
 
 ### Удаление команд в игровых этапах
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/delete', methods  = ['GET', 'POST'])
+@login_required
 def deleteSAST(seasonid, ageid, sasid, sastid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
 
@@ -1190,6 +1217,7 @@ def listGP(seasonid, ageid, sasid):
 
 ### Добавление игрового протокола
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/create', methods=['GET', 'POST'])
+@login_required
 def createGP(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'create':
         gamenumber = request.form['gameNumber']
@@ -1267,6 +1295,7 @@ def createGP(seasonid, ageid, sasid):
 
 ### Изменение игрового протокола
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/update', methods=['GET', 'POST'])
+@login_required
 def updateGP(seasonid, ageid, sasid, gpid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         gameNumber = request.form['gameNumber']
@@ -1353,6 +1382,7 @@ def updateGP(seasonid, ageid, sasid, gpid):
 
 ### Удаление игрового протокола
 @app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/delete', methods  = ['GET', 'POST'])
+@login_required
 def deleteGP(seasonid, ageid, sasid, gpid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
 
