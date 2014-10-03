@@ -740,7 +740,11 @@ def deleteTeam(cityid, schoolid, teamid):
         if session['demo']:
             pass
         else:
-            Team.get(school_ID = schoolid, team_ID = teamid).delete_instance()
+            # Ограничение по внешнему ключу FK_SAST_Team не позволяет удалить команду при наличии связанных с ней игровых этапов.
+            try:
+                Team.get(school_ID = schoolid, team_ID = teamid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить эту команду, пока она добавлена хотя бы в один игровой этап', 'danger')
 
         return redirect(
             url_for('listTeam', 
@@ -1139,7 +1143,7 @@ def deleteSAST(seasonid, ageid, sasid, sastid):
         else:
             # Ограничение по внешним ключам FK_HT_SAST и FK_GT_SAST не позволяет удалить команду в игровом этапе при наличии связанных с ней матчей.
             try:
-                SeasфnAgeStageTeam.get(SAST_ID = sastid).delete_instance()
+                SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
             except IntegrityError:
                 flash('Вы не можете удалить эту команду, пока с её участием добавлен хотя бы один матч', 'danger')
 
