@@ -36,14 +36,12 @@
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText">
-                    {% if lc.countSchools > 0 %}<a href="/city/{{ lc.city_ID }}/school">{% endif %}
-                        {{ lc.cityName }}
-                    {% if lc.countSchools > 0 %}</a>{% endif %}
-                </td>
+                <td class="tableText">{{ lc.cityName }}</td>
                 <td class="tableText">
                     {% if lc.countSchools == 0 %}нет{% endif %}
-                    {% if lc.countSchools > 0 %}{{ lc.countSchools }}{% endif %}
+                    {% if lc.countSchools > 0 %}<a href="/city/{{ lc.city_ID }}/school">{% endif %}
+                        {{ lc.countSchools }}
+                    {% if lc.countSchools > 0 %}</a>{% endif %}
                 </td>
                 <td class="tableInputRight">
                     {% include "includes/deleteCity.jinja.html" %}
