@@ -88,15 +88,9 @@
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">
-                    {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
-                        <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
-                    {% endif %}
-                        {% if lsas.stage_ID.stageType == "Z" %}зона {{ lsas.stage_ID.stageName }}{% endif %}
-                        {% if lsas.stage_ID.stageType == "G" %}группа {{ lsas.stage_ID.stageName }}{% endif %}
-                        {% if lsas.stage_ID.stageType == "P" %}плэй-офф{% endif %}
-                    {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
-                        </a>
-                    {% endif %}
+                    {% if lsas.stage_ID.stageType == "Z" %}зона {{ lsas.stage_ID.stageName }}{% endif %}
+                    {% if lsas.stage_ID.stageType == "G" %}группа {{ lsas.stage_ID.stageName }}{% endif %}
+                    {% if lsas.stage_ID.stageType == "P" %}плэй-офф{% endif %}
                 </td>
                 <td class="tableText">
                     {% if lsas.gameType_ID.gameTypeName == "CHA" %}Первенство{% endif %}
