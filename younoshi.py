@@ -1137,7 +1137,11 @@ def deleteSAST(seasonid, ageid, sasid, sastid):
         if session['demo']:
             pass
         else:
-            SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
+            # Ограничение по внешним ключам FK_HT_SAST и FK_GT_SAST не позволяет удалить команду в игровом этапе при наличии связанных с ней матчей.
+            try:
+                SeasфnAgeStageTeam.get(SAST_ID = sastid).delete_instance()
+            except IntegrityError:
+                flash('Вы не можете удалить эту команду, пока с её участием добавлен хотя бы один матч', 'danger')
 
         return redirect(
             url_for('listSAST',
