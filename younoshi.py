@@ -926,8 +926,10 @@ def listSAS(seasonid, ageid):
 @login_required
 def createSAS(seasonid, ageid):
     if request.method == 'POST' and request.form['modify'] == 'create':
-        stageid  = request.form['stage']
-        gametype = request.form['gameType']
+        stageid    = request.form['stage']
+        gametype   = request.form['gameType']
+        startdate  = datetime.datetime.strptime(request.form['startDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+        finishdate = datetime.datetime.strptime(request.form['finishDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
 
         if session['demo']:
             pass
@@ -939,7 +941,9 @@ def createSAS(seasonid, ageid):
                     season_ID   = seasonid, 
                     age_ID      = ageid, 
                     stage_ID    = stageid, 
-                    gameType_ID = gametype
+                    gameType_ID = gametype,
+                    startDate   = startdate,
+                    finishDate  = finishdate
                 )
             except IntegrityError:
                 flash('Вы не можете добавить ещё один такой же игровой этап в одном и том же сезоне и возрасте', 'danger')
@@ -956,8 +960,10 @@ def createSAS(seasonid, ageid):
 @login_required
 def updateSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'update':
-        stageid  = request.form['stage']
-        gametype = request.form['gameType']
+        stageid    = request.form['stage']
+        gametype   = request.form['gameType']
+        startdate  = datetime.datetime.strptime(request.form['startDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+        finishdate = datetime.datetime.strptime(request.form['finishDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
 
         if session['demo']:
             pass
@@ -968,13 +974,14 @@ def updateSAS(seasonid, ageid, sasid):
             SAS.age_ID      = ageid
             SAS.stage_ID    = stageid
             SAS.gameType_ID = gametype
+            SAS.startDate   = startdate
+            SAS.finishDate  = finishdate
             SAS.save()
 
         return redirect(
             url_for('listSAS',
                 seasonid = seasonid,
-                ageid    = ageid,
-                sasid    = sasid
+                ageid    = ageid
             )
         )
 
@@ -996,8 +1003,7 @@ def deleteSAS(seasonid, ageid, sasid):
         return redirect(
             url_for('listSAS',
                 seasonid = seasonid,
-                ageid    = ageid,
-                sasid    = sasid
+                ageid    = ageid
             )
         )
 

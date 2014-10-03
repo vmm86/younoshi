@@ -69,10 +69,10 @@
                     </a>
                 </td>
                 <td class="tableNumber">#</td>
-<!--                 <td class="tableText">Сезон</td>
-                <td class="tableText">Возраст</td> -->
                 <td class="tableText">Игровая стадия</td>
                 <td class="tableText">Тип соревнования</td>
+                <td class="tableText center">Начало</td>
+                <td class="tableText center">Конец</td>
                 <td class="tableText">Команды</td>
                 <td class="tableText">Матчи</td>
                 <td class="tableInputRight"></td>
@@ -87,8 +87,6 @@
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-<!--                 <td class="tableText">{{ lsas.season_ID.seasonName }}</td>
-                <td class="tableText">{{ lsas.age_ID.ageName }}</td> -->
                 <td class="tableText">
                     {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
                         <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
@@ -103,6 +101,16 @@
                 <td class="tableText">
                     {% if lsas.gameType_ID.gameTypeName == "CHA" %}Первенство{% endif %}
                     {% if lsas.gameType_ID.gameTypeName == "CUP" %}Кубок{% endif %}
+                </td>
+                <td class="tableText center">
+                    {% if lsas.startDate %}
+                        {{ lsas.startDate.strftime('%d.%m.%Y') }}
+                    {% endif %}
+                </td>
+                <td class="tableText center">
+                    {% if lsas.finishDate %}
+                        {{ lsas.finishDate.strftime('%d.%m.%Y') }}
+                    {% endif %}
                 </td>
                 <td class="tableText">
                     {% if lsas.countSAST > 0 %}

@@ -77,7 +77,14 @@
 
                     <div class="row">
 
-                        <div class="col-lg-4" style="text-align: right;"></div>
+                        <div class="col-lg-4" style="text-align: right;">
+
+                            <div class="form-group btn-group">
+                                <label class="btn-label" for="startDate">Начало соревнований</label> 
+                                <input class="datetimepicker form-control" type="date" name="startDate" value="{% if lsas.startDate %}{{ lsas.startDate.strftime('%d.%m.%Y') }}{% endif %}">
+                            </div>
+
+                        </div>
 
                         <div class="col-lg-4" style="text-align: center;">
 
@@ -95,7 +102,14 @@
 
                         </div>
 
-                        <div class="col-lg-4" style="text-align: right;"></div>
+                        <div class="col-lg-4" style="text-align: left;">
+
+                            <div class="form-group btn-group">
+                                <label class="btn-label" for="finishDate">Конец соревнований</label> 
+                                <input class="datetimepicker form-control" type="date" name="finishDate" value="{% if lsas.finishDate %}{{ lsas.finishDate.strftime('%d.%m.%Y') }}{% endif %}">
+                            </div>
+
+                        </div>
 
                     </div>
 
