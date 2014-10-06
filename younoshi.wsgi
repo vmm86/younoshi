@@ -6,7 +6,6 @@ logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, '/home/vmm/www/younoshi')
 
 from younoshi import app as application
-# application = app
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
