@@ -5,11 +5,11 @@ import MySQLdb
 
 from peewee import MySQLDatabase, Model, IntegerField, PrimaryKeyField, CharField, DateField, BooleanField, ForeignKeyField, fn, JOIN_LEFT_OUTER
 
-import config
+from config import DatabaseConf
 
-dbname   = config.DB_NAME
-dbpasswd = config.DB_PASSWD
-dbuser   = config.DB_USER
+dbname   = DatabaseConf.DB_NAME
+dbpasswd = DatabaseConf.DB_PASSWD
+dbuser   = DatabaseConf.DB_USER
 
 # Создание экземпляра базы данных Peewee.
 # Все модели будут использовать его для сохранения информции.
