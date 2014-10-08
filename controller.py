@@ -3,7 +3,7 @@
 
 import datetime
 
-from flask import redirect, request, session, url_for, abort, render_template, flash
+from flask import session, render_template, url_for, request, redirect, abort, flash
 
 from functools import wraps
 
@@ -13,11 +13,7 @@ from model import *
 
 # from werkzeug.wrappers import BaseRequest
 # from werkzeug.wsgi import responder
-from werkzeug.exceptions import BadRequest, HTTPException, NotFound, default_exceptions
-
-from younoshi import app
-
-app.secret_key = config.SECRET_KEY
+from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
 
 # Авторизация
 def auth_user(user):
@@ -43,8 +39,8 @@ def login_required(f):
     return inner
 
 # Получаем объект, соответствующий запросу или страницу ошибки 404.
-# Используется алиас вызова метода "GET" из модели, который получает одиночный объект 
-# или выдаёт исключение DoesNotExist, если ни одного такого объекта не найдено.
+# Используется алиас вызова метода "GET" из модели, 
+# который получает объект или выдаёт исключение DoesNotExist.
 def get_object_or_404(model, **kwargs):
     try:
         return model.get(**kwargs)
@@ -53,28 +49,24 @@ def get_object_or_404(model, **kwargs):
         return render_template('404.jinja.html')
 
 ## Обработка ошибки 400
-def key_error(e):
-    flash('К сожалению, ваш запрос не удалось выполнить. Попробуйте сделать это ещё раз, введя все необходимые данные.', 'danger')
-    return render_template(
-        'index.jinja.html'), 400
+# def key_error(e):
+#     flash('К сожалению, ваш запрос не удалось выполнить. \
+#     Попробуйте сделать это ещё раз, введя все необходимые данные.', 'danger')
+#     return render_template(
+#         'index.jinja.html'), 400
 
 ## Обработка ошибки 404
-@app.errorhandler(404)
 @login_required
 def page_not_found(error):
     return render_template(
         '404.jinja.html'), 404
 
 ## Главная страница
-@app.route('/')
 @login_required
 def index():
-    ### В зависимости от того, вошёл пользователь в систему или нет, ему показывается стартовая страница.
-    return render_template(
-        'index.jinja.html')
+    return render_template('index.jinja.html')
 
 ## Вход в систему
-@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and request.form['login']:
         try:
@@ -86,23 +78,19 @@ def login():
         else:
             auth_user(user)
             return redirect(
-                url_for('index')
-            )
+                url_for('index'))
 
     return render_template('login.jinja.html')
 
 ## Выход из системы
-@app.route('/logout')
 @login_required
 def logout():
     session.pop('logged_in', None)
     flash('Вы вышли из системы', 'warning')
     return redirect(
-        url_for('index')
-    )
+        url_for('index'))
 
 ## Города
-@app.route('/city')
 @login_required
 def listCity():
     listCity = City.select(City, fn.Count(School.city_ID).alias('countSchools')).join(School, JOIN_LEFT_OUTER).group_by(City).order_by(City.cityName)
@@ -113,7 +101,6 @@ def listCity():
     )
 
 ### Добавление городов
-@app.route('/city/create', methods=['GET', 'POST'])
 @login_required
 def createCity():
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -123,15 +110,12 @@ def createCity():
             pass
         else:
             City.create(
-                cityName = cityname
-            )
+                cityName = cityname)
 
         return redirect(
-            url_for('listCity')
-        )
+            url_for('listCity'))
 
 ### Изменение городов
-@app.route('/city/<int:cityid>/update', methods = ['GET', 'POST'])
 @login_required
 def updateCity(cityid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -146,11 +130,9 @@ def updateCity(cityid):
             city.save()
 
         return redirect(
-            url_for('listCity')
-        )
+            url_for('listCity'))
 
 ### Удаление городов
-@app.route('/city/<int:cityid>/delete', methods = ['GET', 'POST'])
 @login_required
 def deleteCity(cityid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -158,18 +140,17 @@ def deleteCity(cityid):
         if session['demo']:
             pass
         else:
-            # Ограничение по внешнему ключу FK_School_City не позволяет удалить населённый пункт при наличии связанных с ним спортивных школ.
+            # Ограничение по внешнему ключу FK_School_City 
+            # не позволяет удалить населённый пункт при наличии связанных с ним спортивных школ.
             try:
                 City.get(city_ID = cityid).delete_instance()
             except IntegrityError:
                 flash('Вы не можете удалить этот город, пока в него добавлена хотя бы одна спортивная школа', 'danger')
 
         return redirect(
-            url_for('listCity')
-        )
+            url_for('listCity'))
 
 ## Спортивные школы
-@app.route('/city/<int:cityid>/school')
 @login_required
 def listSchool(cityid):
     listCity = City.select().order_by(City.cityName)
@@ -185,11 +166,9 @@ def listSchool(cityid):
         listCity   = listCity, 
         cityid     = cityid, 
         cityname   = cityname, 
-        listSchool = listSchool
-    )
+        listSchool = listSchool)
 
 ### Добавление спортивных школ
-@app.route('/city/<int:cityid>/school/create', methods = ['GET', 'POST'])
 @login_required
 def createSchool(cityid):
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -205,12 +184,9 @@ def createSchool(cityid):
 
         return redirect(
             url_for('listSchool', 
-                cityid = cityid
-            )
-        )
+                cityid = cityid))
 
 ### Изменение споривных школ
-@app.route('/city/<int:cityid>/school/<int:schoolid>/update', methods = ['GET', 'POST'])
 @login_required
 def updateSchool(cityid, schoolid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -227,12 +203,9 @@ def updateSchool(cityid, schoolid):
 
         return redirect(
             url_for('listSchool', 
-                cityid = cityid
-            )
-        )
+                cityid = cityid))
 
 ### Удаление спортивных школ
-@app.route('/city/<int:cityid>/school/<int:schoolid>/delete', methods = ['GET', 'POST'])
 @login_required
 def deleteSchool(cityid, schoolid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -240,7 +213,8 @@ def deleteSchool(cityid, schoolid):
         if session['demo']:
             pass
         else:
-            # Ограничение по внешнему ключу FK_Team_School не позволяет удалить спортивную школу при наличии связанных с ней команд.
+            # Ограничение по внешнему ключу FK_Team_School 
+            # не позволяет удалить спортивную школу при наличии связанных с ней команд.
             try:
                 School.get(city_ID = cityid, school_ID = schoolid).delete_instance()
             except IntegrityError:
@@ -248,12 +222,9 @@ def deleteSchool(cityid, schoolid):
 
         return redirect(
             url_for('listSchool', 
-                cityid = cityid
-            )
-        )
+                cityid = cityid))
 
 ## Команды
-@app.route('/city/<int:cityid>/school/<int:schoolid>/team')
 @login_required
 def listTeam(cityid, schoolid):
     listCity = City.select().order_by(City.cityName)
@@ -280,11 +251,9 @@ def listTeam(cityid, schoolid):
         schoolid   = schoolid, 
         schoolname = schoolname,
         listAge    = listAge, 
-        listTeam   = listTeam
-    )
+        listTeam   = listTeam)
 
 ### Добавление команд
-@app.route('/city/<int:cityid>/school/<int:schoolid>/team/create', methods = ['GET', 'POST'])
 @login_required
 def createTeam(cityid, schoolid):
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -297,18 +266,14 @@ def createTeam(cityid, schoolid):
             Team.create(
                 school_ID = schoolid, 
                 age_ID = ageid, 
-                teamName = teamname
-            )
+                teamName = teamname)
 
         return redirect(
             url_for('listTeam', 
                 cityid   = cityid, 
-                schoolid = schoolid
-            )
-        )
+                schoolid = schoolid))
 
 ### Изменение команд
-@app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/update', methods = ['GET', 'POST'])
 @login_required
 def updateTeam(cityid, schoolid, teamid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -329,12 +294,9 @@ def updateTeam(cityid, schoolid, teamid):
             url_for('listTeam', 
                 cityid   = cityid, 
                 schoolid = schoolid,
-                teamid   = teamid
-            )
-        )
+                teamid   = teamid))
 
 ### Удаление команд
-@app.route('/city/<int:cityid>/school/<int:schoolid>/team/<int:teamid>/delete', methods = ['GET', 'POST'])
 @login_required
 def deleteTeam(cityid, schoolid, teamid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -342,7 +304,8 @@ def deleteTeam(cityid, schoolid, teamid):
         if session['demo']:
             pass
         else:
-            # Ограничение по внешнему ключу FK_SAST_Team не позволяет удалить команду при наличии связанных с ней игровых этапов.
+            # Ограничение по внешнему ключу FK_SAST_Team 
+            # не позволяет удалить команду при наличии связанных с ней игровых этапов.
             try:
                 Team.get(school_ID = schoolid, team_ID = teamid).delete_instance()
             except IntegrityError:
@@ -352,23 +315,18 @@ def deleteTeam(cityid, schoolid, teamid):
             url_for('listTeam', 
                 cityid   = cityid, 
                 schoolid = schoolid,
-                teamid   = teamid
-            )
-        )
+                teamid   = teamid))
 
 ## Стадии
-@app.route('/stage')
 @login_required
 def listStage():
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName)
 
     return render_template(
         'Stage.jinja.html', 
-        listStage = listStage
-    )
+        listStage = listStage)
 
 ### Добавление стадий
-@app.route('/stage/create', methods = ['GET', 'POST'])
 @login_required
 def createStage():
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -380,15 +338,12 @@ def createStage():
         else:
             Stage.create(
                 stageType = stagetype, 
-                stageName = stagename
-            )
+                stageName = stagename)
 
         return redirect(
-            url_for('listStage')
-        )
+            url_for('listStage'))
 
 ### Изменение стадий
-@app.route('/stage/<int:stageid>/update', methods = ['GET', 'POST'])
 @login_required
 def updateStage(stageid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -405,11 +360,9 @@ def updateStage(stageid):
             stage.save()
 
         return redirect(
-            url_for('listStage')
-        )
+            url_for('listStage'))
 
 ### Удаление стадий
-@app.route('/stage/<int:stageid>/delete', methods = ['GET', 'POST'])
 @login_required
 def deleteStage(stageid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -417,29 +370,26 @@ def deleteStage(stageid):
         if session['demo']:
             pass
         else:
-            # Ограничение по внешнему ключу FK_SAS_Stage не позволяет удалить стадию при наличии связанных с ней игровых этапов в определённом сезоне и возрасте.
+            # Ограничение по внешнему ключу FK_SAS_Stage 
+            # не позволяет удалить стадию при наличии связанных с ней игровых этапов.
             try:
                 Stage.get(stage_ID = stageid).delete_instance()
             except IntegrityError:
                 flash('Вы не можете удалить эту стадию, пока с ней связан хотя бы один игровой этап внутри сезона', 'danger')
 
         return redirect(
-            url_for('listStage')
-        )
+            url_for('listStage'))
 
 ## Сезоны
-@app.route('/season')
 @login_required
 def listSeason():
     listSeason = Season.select().order_by(Season.seasonName)
 
     return render_template(
         'Season.jinja.html', 
-        listSeason = listSeason
-    )
+        listSeason = listSeason)
 
 ### Добавление сезонов
-@app.route('/season/create', methods = ['GET', 'POST'])
 @login_required
 def createSeason():
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -449,15 +399,12 @@ def createSeason():
             pass
         else:
             Season.create(
-                seasonName = seasonname
-            )
+                seasonName = seasonname)
 
         return redirect(
-            url_for('listSeason')
-        )
+            url_for('listSeason'))
 
 ### Изменение сезонов
-@app.route('/season/<int:seasonid>/update', methods = ['GET', 'POST'])
 @login_required
 def updateSeason(seasonid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -472,11 +419,9 @@ def updateSeason(seasonid):
             season.save()
 
         return redirect(
-            url_for('listSeason')
-        )
+            url_for('listSeason'))
 
 ### Удаление сезонов
-@app.route('/season/<int:seasonid>/delete', methods = ['GET', 'POST'])
 @login_required
 def deleteSeason(seasonid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -484,18 +429,17 @@ def deleteSeason(seasonid):
         if session['demo']:
             pass
         else:
-            # Ограничение по внешнему ключу FK_SAS_Season не позволяет удалить стадию при наличии связанных с ней игровых этапов в определённом сезоне и возрасте.
+            # Ограничение по внешнему ключу FK_SAS_Season 
+            # не позволяет удалить стадию при наличии связанных с ней игровых этапов.
             try:
                 Season.get(season_ID = seasonid).delete_instance()
             except IntegrityError:
                 flash('Вы не можете удалить этот сезон, пока в нём добавлен хотя бы один игровой этап', 'danger')
 
         return redirect(
-            url_for('listSeason')
-        )
+            url_for('listSeason'))
 
-## Игровые стадии
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage')
+## Игровые этапы
 @login_required
 def listSAS(seasonid, ageid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
@@ -524,11 +468,9 @@ def listSAS(seasonid, ageid):
         agename      = agename,
         listStage    = listStage,
         listGameType = listGameType,
-        listSAS      = listSAS
-    )
+        listSAS      = listSAS)
 
 ### Добавление игровых этапов
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/create', methods=['GET', 'POST'])
 @login_required
 def createSAS(seasonid, ageid):
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -540,7 +482,8 @@ def createSAS(seasonid, ageid):
         if session['demo']:
             pass
         else:
-            # Ограничение по ключу UNIQUE_Season_Age_Stage не позволяет добавить повторяющуюся комбинацию сезон/возраст/стадия в рамках игрового этапа.
+            # Ограничение по ключу UNIQUE_Season_Age_Stage 
+            # не позволяет добавить повторяющуюся комбинацию сезон/возраст/стадия в игровом этапе.
             # Например, нельзя добавить второй этап плэй-офф в одном и том же сезоне и возрасте.
             try:
                 SeasonAgeStage.create(
@@ -557,12 +500,9 @@ def createSAS(seasonid, ageid):
         return redirect(
             url_for('listSAS',
                 seasonid = seasonid,
-                ageid    = ageid
-            )
-        )
+                ageid    = ageid))
 
 ### Изменение игровых этапов
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/update', methods = ['GET', 'POST'])
 @login_required
 def updateSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -587,12 +527,9 @@ def updateSAS(seasonid, ageid, sasid):
         return redirect(
             url_for('listSAS',
                 seasonid = seasonid,
-                ageid    = ageid
-            )
-        )
+                ageid    = ageid))
 
 ### Удаление игровых этапов
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/delete', methods  = ['GET', 'POST'])
 @login_required
 def deleteSAS(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -600,7 +537,8 @@ def deleteSAS(seasonid, ageid, sasid):
         if session['demo']:
             pass
         else:
-            # Ограничение по внешнему ключу FK_SAST_SAS не позволяет удалить игровой этап при наличии связанных с ним дочерних команд.
+            # Ограничение по внешнему ключу FK_SAST_SAS 
+            # не позволяет удалить игровой этап при наличии связанных с ним дочерних команд.
             try:
                 SeasonAgeStage.get(SAS_ID = sasid).delete_instance()
             except IntegrityError:
@@ -609,12 +547,9 @@ def deleteSAS(seasonid, ageid, sasid):
         return redirect(
             url_for('listSAS',
                 seasonid = seasonid,
-                ageid    = ageid
-            )
-        )
+                ageid    = ageid))
 
 ## Команды в игровых этапах
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team')
 @login_required
 def listSAST(seasonid, ageid, sasid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
@@ -667,11 +602,9 @@ def listSAST(seasonid, ageid, sasid):
         listSAST         = listSAST,
         listStage        = listStage,
         is_SASTsubstage  = is_SASTsubstage,
-        listSASTsubstage = listSASTsubstage
-    )
+        listSASTsubstage = listSASTsubstage)
 
 ### Добавление команд в игровые этапы
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/create', methods=['GET', 'POST'])
 @login_required
 def createSAST(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -691,19 +624,15 @@ def createSAST(seasonid, ageid, sasid):
             SeasonAgeStageTeam.create(
                 SAS_ID      = sasid, 
                 team_ID     = teamid, 
-                substage_ID = substageid
-            )
+                substage_ID = substageid)
 
         return redirect(
             url_for('listSAST',
                 seasonid = seasonid,
                 ageid    = ageid,
-                sasid    = sasid
-            )
-        )
+                sasid    = sasid))
 
 ### Изменение команд в игровых этапах
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/update', methods=['GET', 'POST'])
 @login_required
 def updateSAST(seasonid, ageid, sasid, sastid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -730,12 +659,9 @@ def updateSAST(seasonid, ageid, sasid, sastid):
             url_for('listSAST',
                 seasonid = seasonid,
                 ageid    = ageid,
-                sasid    = sasid
-            )
-        )
+                sasid    = sasid))
 
 ### Удаление команд в игровых этапах
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/team/<int:sastid>/delete', methods  = ['GET', 'POST'])
 @login_required
 def deleteSAST(seasonid, ageid, sasid, sastid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -743,7 +669,8 @@ def deleteSAST(seasonid, ageid, sasid, sastid):
         if session['demo']:
             pass
         else:
-            # Ограничение по внешним ключам FK_HT_SAST и FK_GT_SAST не позволяет удалить команду в игровом этапе при наличии связанных с ней матчей.
+            # Ограничение по внешним ключам FK_HT_SAST и FK_GT_SAST 
+            # не позволяет удалить команду в игровом этапе при наличии связанных с ней матчей.
             try:
                 SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
             except IntegrityError:
@@ -753,12 +680,9 @@ def deleteSAST(seasonid, ageid, sasid, sastid):
             url_for('listSAST',
                 seasonid = seasonid,
                 ageid    = ageid,
-                sasid    = sasid
-            )
-        )
+                sasid    = sasid))
 
 ## Игровые протоколы
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp')
 @login_required
 def listGP(seasonid, ageid, sasid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
@@ -828,11 +752,9 @@ def listGP(seasonid, ageid, sasid):
         listGP      = listGP,
         gnmax       = gnmax,
         tnmax       = tnmax,
-        dmax        = dmax
-    )
+        dmax        = dmax)
 
 ### Добавление игрового протокола
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/create', methods=['GET', 'POST'])
 @login_required
 def createGP(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'create':
@@ -898,19 +820,15 @@ def createGP(seasonid, ageid, sasid):
                 homeTeamScore11m   = htscore11m, 
                 guestTeamScore11m  = gtscore11m, 
                 is_Semifinal       = issemifinal, 
-                is_Final           = isfinal
-            )
+                is_Final           = isfinal)
 
         return redirect(
             url_for('listGP',
                 seasonid = seasonid,
                 ageid    = ageid,
-                sasid    = sasid
-            )
-        )
+                sasid    = sasid))
 
 ### Изменение игрового протокола
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/update', methods=['GET', 'POST'])
 @login_required
 def updateGP(seasonid, ageid, sasid, gpid):
     if request.method == 'POST' and request.form['modify'] == 'update':
@@ -967,7 +885,7 @@ def updateGP(seasonid, ageid, sasid, gpid):
             GP        = GameProtocol()
             GP.GP_ID  = gpid
 
-            # Заготовка для отслеживания только отличающихся значений полей при обновлении
+            # Заготовка для отслеживания только изменённых значений при обновлении
             # GPfields  = GameProtocol._meta.fields
             # currentGP = GameProtocol.get(GP_ID = gpid)
             # for field in GPfields:
@@ -992,12 +910,9 @@ def updateGP(seasonid, ageid, sasid, gpid):
             url_for('listGP',
                 seasonid = seasonid,
                 ageid    = ageid,
-                sasid    = sasid
-            )
-        )
+                sasid    = sasid))
 
 ### Удаление игрового протокола
-@app.route('/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/delete', methods  = ['GET', 'POST'])
 @login_required
 def deleteGP(seasonid, ageid, sasid, gpid):
     if request.method == 'POST' and request.form['modify'] == 'delete':
@@ -1011,6 +926,4 @@ def deleteGP(seasonid, ageid, sasid, gpid):
             url_for('listGP',
                 seasonid = seasonid,
                 ageid    = ageid,
-                sasid    = sasid
-            )
-        )
+                sasid    = sasid))

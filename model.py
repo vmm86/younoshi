@@ -1,11 +1,11 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-import config
-
 import MySQLdb
 
-from peewee import *
+from peewee import MySQLDatabase, Model, IntegerField, PrimaryKeyField, CharField, DateField, BooleanField, ForeignKeyField, fn, JOIN_LEFT_OUTER
+
+import config
 
 dbname   = config.DB_NAME
 dbpasswd = config.DB_PASSWD
