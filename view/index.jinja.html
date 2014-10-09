@@ -29,13 +29,14 @@
 {% set active_page  =  active_page|default('') -%}
 
 <div id="top-menu" class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+{% if session['logged_in'] %}
+
+    <div class="userName"><a href="/">{{ session['userName'] }}</a></div>
+
     <div class="container">
+
         <div class="navbar-collapse collapse">
-
-        {% if session['logged_in'] %}
-
-            <div class="userName">{{ session['userName'] }}</div>
-
             <ul class="nav navbar-nav">
                 <li class="dropdown {% if active_group == 'Source' %}active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Исходные данные <b class="caret"></b></a>
@@ -68,10 +69,12 @@
                 </li>
                 <li {% if active_page == 'Logout' %}class="active"{% endif %}><a href="/logout">Выйти</a></li>
             </ul>
-        {% endif %}
-
         </div>
+
     </div>
+
+{% endif %}
+
 </div>
 
 <div class="container wrapper" role="main">

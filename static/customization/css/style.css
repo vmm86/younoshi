@@ -188,6 +188,8 @@ table tr td {
     box-shadow: 0 -1rem 1.1rem -1rem rgba(0,0,0,0.11) inset;
 
     width: 100%;
+
+    position: fixed;
 }
 
 .navbar {
@@ -377,7 +379,8 @@ a.btn {
     text-shadow: 1px 1px 0 rgba(0, 60, 100, 0.5);
 }
 
-.btn-info.active {
+.btn-info.active,
+.btn-info.active:hover {
     background: #0C81CF;
 }
 
@@ -392,10 +395,6 @@ a.btn {
 
 .btn-info:focus,
 .btn-info:active {
-    background-color: #3498DB;
-}
-
-.btn-info.active:hover {
     background-color: #3498DB;
 }
 
