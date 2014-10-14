@@ -1,0 +1,260 @@
+#! /usr/bin/python
+# -*- coding: utf-8 -*-
+
+import datetime
+
+from flask import session, render_template, url_for, request, redirect, flash
+
+from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
+
+from peewee import fn, JOIN_LEFT_OUTER
+
+from model import Season, Age, Stage, Team, SeasonAgeStage, SeasonAgeStageTeam, GameProtocol
+
+from User import login_required
+
+## Игровые протоколы
+@login_required
+def listGP(seasonid, ageid, sasid):
+    listSeason = Season.select().order_by(Season.season_ID.asc())
+    try:
+        seasonname = Season.get(season_ID = seasonid).seasonName
+    except Season.DoesNotExist:
+        seasonname = None
+
+    listAge = Age.select().order_by(Age.ageName)
+    try:
+        agename = Age.get(age_ID = ageid).ageName
+    except Age.DoesNotExist:
+        agename = None
+
+    sasid = sasid
+    try:
+        sastype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
+    except SeasonAgeStage.DoesNotExist:
+        sastype = None
+
+    try:
+        sasgametype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).gameType_ID.gameTypeName
+    except SeasonAgeStage.DoesNotExist:
+        sasgametype = None
+
+    listSAS_Z = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
+    listSAS_G = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
+    listSAS_P = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
+
+    listSAST = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Team).switch(SeasonAgeStageTeam).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
+    listGP   = GameProtocol.select().join(SeasonAgeStageTeam).where(SeasonAgeStageTeam.SAS_ID == sasid).order_by(GameProtocol.GP_ID)
+
+    # Удобства при создании новых матчей
+    ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
+    try:
+        gnmax = int(GameProtocol.select(fn.Max(GameProtocol.gameNumber)).scalar())
+    except TypeError:
+        gnmax = 0
+    finally:
+        gnmax += 1
+    ## Номер тура - по умолчанию такой же, как последний добавленный либо 1
+    try:
+        tnmax = int(GameProtocol.select(fn.Max(GameProtocol.tourNumber)).scalar())
+    except TypeError:
+        tnmax = 1
+    ## Дата матча - по умолчанию такая же, как последняя добавленная либо сегодняшняя
+    ## Дата в форме выводится в формате ДД.ММ.ГГГГ, а в БД записывается в формате ГГГГ-ММ-ДД
+    try:
+        dmax = GameProtocol.select(fn.Max(GameProtocol.gameDate)).scalar()
+        dmax = dmax.strftime('%d.%m.%Y')
+    except AttributeError:
+        dmax = datetime.datetime.now().strftime('%d.%m.%Y')
+
+    return render_template(
+        'GP.jinja.html', 
+        listSeason  = listSeason,
+        seasonid    = seasonid,
+        listAge     = listAge,
+        ageid       = ageid,
+        listSAS_Z   = listSAS_Z,
+        listSAS_G   = listSAS_G,
+        listSAS_P   = listSAS_P,
+        sasid       = sasid,
+        sastype     = sastype,
+        sasgametype = sasgametype,
+        listSAST    = listSAST,
+        listGP      = listGP,
+        gnmax       = gnmax,
+        tnmax       = tnmax,
+        dmax        = dmax)
+
+### Добавление игрового протокола
+@login_required
+def createGP(seasonid, ageid, sasid):
+    if request.method == 'POST' and request.form['modify'] == 'create':
+        gamenumber = request.form['gameNumber']
+        tournumber = request.form['tourNumber']
+ 
+        try:
+            stagenumber = request.form['stageNumber']
+        except KeyError:
+            stagenumber = None
+        if stagenumber == '':
+            stagenumber = None
+
+        gamedate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+
+        htid     = request.form['filterHT']
+        gtid     = request.form['filterGT']
+
+        htscoregame = request.form['HTscoreGame']
+        if htscoregame == '':
+            htscoregame = None
+
+        gtscoregame = request.form['GTscoreGame']
+        if gtscoregame == '':
+            gtscoregame = None
+
+        try:
+            htscore11m = request.form['HTscore11m']
+        except KeyError:
+            htscore11m = None
+        if htscore11m == '':
+            htscore11m = None
+
+        try:
+            gtscore11m = request.form['GTscore11m']
+        except KeyError:
+            gtscore11m = None
+        if gtscore11m == '':
+            gtscore11m = None
+
+        try:
+            issemifinal = bool(int(request.form['is_Semifinal']))
+        except KeyError:
+            issemifinal = False
+
+        try:
+            isfinal = bool(int(request.form['is_Final']))
+        except KeyError:
+            isfinal = False
+
+        if session['demo']:
+            pass
+        else:
+            GameProtocol.create(
+                gameNumber         = gamenumber, 
+                tourNumber         = tournumber, 
+                stageNumber        = stagenumber, 
+                gameDate           = gamedate, 
+                homeTeam_ID        = htid, 
+                guestTeam_ID       = gtid, 
+                homeTeamScoreGame  = htscoregame, 
+                guestTeamScoreGame = gtscoregame, 
+                homeTeamScore11m   = htscore11m, 
+                guestTeamScore11m  = gtscore11m, 
+                is_Semifinal       = issemifinal, 
+                is_Final           = isfinal)
+
+        return redirect(
+            url_for('listGP',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid))
+
+### Изменение игрового протокола
+@login_required
+def updateGP(seasonid, ageid, sasid, gpid):
+    if request.method == 'POST' and request.form['modify'] == 'update':
+        gameNumber = request.form['gameNumber']
+        tourNumber = request.form['tourNumber']
+ 
+        try:
+            stageNumber = request.form['stageNumber']
+        except KeyError:
+            stageNumber = None
+        if stageNumber == '':
+            stageNumber = None
+
+        gameDate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+
+        homeTeam_ID  = request.form['filterHT']
+        guestTeam_ID = request.form['filterGT']
+
+        homeTeamScoreGame = request.form['HTscoreGame']
+        if homeTeamScoreGame == '':
+            homeTeamScoreGame = None
+
+        guestTeamScoreGame = request.form['GTscoreGame']
+        if guestTeamScoreGame == '':
+            guestTeamScoreGame = None
+
+        try:
+            homeTeamScore11m = request.form['HTscore11m']
+        except KeyError:
+            homeTeamScore11m = None
+        if homeTeamScore11m == '':
+            homeTeamScore11m = None
+
+        try:
+            guestTeamScore11m = request.form['GTscore11m']
+        except KeyError:
+            guestTeamScore11m = None
+        if guestTeamScore11m == '':
+            guestTeamScore11m = None
+
+        try:
+            is_Semifinal = bool(int(request.form['is_Semifinal']))
+        except KeyError:
+            is_Semifinal = False
+
+        try:
+            is_Final = bool(int(request.form['is_Final']))
+        except KeyError:
+            is_Final = False
+
+        if session['demo']:
+            pass
+        else:
+            GP        = GameProtocol()
+            GP.GP_ID  = gpid
+
+            # Заготовка для отслеживания только изменённых значений при обновлении
+            # GPfields  = GameProtocol._meta.fields
+            # currentGP = GameProtocol.get(GP_ID = gpid)
+            # for field in GPfields:
+            #     if '{0}.{1}'.format(currentGP, field) != field:
+            #         '{0}.{1}'.format(GP, field) = field
+
+            GP.gameNumber         = gameNumber
+            GP.tourNumber         = tourNumber
+            GP.stageNumber        = stageNumber
+            GP.gameDate           = gameDate
+            GP.homeTeam_ID        = homeTeam_ID
+            GP.guestTeam_ID       = guestTeam_ID
+            GP.homeTeamScoreGame  = homeTeamScoreGame
+            GP.guestTeamScoreGame = guestTeamScoreGame
+            GP.homeTeamScore11m   = homeTeamScore11m
+            GP.guestTeamScore11m  = guestTeamScore11m
+            GP.is_Semifinal       = is_Semifinal
+            GP.is_Final           = is_Final
+            GP.save()
+
+        return redirect(
+            url_for('listGP',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid))
+
+### Удаление игрового протокола
+@login_required
+def deleteGP(seasonid, ageid, sasid, gpid):
+    if request.method == 'POST' and request.form['modify'] == 'delete':
+
+        if session['demo']:
+            pass
+        else:
+            GameProtocol.get(GP_ID = gpid).delete_instance()
+
+        return redirect(
+            url_for('listGP',
+                seasonid = seasonid,
+                ageid    = ageid,
+                sasid    = sasid))
