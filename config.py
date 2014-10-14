@@ -13,5 +13,4 @@ class SessionConf(object):
 
 class TestingConf(object):
     DEBUG = True
-
-# TRAP_BAD_REQUEST_ERRORS = True
+    # TRAP_BAD_REQUEST_ERRORS = True
