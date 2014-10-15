@@ -3,10 +3,10 @@
 
 from peewee import PrimaryKeyField, CharField
 
-from Younoshi import *
+from DB import *
 
 ## Города
-class City(Younoshi):
+class City(DB):
     city_ID = PrimaryKeyField(
         db_column = 'city_ID')
     cityName = CharField(

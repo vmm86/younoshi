@@ -3,12 +3,12 @@
 
 from peewee import PrimaryKeyField, CharField, ForeignKeyField
 
-from Younoshi import *
+from DB import *
 
 from City import City
 
 ## Спортивные школы
-class School(Younoshi):
+class School(DB):
     school_ID = PrimaryKeyField(
         db_column = 'school_ID')
     city_ID = ForeignKeyField(

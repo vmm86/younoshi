@@ -3,10 +3,10 @@
 
 from peewee import PrimaryKeyField, CharField
 
-from Younoshi import *
+from DB import *
 
 ## Пользователи
-class User(Younoshi):
+class User(DB):
     user_ID = PrimaryKeyField(
         db_column = 'user_ID')
     userLogin = CharField(

@@ -3,10 +3,10 @@
 
 from peewee import PrimaryKeyField, CharField
 
-from Younoshi import *
+from DB import *
 
 ## Сезоны
-class Season(Younoshi):
+class Season(DB):
     season_ID = PrimaryKeyField(
         db_column = 'season_ID')
     seasonName = CharField(

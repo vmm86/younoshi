@@ -3,10 +3,10 @@
 
 from peewee import PrimaryKeyField, CharField
 
-from Younoshi import *
+from DB import *
 
 ## Игровые стадии
-class Stage(Younoshi):
+class Stage(DB):
     stage_ID = PrimaryKeyField(
         db_column = 'stage_ID')
     stageType = CharField(

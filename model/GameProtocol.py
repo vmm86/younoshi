@@ -3,12 +3,12 @@
 
 from peewee import IntegerField, PrimaryKeyField, DateField, BooleanField, ForeignKeyField
 
-from Younoshi import *
+from DB import *
 
 from SAST import SeasonAgeStageTeam
 
 ## Игровой протокол
-class GameProtocol(Younoshi):
+class GameProtocol(DB):
     GP_ID = PrimaryKeyField(
         db_column = 'GP_ID')
     gameNumber = IntegerField(

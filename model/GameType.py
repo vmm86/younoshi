@@ -3,10 +3,10 @@
 
 from peewee import PrimaryKeyField, CharField
 
-from Younoshi import *
+from DB import *
 
 ## Типы соревнований
-class GameType(Younoshi):
+class GameType(DB):
     gameType_ID = PrimaryKeyField(
         db_column = 'gameType_ID')
     gameTypeName = CharField(

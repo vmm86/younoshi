@@ -3,7 +3,7 @@
 
 from peewee import IntegerField, PrimaryKeyField, DateField, ForeignKeyField
 
-from Younoshi import *
+from DB import *
 
 from Season   import Season
 from Age      import Age
@@ -11,7 +11,7 @@ from Stage    import Stage
 from GameType import GameType
 
 ## СезонВозрастСтадия
-class SeasonAgeStage(Younoshi):
+class SeasonAgeStage(DB):
     SAS_ID = PrimaryKeyField(
         db_column = 'SAS_ID')
     season_ID = ForeignKeyField(

@@ -3,13 +3,13 @@
 
 from peewee import PrimaryKeyField, CharField, ForeignKeyField
 
-from Younoshi import *
+from DB import *
 
 from School import School
 from Age    import Age
 
 ## Команды
-class Team(Younoshi):
+class Team(DB):
     team_ID = PrimaryKeyField(
         db_column = 'team_ID')
     school_ID = ForeignKeyField(

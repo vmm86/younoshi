@@ -3,14 +3,14 @@
 
 from peewee import PrimaryKeyField, ForeignKeyField
 
-from Younoshi import *
+from DB import *
 
 from SAS   import SeasonAgeStage
 from Team  import Team
 from Stage import Stage
 
 ## СезонВозрастСтадияКоманда
-class SeasonAgeStageTeam(Younoshi):
+class SeasonAgeStageTeam(DB):
     SAST_ID = PrimaryKeyField(
         db_column = 'SAST_ID')
     SAS_ID = ForeignKeyField(

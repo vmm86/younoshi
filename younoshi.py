@@ -1,17 +1,30 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
+import MySQLdb
+
 from flask import Flask
+
+from peewee import MySQLDatabase, Proxy
 
 # Инициализация приложения
 app = Flask(__name__, template_folder = 'view')
 
-from config import SessionConf, TestingConf
+# Импорт параметров из файла конфигурации
+from config import DatabaseConf, SessionConf, TestingConf
+
+# Импорт прокси-объекта из модели БД, к которому будет подключаться пользователь
+from model.DB import proxy_db
+
+# Создание экземпляра базы данных Peewee.
+mysql_db = MySQLDatabase(DatabaseConf.NAME, passwd = DatabaseConf.PASSWD, user = DatabaseConf.USER)
+# Подключение к БД с помощью инициализированного прокси-объекта
+proxy_db.initialize(mysql_db)
+
+import controller
 
 # Секретный ключ из файла конфигурации для создания пользовательской сессии
 app.secret_key = SessionConf.SECRET_KEY
-
-import controller
 
 # Увязка функций из контроллера и URL-адресов, по которым они будут работать:
 

@@ -3,10 +3,10 @@
 
 from peewee import PrimaryKeyField, IntegerField
 
-from Younoshi import *
+from DB import *
 
 ## Возраста
-class Age(Younoshi):
+class Age(DB):
     age_ID = PrimaryKeyField(
         db_column = 'age_ID')
     ageName = IntegerField(
