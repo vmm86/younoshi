@@ -42,7 +42,7 @@ def listGP(seasonid, ageid, sasid):
     listSAS_G = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
     listSAS_P = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
 
-    listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(SAST.SAST_ID)
+    listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(Team.teamName)    
     listGP   = GP.select().join(SAST).where(SAST.SAS_ID == sasid).order_by(GP.GP_ID)
 
     # Удобства при создании новых матчей
