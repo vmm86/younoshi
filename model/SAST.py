@@ -5,17 +5,17 @@ from peewee import PrimaryKeyField, ForeignKeyField
 
 from DB import *
 
-from SAS   import SeasonAgeStage
+from SAS   import SAS
 from Team  import Team
 from Stage import Stage
 
 ## СезонВозрастСтадияКоманда
-class SeasonAgeStageTeam(DB):
+class SAST(DB):
     SAST_ID = PrimaryKeyField(
         db_column = 'SAST_ID')
     SAS_ID = ForeignKeyField(
         db_column    = 'SAS_ID',
-        rel_model    = SeasonAgeStage,
+        rel_model    = SAS,
         related_name = 'SAS_of_SAST',
         on_delete    = 'NO ACTION',
         on_update    = 'NO ACTION',

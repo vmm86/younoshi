@@ -11,7 +11,7 @@ from Stage    import Stage
 from GameType import GameType
 
 ## СезонВозрастСтадия
-class SeasonAgeStage(DB):
+class SAS(DB):
     SAS_ID = PrimaryKeyField(
         db_column = 'SAS_ID')
     season_ID = ForeignKeyField(
@@ -55,8 +55,8 @@ class SeasonAgeStage(DB):
         null      = True)
 
     class Meta:
-        db_table = 'SeasonAgeStage'
-        order_by = ('SAS_ID',)
-        indexes  = (
+        db_table    = 'SeasonAgeStage'
+        order_by    = ('SAS_ID',)
+        indexes     = (
             (
                 ('SAS_ID', 'season_ID', 'age_ID', 'stage_ID'), True),)

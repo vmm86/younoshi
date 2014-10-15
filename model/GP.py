@@ -5,10 +5,10 @@ from peewee import IntegerField, PrimaryKeyField, DateField, BooleanField, Forei
 
 from DB import *
 
-from SAST import SeasonAgeStageTeam
+from SAST import SAST
 
 ## Игровой протокол
-class GameProtocol(DB):
+class GP(DB):
     GP_ID = PrimaryKeyField(
         db_column = 'GP_ID')
     gameNumber = IntegerField(
@@ -26,7 +26,7 @@ class GameProtocol(DB):
         null      = False)
     homeTeam_ID = ForeignKeyField(
         db_column    = 'homeTeam_ID',
-        rel_model    = SeasonAgeStageTeam,
+        rel_model    = SAST,
         related_name = 'homeTeam_of_GP',
         on_delete    = 'NO ACTION',
         on_update    = 'NO ACTION',
@@ -34,7 +34,7 @@ class GameProtocol(DB):
         null         = False)
     guestTeam_ID = ForeignKeyField(
         db_column    = 'guestTeam_ID',
-        rel_model    = SeasonAgeStageTeam,
+        rel_model    = SAST,
         related_name = 'guestTeam_of_GP',
         on_delete    = 'NO ACTION',
         on_update    = 'NO ACTION',
@@ -62,9 +62,9 @@ class GameProtocol(DB):
         null      = False)
 
     class Meta:
-        db_table = 'GameProtocol'
-        order_by = ('GP_ID',)
-        indexes  = (
+        db_table    = 'GameProtocol'
+        order_by    = ('GP_ID',)
+        indexes     = (
             (
                 ('GP_ID', 'homeTeam_ID', 'guestTeam_ID'),
                 True),)

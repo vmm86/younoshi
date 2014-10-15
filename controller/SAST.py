@@ -7,7 +7,7 @@ from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, N
 
 from peewee import JOIN_LEFT_OUTER
 
-from model import City, School, Team, Season, Age, Stage, SeasonAgeStage, SeasonAgeStageTeam
+from model import City, School, Team, Season, Age, Stage, SAS, SAST
 
 from User import login_required
 
@@ -27,23 +27,23 @@ def listSAST(seasonid, ageid, sasid):
         agename = None
 
     try:
-        sastype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
-    except SeasonAgeStage.DoesNotExist:
+        sastype = SAS.get(SAS.SAS_ID == sasid).stage_ID.stageType
+    except SAS.DoesNotExist:
         sastype = None
 
-    listSAS_Z = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
-    listSAS_G = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
-    listSAS_P = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
+    listSAS_Z = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
+    listSAS_G = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
+    listSAS_P = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
 
     filterCity   =   City.select().order_by(City.cityName)
     filterSchool = School.select().order_by(School.schoolName)
     filterTeam   =   Team.select().order_by(Team.teamName)
 
-    listSAST  = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
+    listSAST  = SAST.select().where(SAST.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER).order_by(SAST.SAST_ID)
     listStage = Stage.select().order_by(Stage.stageType, Stage.stageName).order_by(Stage.stage_ID)
 
-    is_SASTsubstage  = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage).exists()
-    listSASTsubstage = SeasonAgeStageTeam.select(SeasonAgeStageTeam.substage_ID).distinct().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER)
+    is_SASTsubstage  = SAST.select().where(SAST.SAS_ID == sasid).join(Stage).exists()
+    listSASTsubstage = SAST.select(SAST.substage_ID).distinct().where(SAST.SAS_ID == sasid).join(Stage, JOIN_LEFT_OUTER)
 
     return render_template(
         'SAST.jinja.html', 
@@ -83,7 +83,7 @@ def createSAST(seasonid, ageid, sasid):
         if session['demo']:
             pass
         else:
-            SeasonAgeStageTeam.create(
+            SAST.create(
                 SAS_ID      = sasid, 
                 team_ID     = teamid, 
                 substage_ID = substageid)
@@ -111,7 +111,7 @@ def updateSAST(seasonid, ageid, sasid, sastid):
         if session['demo']:
             pass
         else:
-            SAST             = SeasonAgeStageTeam()
+            SAST             = SAST()
             SAST.SAST_ID     = sastid
             SAST.team_ID     = teamid
             SAST.substage_ID = substageid
@@ -134,7 +134,7 @@ def deleteSAST(seasonid, ageid, sasid, sastid):
             # Ограничение по внешним ключам FK_HT_SAST и FK_GT_SAST 
             # не позволяет удалить команду в игровом этапе при наличии связанных с ней матчей.
             try:
-                SeasonAgeStageTeam.get(SAST_ID = sastid).delete_instance()
+                SAST.get(SAST_ID = sastid).delete_instance()
             except IntegrityError:
                 flash('Вы не можете удалить эту команду, пока с её участием добавлен хотя бы один матч', 'danger')
 

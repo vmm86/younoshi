@@ -9,7 +9,7 @@ from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, N
 
 from peewee import fn, JOIN_LEFT_OUTER
 
-from model import Season, Age, Stage, GameType, SeasonAgeStage, SeasonAgeStageTeam, GameProtocol
+from model import Season, Age, Stage, GameType, SAS, SAST, GP
 
 from User import login_required
 
@@ -30,7 +30,7 @@ def listSAS(seasonid, ageid):
 
     listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName)
     listGameType = GameType.select().order_by(GameType.gameTypeName)
-    listSAS      = SeasonAgeStage.select(SeasonAgeStage, fn.Count(SeasonAgeStageTeam.SAS_ID).alias('countSAST'), fn.Count(GameProtocol.homeTeam_ID).alias('countHT'), fn.Count(GameProtocol.guestTeam_ID).alias('countGT')).where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(SeasonAgeStageTeam, JOIN_LEFT_OUTER).join(GameProtocol, JOIN_LEFT_OUTER).switch(SeasonAgeStage).join(Stage).group_by(SeasonAgeStage).order_by(Stage.stageName, SeasonAgeStage.gameType_ID)
+    listSAS      = SAS.select(SAS, fn.Count(SAST.SAS_ID).alias('countSAST'), fn.Count(GP.homeTeam_ID).alias('countHT'), fn.Count(GP.guestTeam_ID).alias('countGT')).where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(SAST, JOIN_LEFT_OUTER).join(GP, JOIN_LEFT_OUTER).switch(SAS).join(Stage).group_by(SAS).order_by(Stage.stageName, SAS.gameType_ID)
 
     return render_template(
         'SAS.jinja.html', 
@@ -60,7 +60,7 @@ def createSAS(seasonid, ageid):
             # не позволяет добавить повторяющуюся комбинацию сезон/возраст/стадия в игровом этапе.
             # Например, нельзя добавить второй этап плэй-офф в одном и том же сезоне и возрасте.
             try:
-                SeasonAgeStage.create(
+                SAS.create(
                     season_ID   = seasonid, 
                     age_ID      = ageid, 
                     stage_ID    = stageid, 
@@ -88,7 +88,7 @@ def updateSAS(seasonid, ageid, sasid):
         if session['demo']:
             pass
         else:
-            SAS             = SeasonAgeStage()
+            SAS             = SAS()
             SAS.SAS_ID      = sasid
             SAS.season_ID   = seasonid
             SAS.age_ID      = ageid
@@ -114,7 +114,7 @@ def deleteSAS(seasonid, ageid, sasid):
             # Ограничение по внешнему ключу FK_SAST_SAS 
             # не позволяет удалить игровой этап при наличии связанных с ним дочерних команд.
             try:
-                SeasonAgeStage.get(SAS_ID = sasid).delete_instance()
+                SAS.get(SAS_ID = sasid).delete_instance()
             except IntegrityError:
                 flash('Вы не можете удалить этот игровой этап, пока в него добавлена хотя бы одна команда', 'danger')
 

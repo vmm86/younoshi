@@ -9,7 +9,7 @@ from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, N
 
 from peewee import fn, JOIN_LEFT_OUTER
 
-from model import Season, Age, Stage, Team, SeasonAgeStage, SeasonAgeStageTeam, GameProtocol
+from model import Season, Age, Stage, Team, SAS, SAST, GP
 
 from User import login_required
 
@@ -28,41 +28,40 @@ def listGP(seasonid, ageid, sasid):
     except Age.DoesNotExist:
         agename = None
 
-    sasid = sasid
     try:
-        sastype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).stage_ID.stageType
-    except SeasonAgeStage.DoesNotExist:
+        sastype = SAS.get(SAS.SAS_ID == sasid).stage_ID.stageType
+    except SAS.DoesNotExist:
         sastype = None
 
     try:
-        sasgametype = SeasonAgeStage.get(SeasonAgeStage.SAS_ID == sasid).gameType_ID.gameTypeName
-    except SeasonAgeStage.DoesNotExist:
+        sasgametype = SAS.get(SAS.SAS_ID == sasid).gameType_ID.gameTypeName
+    except SAS.DoesNotExist:
         sasgametype = None
 
-    listSAS_Z = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
-    listSAS_G = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
-    listSAS_P = SeasonAgeStage.select().where(SeasonAgeStage.season_ID == seasonid, SeasonAgeStage.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
+    listSAS_Z = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
+    listSAS_G = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
+    listSAS_P = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
 
-    listSAST = SeasonAgeStageTeam.select().where(SeasonAgeStageTeam.SAS_ID == sasid).join(Team).switch(SeasonAgeStageTeam).join(Stage, JOIN_LEFT_OUTER).order_by(SeasonAgeStageTeam.SAST_ID)
-    listGP   = GameProtocol.select().join(SeasonAgeStageTeam).where(SeasonAgeStageTeam.SAS_ID == sasid).order_by(GameProtocol.GP_ID)
+    listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(SAST.SAST_ID)
+    listGP   = GP.select().join(SAST).where(SAST.SAS_ID == sasid).order_by(GP.GP_ID)
 
     # Удобства при создании новых матчей
     ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
     try:
-        gnmax = int(GameProtocol.select(fn.Max(GameProtocol.gameNumber)).scalar())
+        gnmax = int(GP.select(fn.Max(GP.gameNumber)).scalar())
     except TypeError:
         gnmax = 0
     finally:
         gnmax += 1
     ## Номер тура - по умолчанию такой же, как последний добавленный либо 1
     try:
-        tnmax = int(GameProtocol.select(fn.Max(GameProtocol.tourNumber)).scalar())
+        tnmax = int(GP.select(fn.Max(GP.tourNumber)).scalar())
     except TypeError:
         tnmax = 1
     ## Дата матча - по умолчанию такая же, как последняя добавленная либо сегодняшняя
     ## Дата в форме выводится в формате ДД.ММ.ГГГГ, а в БД записывается в формате ГГГГ-ММ-ДД
     try:
-        dmax = GameProtocol.select(fn.Max(GameProtocol.gameDate)).scalar()
+        dmax = GP.select(fn.Max(GP.gameDate)).scalar()
         dmax = dmax.strftime('%d.%m.%Y')
     except AttributeError:
         dmax = datetime.datetime.now().strftime('%d.%m.%Y')
@@ -139,7 +138,7 @@ def createGP(seasonid, ageid, sasid):
         if session['demo']:
             pass
         else:
-            GameProtocol.create(
+            GP.create(
                 gameNumber         = gamenumber, 
                 tourNumber         = tournumber, 
                 stageNumber        = stagenumber, 
@@ -213,12 +212,12 @@ def updateGP(seasonid, ageid, sasid, gpid):
         if session['demo']:
             pass
         else:
-            GP        = GameProtocol()
+            GP        = GP()
             GP.GP_ID  = gpid
 
             # Заготовка для отслеживания только изменённых значений при обновлении
-            # GPfields  = GameProtocol._meta.fields
-            # currentGP = GameProtocol.get(GP_ID = gpid)
+            # GPfields  = GP._meta.fields
+            # currentGP = GP.get(GP_ID = gpid)
             # for field in GPfields:
             #     if '{0}.{1}'.format(currentGP, field) != field:
             #         '{0}.{1}'.format(GP, field) = field
@@ -251,7 +250,7 @@ def deleteGP(seasonid, ageid, sasid, gpid):
         if session['demo']:
             pass
         else:
-            GameProtocol.get(GP_ID = gpid).delete_instance()
+            GP.get(GP_ID = gpid).delete_instance()
 
         return redirect(
             url_for('listGP',
