@@ -55,20 +55,16 @@ def listGP(seasonid, ageid, sasid):
     for i in maxvalues:
         try:
             ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
-            gnmax = int(i.gnmax)
+            gnmax = int(i.gnmax) + 1
             ## Номер тура - по умолчанию такой же, как последний добавленный либо 1
             tnmax = int(i.tnmax)
             ## Дата матча - по умолчанию такая же, как последняя добавленная либо сегодняшняя
             ## Дата в форме выводится в формате ДД.ММ.ГГГГ, а в БД записывается в формате ГГГГ-ММ-ДД
-            dmax  = i.dmax
-            dmax = dmax.strftime('%d.%m.%Y')
-        except TypeError:
+            dmax  = (i.dmax).strftime('%d.%m.%Y')
+        except (TypeError, AttributeError):
             gnmax = 0
             tnmax = 1
-        except AttributeError:
-            dmax = datetime.datetime.now().strftime('%d.%m.%Y')
-        finally:
-            gnmax += 1
+            dmax  = datetime.datetime.now().strftime('%d.%m.%Y')
 
     return render_template(
         'GP.jinja.html', 
