@@ -45,26 +45,30 @@ def listGP(seasonid, ageid, sasid):
     listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(Team.teamName)    
     listGP   = GP.select().join(SAST).where(SAST.SAS_ID == sasid).order_by(GP.GP_ID)
 
+    # Для тестирования в консоли из старой модели
+    # maxvalues = GameProtocol.select(fn.Max(GameProtocol.gameNumber).alias('gnmax'), fn.Max(GameProtocol.tourNumber).alias('tnmax'), fn.Max(GameProtocol.gameDate).alias('dmax')).join(SeasonAgeStageTeam, JOIN_LEFT_OUTER).where(SeasonAgeStageTeam.SAS_ID == sasid)
+
     # Удобства при создании новых матчей
-    ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
-    try:
-        gnmax = int(GP.select(fn.Max(GP.gameNumber)).scalar())
-    except TypeError:
-        gnmax = 0
-    finally:
-        gnmax += 1
-    ## Номер тура - по умолчанию такой же, как последний добавленный либо 1
-    try:
-        tnmax = int(GP.select(fn.Max(GP.tourNumber)).scalar())
-    except TypeError:
-        tnmax = 1
-    ## Дата матча - по умолчанию такая же, как последняя добавленная либо сегодняшняя
-    ## Дата в форме выводится в формате ДД.ММ.ГГГГ, а в БД записывается в формате ГГГГ-ММ-ДД
-    try:
-        dmax = GP.select(fn.Max(GP.gameDate)).scalar()
-        dmax = dmax.strftime('%d.%m.%Y')
-    except AttributeError:
-        dmax = datetime.datetime.now().strftime('%d.%m.%Y')
+
+    maxvalues = GP.select(fn.Max(GP.gameNumber).alias('gnmax'), fn.Max(GP.tourNumber).alias('tnmax'), fn.Max(GP.gameDate).alias('dmax')).join(SAST).where(SAST.SAS_ID == sasid).naive()
+
+    for i in maxvalues:
+        try:
+            ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
+            gnmax = int(i.gnmax)
+            ## Номер тура - по умолчанию такой же, как последний добавленный либо 1
+            tnmax = int(i.tnmax)
+            ## Дата матча - по умолчанию такая же, как последняя добавленная либо сегодняшняя
+            ## Дата в форме выводится в формате ДД.ММ.ГГГГ, а в БД записывается в формате ГГГГ-ММ-ДД
+            dmax  = i.dmax
+            dmax = dmax.strftime('%d.%m.%Y')
+        except TypeError:
+            gnmax = 0
+            tnmax = 1
+        except AttributeError:
+            dmax = datetime.datetime.now().strftime('%d.%m.%Y')
+        finally:
+            gnmax += 1
 
     return render_template(
         'GP.jinja.html', 
