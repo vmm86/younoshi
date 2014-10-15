@@ -93,7 +93,13 @@ def listGP(seasonid, ageid, sasid):
 def createGP(seasonid, ageid, sasid):
     if request.method == 'POST' and request.form['modify'] == 'create':
         gamenumber = request.form['gameNumber']
-        tournumber = request.form['tourNumber']
+
+        try:
+            tournumber = request.form['tourNumber']
+        except KeyError:
+            tournumber = 0
+        if tournumber == '':
+            tournumber = 0
  
         try:
             stagenumber = request.form['stageNumber']
@@ -167,7 +173,13 @@ def createGP(seasonid, ageid, sasid):
 def updateGP(seasonid, ageid, sasid, gpid):
     if request.method == 'POST' and request.form['modify'] == 'update':
         gameNumber = request.form['gameNumber']
-        tourNumber = request.form['tourNumber']
+
+        try:
+            tournumber = request.form['tourNumber']
+        except KeyError:
+            tournumber = 0
+        if tournumber == '':
+            tournumber = 0
  
         try:
             stageNumber = request.form['stageNumber']
