@@ -170,11 +170,11 @@
                 <td class="tableScore">
                     {% if not lgp.homeTeamScoreGame or not lgp.guestTeamScoreGame %}
                     {% endif %}
-                    {% if lgp.homeTeamScoreGame or lgp.guestTeamScoreGame %}
+                    {% if lgp.homeTeamScoreGame >= 0 or lgp.guestTeamScoreGame >= 0 %}
                         {{ lgp.homeTeamScoreGame }} : {{ lgp.guestTeamScoreGame }}
                     {% endif %}
 
-                    {% if not lgp.homeTeamScore11m or not lgp.guestTeamScore11m %}
+                    {% if not lgp.homeTeamScore11m >= 0 or not lgp.guestTeamScore11m >= 0 %}
                     {% endif %}
                     {% if lgp.homeTeamScore11m or lgp.guestTeamScore11m %}
                         ({{ lgp.homeTeamScore11m }} : {{ lgp.guestTeamScore11m }})
