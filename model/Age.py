@@ -3,7 +3,7 @@
 
 from peewee import PrimaryKeyField, IntegerField
 
-from connect import *
+from Younoshi import *
 
 ## Возраста
 class Age(Younoshi):

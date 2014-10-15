@@ -3,7 +3,7 @@
 
 from peewee import PrimaryKeyField, CharField
 
-from connect import *
+from Younoshi import *
 
 ## Города
 class City(Younoshi):

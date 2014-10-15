@@ -3,7 +3,7 @@
 
 from peewee import PrimaryKeyField, ForeignKeyField
 
-from connect import *
+from Younoshi import *
 
 from SAS   import SeasonAgeStage
 from Team  import Team

@@ -3,7 +3,7 @@
 
 import MySQLdb
 
-from peewee import MySQLDatabase, Model
+from peewee import MySQLDatabase
 
 from config import DatabaseConf
 
@@ -28,9 +28,3 @@ younoshi_db = MySQLDatabase(dbname, passwd = dbpasswd, user = dbuser)
 # def after_request(response):
 #     g.db.close()
 #     return response
-
-# Определение модели - базового класса модели, который определяет, какую БД использовать.
-# Все его подкласссы будут наследовать указанное в нём хранинище.
-class Younoshi(Model):
-    class Meta:
-        database = younoshi_db

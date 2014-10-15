@@ -3,7 +3,7 @@
 
 from peewee import PrimaryKeyField, CharField, ForeignKeyField
 
-from connect import *
+from Younoshi import *
 
 from School import School
 from Age    import Age

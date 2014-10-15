@@ -3,7 +3,7 @@
 
 from peewee import PrimaryKeyField, CharField
 
-from connect import *
+from Younoshi import *
 
 ## Сезоны
 class Season(Younoshi):

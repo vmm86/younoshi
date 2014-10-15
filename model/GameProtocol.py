@@ -3,7 +3,7 @@
 
 from peewee import IntegerField, PrimaryKeyField, DateField, BooleanField, ForeignKeyField
 
-from connect import *
+from Younoshi import *
 
 from SAST import SeasonAgeStageTeam
 
