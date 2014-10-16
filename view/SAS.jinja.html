@@ -117,12 +117,12 @@
                     {% endif %}
                 </td>
                <td class="tableText">
-                    {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
+                    {% if lsas.countGP > 0 %}
                         <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
                     {% endif %}
-                        {% if lsas.countHT == 0 and lsas.countGT == 0 %}нет{% endif %}
-                        {% if lsas.countHT >  0 or  lsas.countGT >  0 %}{{ lsas.countHT + lsas.countGT }}{% endif %}
-                    {% if lsas.countHT > 0 or  lsas.countGT > 0 %}
+                        {% if lsas.countGP == 0 %}нет{% endif %}
+                        {% if lsas.countGP >  0 %}{{ lsas.countGP }}{% endif %}
+                    {% if lsas.countGP > 0 %}
                         </a>
                     {% endif %}
                 </td>

@@ -7,7 +7,7 @@ from flask import session, render_template, url_for, request, redirect, flash
 
 from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
 
-from peewee import fn, JOIN_LEFT_OUTER
+from peewee import fn, JOIN_LEFT_OUTER, DoesNotExist
 
 from model import Season, Age, Stage, GameType, SAS, SAST, GP
 
@@ -17,20 +17,27 @@ from User import login_required
 @login_required
 def listSAS(seasonid, ageid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
-    try:
-        seasonname = Season.get(season_ID = seasonid).seasonName
-    except Season.DoesNotExist:
-        seasonname = None
 
     listAge = Age.select().order_by(Age.ageName)
+
     try:
-        agename = Age.get(age_ID = ageid).ageName
-    except Age.DoesNotExist:
-        agename = None
+        seasonname = Season.get(season_ID = seasonid).seasonName
+        agename    = Age.get(age_ID = ageid).ageName
+    except DoesNotExist:
+        seasonname = None
+        agename    = None
 
     listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName)
     listGameType = GameType.select().order_by(GameType.gameTypeName)
-    listSAS      = SAS.select(SAS, fn.Count(SAST.SAS_ID).alias('countSAST'), fn.Count(GP.homeTeam_ID).alias('countHT'), fn.Count(GP.guestTeam_ID).alias('countGT')).where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(SAST, JOIN_LEFT_OUTER).join(GP, JOIN_LEFT_OUTER).switch(SAS).join(Stage).group_by(SAS).order_by(Stage.stageName, SAS.gameType_ID)
+    listSAS      = (SAS
+        .select(SAS, 
+            fn.Count(fn.Distinct(SAST.SAST_ID)).alias('countSAST'), 
+            fn.Count(GP.GP_ID).alias('countGP')) 
+        .join(SAST, JOIN_LEFT_OUTER).join(GP, JOIN_LEFT_OUTER)
+        .switch(SAS).join(Stage)
+        .where(SAS.season_ID == seasonid, SAS.age_ID == ageid)
+        .group_by(SAS)
+        .order_by(Stage.stageName, SAS.gameType_ID).naive())
 
     return render_template(
         'SAS.jinja.html', 
@@ -50,7 +57,7 @@ def createSAS(seasonid, ageid):
     if request.method == 'POST' and request.form['modify'] == 'create':
         stageid    = request.form['stage']
         gametype   = request.form['gameType']
-        startdate  = datetime.datetime.strptime(request.form['startDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+        startdate  = datetime.datetime.strptime(request.form['startDate'],  '%d.%m.%Y').strftime('%Y-%m-%d')
         finishdate = datetime.datetime.strptime(request.form['finishDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
 
         if session['demo']:
