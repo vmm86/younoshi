@@ -7,6 +7,8 @@ from hashlib import md5
 
 from flask import session, render_template, url_for, request, redirect, abort, flash
 
+from peewee import DoesNotExist
+
 from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
 
 from model import User
