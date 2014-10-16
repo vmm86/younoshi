@@ -7,7 +7,7 @@ from flask import session, render_template, url_for, request, redirect, flash
 
 from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
 
-from peewee import fn, JOIN_LEFT_OUTER
+from peewee import fn, JOIN_LEFT_OUTER, DoesNotExist
 
 from model import Season, Age, Stage, Team, SAS, SAST, GP
 
@@ -16,55 +16,48 @@ from User import login_required
 ## Игровые протоколы
 @login_required
 def listGP(seasonid, ageid, sasid):
-    listSeason = Season.select().order_by(Season.season_ID.asc())
-    try:
-        seasonname = Season.get(season_ID = seasonid).seasonName
-    except Season.DoesNotExist:
-        seasonname = None
+    listSeason = Season.select().order_by(Season.season_ID.asc()).naive()
 
-    listAge = Age.select().order_by(Age.ageName)
-    try:
-        agename = Age.get(age_ID = ageid).ageName
-    except Age.DoesNotExist:
-        agename = None
+    listAge = Age.select().order_by(Age.ageName).naive()
 
     try:
-        sastype = SAS.get(SAS.SAS_ID == sasid).stage_ID.stageType
-    except SAS.DoesNotExist:
-        sastype = None
-
-    try:
-        sasgametype = SAS.get(SAS.SAS_ID == sasid).gameType_ID.gameTypeName
-    except SAS.DoesNotExist:
+        seasonname  = Season.get(season_ID = seasonid).seasonName
+        agename     = Age.get(age_ID = ageid).ageName
+        sasname     = SAS.get(SAS_ID = sasid).stage_ID.stageName
+        sastype     = SAS.get(SAS_ID = sasid).stage_ID.stageType
+        sasgametype = SAS.get(SAS_ID = sasid).gameType_ID.gameTypeName
+    except DoesNotExist:
+        seasonname  = None
+        agename     = None
+        sasname     = None
+        sastype     = None
         sasgametype = None
 
-    listSAS_Z = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
-    listSAS_G = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
-    listSAS_P = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
+    listSAS_Z = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName).naive()
+    listSAS_G = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName).naive()
+    listSAS_P = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName).naive()
 
-    listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(Team.teamName)    
-    listGP   = GP.select().join(SAST).where(SAST.SAS_ID == sasid).order_by(GP.GP_ID)
-
-    # Для тестирования в консоли из старой модели
-    # maxvalues = GameProtocol.select(fn.Max(GameProtocol.gameNumber).alias('gnmax'), fn.Max(GameProtocol.tourNumber).alias('tnmax'), fn.Max(GameProtocol.gameDate).alias('dmax')).join(SeasonAgeStageTeam, JOIN_LEFT_OUTER).where(SeasonAgeStageTeam.SAS_ID == sasid)
+    listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(Team.teamName).naive()
+    listGP   = GP.select().join(SAST).where(SAST.SAS_ID == sasid).order_by(GP.GP_ID).naive()
 
     # Удобства при создании новых матчей
 
-    maxvalues = GP.select(fn.Max(GP.gameNumber).alias('gnmax'), fn.Max(GP.tourNumber).alias('tnmax'), fn.Max(GP.gameDate).alias('dmax')).join(SAST).where(SAST.SAS_ID == sasid).naive()
+    maxvalues = GP.select(fn.Max(GP.gameNumber).alias('gnmax'), fn.Max(GP.tourNumber).alias('tnmax'), fn.Max(GP.gameDate).alias('dmax')).join(SAST).where(SAST.SAS_ID == sasid).scalar(as_tuple = True)
 
-    for i in maxvalues:
-        try:
-            ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
-            gnmax = int(i.gnmax) + 1
-            ## Номер тура - по умолчанию такой же, как последний добавленный либо 1
-            tnmax = int(i.tnmax)
-            ## Дата матча - по умолчанию такая же, как последняя добавленная либо сегодняшняя
-            ## Дата в форме выводится в формате ДД.ММ.ГГГГ, а в БД записывается в формате ГГГГ-ММ-ДД
-            dmax  = (i.dmax).strftime('%d.%m.%Y')
-        except (TypeError, AttributeError):
-            gnmax = 0
-            tnmax = 1
-            dmax  = datetime.datetime.now().strftime('%d.%m.%Y')
+    try:
+        ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
+        gnmax = int(maxvalues[0])
+        ## Номер тура - по умолчанию такой же, как последний добавленный либо 1
+        tnmax = int(maxvalues[1])
+        ## Дата матча - по умолчанию такая же, как последняя добавленная либо сегодняшняя
+        ## Дата в форме выводится в формате ДД.ММ.ГГГГ, а в БД записывается в формате ГГГГ-ММ-ДД
+        dmax  = (maxvalues[2]).strftime('%d.%m.%Y')
+    except (TypeError, AttributeError):
+        gnmax = 0
+        tnmax = 1
+        dmax  = datetime.datetime.now().strftime('%d.%m.%Y')
+    finally:
+        gnmax += 1
 
     return render_template(
         'GP.jinja.html', 
@@ -76,6 +69,7 @@ def listGP(seasonid, ageid, sasid):
         listSAS_G   = listSAS_G,
         listSAS_P   = listSAS_P,
         sasid       = sasid,
+        sasname     = sasname,
         sastype     = sastype,
         sasgametype = sasgametype,
         listSAST    = listSAST,
