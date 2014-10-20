@@ -107,24 +107,16 @@
                     {% endif %}
                 </td>
                 <td class="tableText">
-                    {% if lsas.countSAST > 0 %}
-                        <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/team">
-                    {% endif %}
+                    <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/team">
                         {% if lsas.countSAST == 0 %}нет{% endif %}
                         {% if lsas.countSAST > 0 %}{{ lsas.countSAST }}{% endif %}
-                    {% if lsas.countSAST > 0 %}
-                        </a>
-                    {% endif %}
+                    </a>
                 </td>
                <td class="tableText">
-                    {% if lsas.countGP > 0 %}
-                        <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
-                    {% endif %}
+                    <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/gp">
                         {% if lsas.countGP == 0 %}нет{% endif %}
                         {% if lsas.countGP >  0 %}{{ lsas.countGP }}{% endif %}
-                    {% if lsas.countGP > 0 %}
-                        </a>
-                    {% endif %}
+                    </a>
                 </td>
                 <td class="tableInputRight">
                     {% include "includes/deleteSAS.jinja.html" %}
@@ -143,9 +135,11 @@
 
 {% include "includes/createSAS.jinja.html" %}
 
+{#
 {% for lsas in listSAS %}
     {% include "includes/updateSAS.jinja.html" %}
 {% endfor %}
+#}
 
 {% endblock %}
 
