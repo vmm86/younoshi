@@ -5,12 +5,20 @@ from peewee import IntegerField, PrimaryKeyField, DateField, BooleanField, Forei
 
 from DB import *
 
-from SAST import SAST
+from SAST import SAS, SAST
 
 ## Игровой протокол
 class GP(DB):
     GP_ID = PrimaryKeyField(
         db_column = 'GP_ID')
+    SAS_ID = ForeignKeyField(
+        db_column    = 'SAS_ID',
+        rel_model    = SAS,
+        related_name = 'GP_of_SAS',
+        on_delete    = 'NO ACTION',
+        on_update    = 'NO ACTION',
+        to_field     = 'SAS_ID',
+        null         = False)
     gameNumber = IntegerField(
         db_column  = 'gameNumber',
         null       = True)
