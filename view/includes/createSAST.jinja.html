@@ -9,32 +9,21 @@
                         <button type="button" class="close" aria-hidden="true">&times;</button>
                     </a>
                     <h3 class="modal-title" aria-labelledby="Modal_editSAST_Label">Добавить команду в 
-                        {% for lsast in listSAST %}
-                            {% if loop.index in range(1,2) %}
-                                {% if lsast.SAS_ID.stage_ID.stageType == "G" %}
-                                    группе {{ lsast.SAS_ID.stage_ID.stageName }}
-                                {% endif %}
-                                {% if lsast.SAS_ID.stage_ID.stageType == "P" %}
-                                    этапе плэй-офф
-                                {% endif %}
-                                {% if lsast.SAS_ID.stage_ID.stageType == "Z" %}
-                                    зоне {{ lsast.SAS_ID.stage_ID.stageName }}
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
+                        {% if sastype == "Z" %} зоне {{ sasname }} {% endif %}
+                        {% if sastype == "G" %} группе {{ sasname }} {% endif %}
+                        {% if sastype == "P" %} этапе плэй-офф {% endif %}
                     </h3>
                 </div>
 
                 <div class="modal-body">
 
+                {% if sastype == "Z" or sastype == "G" %}
                     <div class="row">
                         <div class="col-lg-4" style="text-align: center;">
                             <div class="btn-group">
                                 <label class="btn-label" for="filterCity">Выберите город</label>
                                 <select id="filterCity" name="filterCity" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
-                                    <option value="0">
-                                        выберите город
-                                    </option>
+                                    <option value="0" selected disabled>выберите город</option>
                                 {% for fc in filterCity %}
                                     <option value="{{ fc.city_ID }}">{{ fc.cityName }}</option>
                                 {% endfor %}
@@ -46,9 +35,7 @@
                             <div class="btn-group">
                                 <label class="btn-label" for="filterSchool">Выберите школу</label>
                                 <select id="filterSchool" name="filterSchool" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
-                                    <option value="0">
-                                        выберите школу
-                                    </option>
+                                    <option value="0" selected disabled>выберите школу</option>
                                 {% for fs in filterSchool %}
                                     <option value="{{ fs.school_ID }}" data-city-id="{{ fs.city_ID.city_ID }}">{{ fs.schoolName }}</option>
                                 {% endfor %}
@@ -60,9 +47,7 @@
                             <div class="btn-group">
                                 <label class="btn-label" for="filterTeam">Выберите команду</label>
                                 <select id="filterTeam" name="filterTeam" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
-                                    <option value="0">
-                                        выберите команду
-                                    </option>
+                                    <option value="0" selected disabled>выберите команду</option>
                                 {% for ft in filterTeam %}
                                     <option value="{{ ft.team_ID }}" data-school-id="{{ ft.school_ID.school_ID }}">{{ ft.teamName }}</option>
                                 {% endfor %}
@@ -70,6 +55,23 @@
                             </div>
                         </div>
                     </div>
+                {% endif %}
+
+                {% if sastype == "P" %}
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: center;">
+                            <div class="btn-group">
+                                <label class="btn-label" for="filterTeam">Выберите команду</label>
+                                <select id="filterTeam" name="filterTeam" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+                                    <option value="0" selected disabled>выберите команду</option>
+                                {% for ft in filterTeam %}
+                                    <option value="{{ ft.team_ID }}">{{ ft.teamName }} ({{ ft.school_ID.city_ID.cityName }})</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
 
                     <div class="row">
                         <div class="col-lg-12" style="text-align: center;">
