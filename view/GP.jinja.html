@@ -147,8 +147,9 @@
                 <td class="tableText">Команда хозяев</td>
                 <td class="tableScore">Счёт</td>
                 <td class="tableText">Команда гостей</td>
-                <td class="tableNumber">пф</td>
-                <td class="tableNumber">ф</td>
+            {% if sastype == "P" %}
+                <td class="tableNumber">пф/ф</td>
+            {% endif %}
                 <td class="tableInputRight"></td>
             </tr>
         </thead>
@@ -181,8 +182,12 @@
                     {% endif %}
                 </td>
                 <td class="tableText">{{ lgp.guestTeam_ID.team_ID.teamName }}</td>
-                <td class="tableNumber">{{ lgp.is_Semifinal }}</td>
-                <td class="tableNumber">{{ lgp.is_Final }}</td>
+            {% if sastype == "P" %}
+                <td class="tableNumber">
+                    {% if lgp.is_Semifinal == true %}полуфинал{% endif %}
+                    {% if lgp.is_Final == true %}финал{% endif %}
+                </td>
+            {% endif %}
                 <td class="tableInputRight">
                     {% include "includes/deleteGP.jinja.html" %}
                 </td>
@@ -198,9 +203,11 @@
 
 {% include "includes/createGP.jinja.html" %}
 
+{#}
 {% for lgp in listGP %}
     {% include "includes/updateGP.jinja.html" %}
 {% endfor %}
+#}
 
 {% endblock %}
 
