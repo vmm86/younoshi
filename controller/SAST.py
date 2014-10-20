@@ -5,7 +5,7 @@ from flask import session, render_template, url_for, request, redirect, flash
 
 from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
 
-from peewee import JOIN_LEFT_OUTER
+from peewee import JOIN_LEFT_OUTER, DoesNotExist
 
 from model import City, School, Team, Season, Age, Stage, SAS, SAST
 
@@ -15,21 +15,19 @@ from User import login_required
 @login_required
 def listSAST(seasonid, ageid, sasid):
     listSeason = Season.select().order_by(Season.season_ID.asc())
-    try:
-        seasonname = Season.get(season_ID = seasonid).seasonName
-    except Season.DoesNotExist:
-        seasonname = None
 
     listAge = Age.select().order_by(Age.ageName)
-    try:
-        agename = Age.get(age_ID = ageid).ageName
-    except Age.DoesNotExist:
-        agename = None
 
     try:
-        sastype = SAS.get(SAS.SAS_ID == sasid).stage_ID.stageType
-    except SAS.DoesNotExist:
-        sastype = None
+        seasonname = Season.get(season_ID = seasonid).seasonName
+        agename    = Age.get(age_ID = ageid).ageName
+        sasname    = SAS.get(SAS_ID = sasid).stage_ID.stageName
+        sastype    = SAS.get(SAS_ID = sasid).stage_ID.stageType
+    except DoesNotExist:
+        seasonname = None
+        agename    = None
+        sasname    = None
+        sastype    = None
 
     listSAS_Z = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
     listSAS_G = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
@@ -57,6 +55,7 @@ def listSAST(seasonid, ageid, sasid):
         listSAS_G        = listSAS_G,
         listSAS_P        = listSAS_P,
         sasid            = sasid,
+        sasname          = sasname,
         sastype          = sastype,
         filterCity       = filterCity,
         filterSchool     = filterSchool,
