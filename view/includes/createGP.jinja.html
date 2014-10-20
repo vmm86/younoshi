@@ -47,7 +47,7 @@
 
                     <div class="row">
 
-                        <div class="btn-group">
+                        <div class="form-group btn-group">
                             <label class="btn-label" for="gameDate">Дата матча </label>
                             <div class="btn-group">
                                 <input type="date" name="gameDate" value="{{ dmax }}" size="10" class="datetimepicker form-control">
@@ -58,22 +58,32 @@
 
                     <div class="row">
 
-                        <div class="btn-group">
-                            <label class="btn-label" for="filterHT">Команда хозяев </label>
-                            <select class="selectpicker" name="filterHT" data-live-search="true" data-style="btn-info" data-width="auto">
-                                <option value="0">выберите команду</option>
-                                {% for lsast in listSAST %}
-                                    <option value="{{ lsast.team_ID.team_ID }}">{{ lsast.team_ID.teamName }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="col-lg-6" style="text-align: center;">
+                            <div class="form-group btn-group">
+                                <label class="btn-label" for="homeTeam">Команда хозяев </label>
+                                <div class="btn-group">
+                                    <select class="selectpicker" name="homeTeam" data-live-search="true" data-style="btn-info" data-width="auto">
+                                        <option value="0" selected disabled>выберите команду</option>
+                                        {% for lsast in listSAST %}
+                                            <option value="{{ lsast.team_ID.team_ID }}">{{ lsast.team_ID.teamName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                            <label class="btn-label" for="filterGT">Команда гостей </label>
-                            <select class="selectpicker" name="filterGT" data-live-search="true" data-style="btn-info" data-width="auto">
-                                <option value="0">выберите команду</option>
-                                {% for lsast in listSAST %}
-                                    <option value="{{ lsast.team_ID.team_ID}}">{{ lsast.team_ID.teamName }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="col-lg-6" style="text-align: center;">
+                            <div class="form-group btn-group">
+                                <label class="btn-label" for="guestTeam">Команда гостей </label>
+                                <div class="btn-group">
+                                    <select class="selectpicker" name="guestTeam" data-live-search="true" data-style="btn-info" data-width="auto">
+                                        <option value="0" selected disabled>выберите команду</option>
+                                        {% for lsast in listSAST %}
+                                            <option value="{{ lsast.team_ID.team_ID}}">{{ lsast.team_ID.teamName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -84,12 +94,9 @@
                             <label class="btn-label">Счёт матча </label>
                             <input type="number" name="HTscoreGame" class="form-control"> : <input type="number" name="GTscoreGame" class="form-control">
                         </div>
-                    </div>
 
-                {# поля внутри д.б. доступны только в матчах стадии плэй-офф #}
-                {% if sastype == "P" %}
-                    <div class="row">
-
+                    {# поля внутри д.б. доступны только в матчах стадии плэй-офф #}
+                    {% if sastype == "P" %}
                         <div class="btn-group">
                             <input type="checkbox" name="is11m" class="checkbox">
                             <label class="btn-label">Счёт серии 11-метровых </label>
@@ -115,10 +122,12 @@
                             <input type="hidden"   name="is_Final" value="0">
                             <label for="is_Final" class="btn-label"> финальный матч плэй-офф</label>
                         </div>
-
+                    {% endif %}
+                    {# поля внутри д.б. доступны только в матчах стадии плэй-офф #}
                     </div>
-                {% endif %}
-                {# поля внутри д.б. доступны только в матчах стадии плэй-офф #}
+
+                <input type="hidden" name="SAS_ID" value="{{ sasid }}">
+
                 </div>
 
                 <div class="modal-footer">

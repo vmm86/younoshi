@@ -33,16 +33,16 @@ def listGP(seasonid, ageid, sasid):
         sastype     = None
         sasgametype = None
 
-    listSAS_Z = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName).naive()
-    listSAS_G = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName).naive()
-    listSAS_P = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName).naive()
+    listSAS_Z = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "Z").order_by(Stage.stageName)
+    listSAS_G = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "G").order_by(Stage.stageName)
+    listSAS_P = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
 
-    listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(Team.teamName).naive()
-    listGP   = GP.select().join(SAST).where(SAST.SAS_ID == sasid).order_by(GP.GP_ID).naive()
+    listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(Team.teamName)
+    listGP   = GP.select().where((SAST.SAS_ID == sasid) & (GP.SAS_ID == sasid)).join(SAST).order_by(GP.GP_ID)
 
     # Удобства при создании новых матчей
 
-    maxvalues = GP.select(fn.Max(GP.gameNumber).alias('gnmax'), fn.Max(GP.tourNumber).alias('tnmax'), fn.Max(GP.gameDate).alias('dmax')).join(SAST).where(SAST.SAS_ID == sasid).scalar(as_tuple = True)
+    maxvalues = GP.select(fn.Max(GP.gameNumber).alias('gnmax'), fn.Max(GP.tourNumber).alias('tnmax'), fn.Max(GP.gameDate).alias('dmax')).where((SAST.SAS_ID == sasid) & (GP.SAS_ID == sasid)).join(SAST).scalar(as_tuple = True)
 
     try:
         ## Номер матча - по умолчанию на 1 больше, чем последний добавленный либо 1
@@ -100,8 +100,8 @@ def createGP(seasonid, ageid, sasid):
 
         gamedate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
 
-        htid     = request.form['filterHT']
-        gtid     = request.form['filterGT']
+        htid     = request.form['homeTeam']
+        gtid     = request.form['guestTeam']
 
         htscoregame = request.form['HTscoreGame']
         if htscoregame == '':
@@ -135,6 +135,8 @@ def createGP(seasonid, ageid, sasid):
         except KeyError:
             isfinal = False
 
+        gpsasid = request.form['SAS_ID']
+
         if session['demo']:
             pass
         else:
@@ -150,7 +152,8 @@ def createGP(seasonid, ageid, sasid):
                 homeTeamScore11m   = htscore11m, 
                 guestTeamScore11m  = gtscore11m, 
                 is_Semifinal       = issemifinal, 
-                is_Final           = isfinal)
+                is_Final           = isfinal,
+                SAS_ID             = gpsasid)
 
         return redirect(
             url_for('listGP',
@@ -180,8 +183,8 @@ def updateGP(seasonid, ageid, sasid, gpid):
 
         gameDate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
 
-        homeTeam_ID  = request.form['filterHT']
-        guestTeam_ID = request.form['filterGT']
+        homeTeam_ID  = request.form['homeTeam']
+        guestTeam_ID = request.form['guestTeam']
 
         homeTeamScoreGame = request.form['HTscoreGame']
         if homeTeamScoreGame == '':
@@ -215,6 +218,8 @@ def updateGP(seasonid, ageid, sasid, gpid):
         except KeyError:
             is_Final = False
 
+        gpsasid = request.form['SAS_ID']
+
         if session['demo']:
             pass
         else:
@@ -240,6 +245,7 @@ def updateGP(seasonid, ageid, sasid, gpid):
             GP.guestTeamScore11m  = guestTeamScore11m
             GP.is_Semifinal       = is_Semifinal
             GP.is_Final           = is_Final
+            GP.SAS_ID             = gpsasid
             GP.save()
 
         return redirect(
