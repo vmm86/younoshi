@@ -7,7 +7,7 @@ from flask import session, render_template, url_for, request, redirect, flash
 
 from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
 
-from peewee import fn, JOIN_LEFT_OUTER, DoesNotExist
+from peewee import RawQuery, fn, JOIN_LEFT_OUTER, DoesNotExist
 
 from model import Season, Age, Stage, GameType, SAS, SAST, GP
 
@@ -29,15 +29,9 @@ def listSAS(seasonid, ageid):
 
     listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName)
     listGameType = GameType.select().order_by(GameType.gameTypeName)
-    listSAS      = (SAS
-        .select(SAS, 
-            fn.Count(fn.Distinct(SAST.SAST_ID)).alias('countSAST'), 
-            fn.Count(GP.GP_ID).alias('countGP')) 
-        .join(SAST, JOIN_LEFT_OUTER).join(GP, JOIN_LEFT_OUTER)
-        .switch(SAS).join(Stage)
-        .where(SAS.season_ID == seasonid, SAS.age_ID == ageid)
-        .group_by(SAS)
-        .order_by(Stage.stageName, SAS.gameType_ID).naive())
+    listSAS      = (RawQuery(
+        SAS, 
+        'SELECT `sas`.*, (SELECT COUNT(`sast`.`SAS_ID`) FROM `SeasonAgeStageTeam` AS `sast` WHERE `sast`.`sas_ID` = `sas`.`sas_ID`) `countSAST`, (SELECT     COUNT(`gp`.`SAS_ID`) FROM `GameProtocol` AS `gp` WHERE `gp`.`sas_ID` = `sas`.`sas_ID`) `countGP` FROM `SeasonAgeStage` AS `sas` LEFT JOIN `Stage` ON (`sas`.`stage_ID` = `Stage`.`stage_ID`) WHERE ((`sas`.`season_ID` = %s) AND (`sas`.`age_ID` = %s)) GROUP BY `sas`.`SAS_ID` ORDER BY `sas`.`SAS_ID` ASC', seasonid, ageid))
 
     return render_template(
         'SAS.jinja.html', 
@@ -73,8 +67,7 @@ def createSAS(seasonid, ageid):
                     stage_ID    = stageid, 
                     gameType_ID = gametype,
                     startDate   = startdate,
-                    finishDate  = finishdate
-                )
+                    finishDate  = finishdate)
             except IntegrityError:
                 flash('Вы не можете добавить ещё один такой же игровой этап в одном и том же сезоне и возрасте', 'danger')
 
