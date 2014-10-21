@@ -16,9 +16,9 @@ from User import login_required
 ## Игровые протоколы
 @login_required
 def listGP(seasonid, ageid, sasid):
-    listSeason = Season.select().order_by(Season.season_ID.asc()).naive()
+    listSeason = Season.select().order_by(Season.season_ID.asc())
 
-    listAge = Age.select().order_by(Age.ageName).naive()
+    listAge = Age.select().order_by(Age.ageName)
 
     try:
         seasonname  = Season.get(season_ID = seasonid).seasonName
@@ -38,7 +38,7 @@ def listGP(seasonid, ageid, sasid):
     listSAS_P = SAS.select().where(SAS.season_ID == seasonid, SAS.age_ID == ageid).join(Stage).where(Stage.stageType == "P").order_by(Stage.stageName)
 
     listSAST = SAST.select().where(SAST.SAS_ID == sasid).join(Team).switch(SAST).join(Stage, JOIN_LEFT_OUTER).order_by(Team.teamName)
-    listGP   = GP.select().where((SAST.SAS_ID == sasid) & (GP.SAS_ID == sasid)).join(SAST).order_by(GP.GP_ID)
+    listGP   = GP.select().distinct().join(SAST, on=GP.SAS_ID).where((SAST.SAS_ID == sasid) & (GP.SAS_ID == sasid)).order_by(GP.gameNumber)
 
     # Удобства при создании новых матчей
 

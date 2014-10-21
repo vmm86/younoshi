@@ -13,7 +13,7 @@ class GP(DB):
         db_column = 'GP_ID')
     SAS_ID = ForeignKeyField(
         db_column    = 'SAS_ID',
-        rel_model    = SAS,
+        rel_model    = SAST,
         related_name = 'GP_of_SAS',
         on_delete    = 'NO ACTION',
         on_update    = 'NO ACTION',

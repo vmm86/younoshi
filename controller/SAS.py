@@ -29,9 +29,8 @@ def listSAS(seasonid, ageid):
 
     listStage    = Stage.select().order_by(Stage.stageType, Stage.stageName)
     listGameType = GameType.select().order_by(GameType.gameTypeName)
-    listSAS      = (RawQuery(
-        SAS, 
-        'SELECT `sas`.*, (SELECT COUNT(`sast`.`SAS_ID`) FROM `SeasonAgeStageTeam` AS `sast` WHERE `sast`.`sas_ID` = `sas`.`sas_ID`) `countSAST`, (SELECT     COUNT(`gp`.`SAS_ID`) FROM `GameProtocol` AS `gp` WHERE `gp`.`sas_ID` = `sas`.`sas_ID`) `countGP` FROM `SeasonAgeStage` AS `sas` LEFT JOIN `Stage` ON (`sas`.`stage_ID` = `Stage`.`stage_ID`) WHERE ((`sas`.`season_ID` = %s) AND (`sas`.`age_ID` = %s)) GROUP BY `sas`.`SAS_ID` ORDER BY `sas`.`SAS_ID` ASC', seasonid, ageid))
+    listSAS = (RawQuery(SAS, 
+        'SELECT `SAS`.*, (SELECT COUNT(`SAST2`.`SAS_ID`) FROM `SeasonAgeStageTeam` AS `SAST2` WHERE `SAST2`.`SAS_ID` = `SAS`.`SAS_ID`) AS `countSAST`, (SELECT COUNT(`GP2`.`SAS_ID`) FROM `GameProtocol` AS `GP2` WHERE ((`GP2`.`SAS_ID` = `SAST`.`SAS_ID`) AND (`SAST`.`SAS_ID` = `SAS`.`SAS_ID` )) ) AS `countGP` FROM `SeasonAgeStage` AS `SAS` LEFT JOIN `SeasonAgeStageTeam` AS `SAST` ON (`SAS`.`SAS_ID` = `SAST`.`SAS_ID`) LEFT JOIN `Stage` ON (`SAS`.`stage_ID` = `Stage`.`stage_ID`) WHERE ((`SAS`.`season_ID` = %s) AND (`SAS`.`age_ID` = %s)) GROUP BY `SAS`.`SAS_ID` ORDER BY `SAS`.`SAS_ID` ASC', seasonid, ageid))
 
     return render_template(
         'SAS.jinja.html', 
