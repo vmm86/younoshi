@@ -73,6 +73,11 @@ table tr td {
     padding: 0;
 }
 
+table.dataTable th,
+table.dataTable td {
+    white-space: nowrap;
+}
+
 .tableInputLeft,
 .tableInputRight {
     background: transparent !important;
@@ -251,6 +256,15 @@ table tr td {
 
 /* Формы */
 
+input:focus,
+button:focus,
+textarea:focus,
+select:focus,
+.btn:focus,
+.btn-group:focus {
+    outline: none !important;
+}
+
 input[type="submit"],
 button {
     color: #FFF;
@@ -371,6 +385,17 @@ input[type=number] {
 
 a.btn {
     text-transform: uppercase;
+}
+
+.btn-default,
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+    color: #FFF;
+    background-color: #3498DB;
+    outline: none !important;
 }
 
 .btn-info {
@@ -589,7 +614,7 @@ fieldset[disabled] .btn {
     box-shadow: 0 0.15rem 0.2rem 0 rgba(0, 0, 0, 0.5);
 }
 .dropdown-menu.open {
-    top: 3.2rem !important;
+    top: 2.9rem !important;
 }
 .nav .dropdown-menu {
     top: 0 !important;
@@ -907,4 +932,40 @@ input.error {
 .close {
     font-size: 3rem;
     line-height: 1;
+}
+
+/* DataTables Responsive */
+
+table.dataTable.dtr-inline.collapsed tbody td:first-child:before, 
+table.dataTable.dtr-inline.collapsed tbody th:first-child:before {
+    top: 20%;
+    left: 10%;
+    font-weight: bold;
+    line-height: 16px;
+    box-shadow: none;
+}
+table.dataTable.dtr-inline.collapsed tbody tr.parent td:first-child:before, 
+table.dataTable.dtr-inline.collapsed tbody tr.parent th:first-child:before {
+    content: '‒';
+    font-weight: bold;
+    line-height: 14px;
+}
+
+table.dataTable tr.child td.child {
+    padding-left: 0;
+}
+
+table.dataTable tr.child ul {
+    width: 100%;
+}
+
+table.dataTable tr.child ul li {
+    display: table;
+    width: 100%;
+}
+
+table.dataTable tr.child span.dtr-title,
+table.dataTable tr.child span.dtr-data {
+    display: table-cell;
+    width: 50%;
 }
