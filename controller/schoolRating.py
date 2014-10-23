@@ -11,7 +11,7 @@ from User import login_required
 
 ## Рейтинг команд
 @login_required
-def schoolRating():
+def listSR():
     listSR = schoolRating.select()
 
     return render_template(

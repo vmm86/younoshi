@@ -11,7 +11,7 @@ from User import login_required
 
 ## Рейтинг команд
 @login_required
-def teamRating():
+def listTR():
     listTR = teamRating.select()
 
     return render_template(

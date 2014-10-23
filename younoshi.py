@@ -180,6 +180,16 @@ app.add_url_rule(
     '/season/<int:seasonid>/age/<int:ageid>/stage/<int:sasid>/gp/<int:gpid>/delete',
     view_func = controller.deleteGP, methods  = ['GET', 'POST',])
 
+## Рейтинг команд
+app.add_url_rule(
+    '/teamrating',
+    view_func = controller.listTR)
+
+## Рейтинг школ
+app.add_url_rule(
+    '/schoolrating',
+    view_func = controller.listSR)
+
 app.debug = TestingConf.DEBUG
 
 if __name__ == '__main__':

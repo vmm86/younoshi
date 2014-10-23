@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-from peewee import IntegerField, CharField
+from peewee import PrimaryKeyField, IntegerField, CharField
 
 from DB import *
 
@@ -17,16 +17,11 @@ class schoolRating(DB):
     cityName   = CharField(
         db_column  = 'cityName',
         max_length = 128)
-    school_ID = IntegerField(
+    school_ID = PrimaryKeyField(
         db_column = 'school_ID')
     schoolName = CharField(
         db_column  = 'schoolName',
         max_length = 128)
-    # team_ID = IntegerField(
-    #     db_column = 'team_ID')
-    # teamName = CharField(
-    #     db_column  = 'teamName',
-    #     max_length = 128)
 
     games       = IntegerField(
         db_column = 'games')
