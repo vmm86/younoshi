@@ -1,12 +1,19 @@
 $( document ).ready(function() {
 
+    function routeSchool(cityid) {
+        console.log('city ', cityid);
+        path = '/city/' + cityid + '/school';
+        return window.location.href = path;
+    }
+
 //  Фильтр школ по городам
 
     $('#filterCityforSchool').change(function() {
         var cityid = $(this).val();
-        console.log('city ', cityid);
-        path = '/city/' + cityid + '/school';
-        window.location.href = path;
+        if (typeof cityid === "undefined")
+            cityid = 0;
+
+        routeSchool(cityid);
     });
 
 });

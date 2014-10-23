@@ -2,37 +2,58 @@ $(document).ready(function() {
 
 //  Отображение данных
 
+    function routeSAST(seasonid, ageid, sasid) {
+        console.log('season ', seasonid, 'age', ageid, 'sas', sasid);
+        path = '/season/' + seasonid + '/age/' + ageid + '/stage/' + sasid + '/team';
+        window.location.href = path;
+    }
+
 /// Фильтр списка команд в игровой стадии по сезону
 
     $('#filterSeasonforSAST').change(function() {
         var seasonid = $(this).val();
-        var ageid    = 0;
-        var sasid    = 0;
-        console.log('season ', seasonid, 'age', $('#filterAgeforSAST').val(), 'sas', sasid);
-        path         = '/season/' + seasonid + '/age/' + ageid + '/stage/' + sasid + '/team';
-        window.location.href = path;
+        if (typeof seasonid === "undefined")
+            seasonid = 0;
+
+        var ageid = 0;
+
+        var sasid = 0;
+
+        routeSAST(seasonid, ageid, sasid);
     });
 
 /// Фильтр списка команд в игровой стадии по возрасту
 
     $('input[name="filterAgeforSAST"]').change(function() {
         var seasonid = $('#filterSeasonforSAST').val();
-        var ageid    = $(this).val();
-        var sasid    = 0;
-        console.log('age ', ageid, 'season ', seasonid, 'sas', sasid);
-        path         = '/season/' + seasonid + '/age/' + ageid + '/stage/' + sasid + '/team';
-        window.location.href = path;
+        if (typeof seasonid === "undefined")
+            seasonid = 0;
+
+        var ageid = $(this).val();
+        if (typeof ageid === "undefined")
+            ageid = 0;
+
+        var sasid = 0;
+
+        routeSAST(seasonid, ageid, sasid);
     });
 
 /// Фильтр списка команд в игровой стадии по самой игровой стадии
 
     $('#chooseZone, #chooseGroup, #zoneGroupPlayoffToggle_P').change(function() {
         var seasonid = $('#filterSeasonforSAST').val();
-        var ageid    = $('input[name="filterAgeforSAST"]').val();
-        var sasid    = $(this).val();
-        console.log('season ', seasonid, 'age', ageid, 'sas', sasid);
-        path         = '/season/' + seasonid + '/age/' + ageid + '/stage/' + sasid + '/team';
-        window.location.href = path;
+        if (typeof seasonid === "undefined")
+            seasonid = 0;
+
+        var ageid = $('input[name="filterAgeforSAST"]').val();
+        if (typeof ageid === "undefined")
+            ageid = 0;
+
+        var sasid = $(this).val();
+        if (typeof sasid === "undefined")
+            sasid = 0;
+
+        routeSAST(seasonid, ageid, sasid);
     });
 
 //  Добавление/изменение данных

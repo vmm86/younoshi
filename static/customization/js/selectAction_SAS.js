@@ -1,23 +1,35 @@
 $( document ).ready(function() {
 
+    function routeSAS(seasonid, ageid) {
+        console.log('season ', seasonid, 'age', $('#filterAgeforSAS').val());
+        path = '/season/' + seasonid + '/age/' + ageid + '/stage';
+        return window.location.href = path;
+    }
+
 //  Фильтр игровых стадий по сезону
 
     $('#filterSeasonforSAS').change(function() {
         var seasonid = $(this).val();
+        if (typeof seasonid === "undefined")
+            seasonid = 0;
+
         var ageid = 0;
-        console.log('season ', seasonid, 'age', $('#filterAgeforSAS').val());
-        path = '/season/' + seasonid + '/age/' + ageid + '/stage';
-        window.location.href = path;
+
+        routeSAS(seasonid, ageid);
     });
 
 //  Фильтр игровых стадий по возрасту
 
     $('input[name="filterAgeforSAS"]').change(function() {
-        var seasonid   = $('#filterSeasonforSAS').val();
+        var seasonid = $('#filterSeasonforSAS').val();
+        if (typeof seasonid === "undefined")
+            seasonid = 0;
+
         var ageid = $(this).val();
-        console.log('age ', ageid, 'season ', seasonid);
-        path = '/season/' + seasonid + '/age/' + ageid + '/stage';
-        window.location.href = path;
+        if (typeof ageid === "undefined")
+            ageid = 0;
+
+        routeSAS(seasonid, ageid);
     });
 
 });
