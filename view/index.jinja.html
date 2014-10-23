@@ -63,8 +63,8 @@
                     <a class="dropdown-toggle" data-toggle="dropdown {% if active_group == 'Rating' %}active{% endif %}">Текущий рейтинг <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li role="presentation" class="dropdown-header">Текущий рейтинг</li>
-                        <li {% if active_page == 'TeamRating'   %}class="active"{% endif %}><a href="/teamrating">Рейтинг команд</a></li>
-                        <li {% if active_page == 'SchoolRating' %}class="active"{% endif %}><a href="/schoolrating">Рейтинг школ</a></li>
+                        <li {% if active_page == 'TeamRating'   %}class="active"{% endif %}><a href="/teamrating/season/0-0/age/0">Рейтинг команд</a></li>
+                        <li {% if active_page == 'SchoolRating' %}class="active"{% endif %}><a href="/schoolrating/season/0-0">Рейтинг школ</a></li>
                     </ul>
                 </li>
                 <li {% if active_page == 'Logout' %}class="active"{% endif %}><a href="/logout">Выйти</a></li>

@@ -9,22 +9,37 @@
 {% include 'header.jinja.html' with context %}
 
 <div class="row">
-{#
-    <div class="col-md-4">
-        <form id="filterSeason" class="flat-form" name="filterSeason" style="text-align: center;">
+
+    <div class="col-md-6">
+        <form id="filterSeason_from" class="flat-form" name="filterSeason_from" style="text-align: right;">
             <div class="btn-group">
-                <label class="btn-label" for="filterSeasonforSAS">Выберите сезон</label>
+                <label class="btn-label" for="filterSeasonforSR_from">Начальный сезон</label>
                 <br>
-                <select id="filterSeasonforSAS" name="filterSeasonforSAS" class="selectpicker" data-live-search="true" data-style="btn-info">
-                    <option value="0" {% for lse in listSeason %}{% if lse.season_ID == seasonid %}selected{% endif %}{% endfor %}>выберите сезон</option>
-                {% for lse in listSeason %}
-                    <option value="{{ lse.season_ID }}" {% if lse.season_ID == seasonid %}selected{% endif %}>{{ lse.seasonName }}</option>
+                <select id="filterSeasonforSR_from" name="filterSeasonforSR_from" class="selectpicker" data-live-search="true" data-style="btn-info">
+                    <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_from %}selected{% endif %}{% endfor %}>выберите сезон</option>
+                {% for ls in listSeason %}
+                    <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_from %}selected{% endif %}>{{ ls.seasonName }}</option>
                 {% endfor %}
                 </select>
             </div>
         </form>
     </div>
-#}
+
+    <div class="col-md-6">
+        <form id="filterSeason_to" class="flat-form" name="filterSeason_to" style="text-align: left;">
+            <div class="btn-group">
+                <label class="btn-label" for="filterSeasonforSR_to">Конечный сезон</label>
+                <br>
+                <select id="filterSeasonforSR_to" name="filterSeasonforSR_to" class="selectpicker" data-live-search="true" data-style="btn-info">
+                    <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_to %}selected{% endif %}{% endfor %}>выберите сезон</option>
+                {% for ls in listSeason %}
+                    <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_to %}selected{% endif %}>{{ ls.seasonName }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+
 </div>
 
 <div class="row">
@@ -32,37 +47,42 @@
     <div class="col-lg-1"></div>
 
     <div class="col-lg-10">
+        {% if not seasonid_from == 0 %}
+        {% if not seasonid_to == 0 %}
         <table id="teamRating" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
-                <td class="tableNumber">#</td>
-                <td class="tableText">Сезон</td>
-                <td class="tableText">Спортивная школа</td>
-                <td class="tableNumber">Матчи</td>
-                <td class="tableNumber">Победы</td>
-                <td class="tableNumber">Ничьи</td>
+                <td class="tableNumber" rowspan="2">#</td>
+                <td class="tableText"   rowspan="2">Спортивная школа</td>
+                <td class="tableNumber" rowspan="2">Игры</td>
+                <td class="tableNumber" colspan="2">Результаты</td>
+                <td class="tableNumber" colspan="3">Мячи</td>
+                <td class="tableNumber" colspan="4">Плэй-офф</td>
+                <td class="tableNumber" rowspan="2">Рейтинг</td>
+            </tr>
+            <tr>
+                <td class="tableNumber">В</td>
+                <td class="tableNumber">Н</td>
                 <td class="tableNumber">З</td>
                 <td class="tableNumber">П</td>
-                <td class="tableNumber">З-П</td>
-                <td class="tableNumber">ПО</td>
-                <td class="tableNumber">11м</td>
+                <td class="tableNumber">З - П</td>
+                <td class="tableNumber">Выход</td>
+                <td class="tableNumber">В 11м</td>
                 <td class="tableNumber">ПФ</td>
                 <td class="tableNumber">Ф</td>
-                <td class="tableNumber">Рейтинг</td>
             </tr>
         </thead>
         <tbody>
             {% for lsr in listSR %}
             <tr>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText">  {{ lsr.seasonName }}</td>
                 <td class="tableText">  {{ lsr.schoolName }} ({{ lsr.cityName }})</td>
                 <td class="tableNumber">{% if lsr.games       != 0 %} {{ lsr.games }}       {% endif %}</td>
                 <td class="tableNumber">{% if lsr.wins        != 0 %} {{ lsr.wins }}        {% endif %}</td>
                 <td class="tableNumber">{% if lsr.equals      != 0 %} {{ lsr.equals }}      {% endif %}</td>
                 <td class="tableNumber">{% if lsr.scored      != 0 %} {{ lsr.scored }}      {% endif %}</td>
                 <td class="tableNumber">{% if lsr.missed      != 0 %} {{ lsr.missed }}      {% endif %}</td>
-                <td class="tableNumber">{% if lsr.goals       != 0 %} {{ lsr.goals }}       {% endif %}</td>
+                <td class="tableNumber">{% if lsr.scored != 0 or lsr.missed != 0%} {{ lsr.goals }}       {% endif %}</td>
                 <td class="tableNumber">{% if lsr.playoff     != 0 %} {{ lsr.playoff }}     {% endif %}</td>
                 <td class="tableNumber">{% if lsr.playoff_11m != 0 %} {{ lsr.playoff_11m }} {% endif %}</td>
                 <td class="tableNumber">{% if lsr.playoff_SF  != 0 %} {{ lsr.playoff_SF }}  {% endif %}</td>
@@ -72,7 +92,8 @@
             {% endfor %}
         </tbody>
         </table>
-
+        {% endif %}
+        {% endif %}
     </div>
 
     <div class="col-lg-1"></div>
@@ -82,5 +103,5 @@
 {% endblock %}
 
 {% block scripts %}
-
+    <script src="{{ url_for('static', filename='customization/js/selectAction_SR.js') }}"></script>
 {% endblock %}

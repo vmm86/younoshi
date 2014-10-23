@@ -182,12 +182,12 @@ app.add_url_rule(
 
 ## Рейтинг команд
 app.add_url_rule(
-    '/teamrating',
+    '/teamrating/season/<int:seasonid_from>-<int:seasonid_to>/age/<int:ageid>',
     view_func = controller.listTR)
 
 ## Рейтинг школ
 app.add_url_rule(
-    '/schoolrating',
+    '/schoolrating/season/<int:seasonid_from>-<int:seasonid_to>',
     view_func = controller.listSR)
 
 app.debug = TestingConf.DEBUG
