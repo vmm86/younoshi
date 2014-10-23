@@ -10,9 +10,9 @@ $(document).ready(function() {
 
     $('#filterSeasonforSR_from').change(function() {
         var seasonid_from = $(this).val();
-            if (typeof seasonid_from === "undefined") {
-                seasonid_from = 0;
-            }
+        if (typeof seasonid_from === "undefined")
+            seasonid_from = 0;
+
         var seasonid_to = 0;
 
         routeSR(seasonid_from, seasonid_to);
@@ -22,13 +22,12 @@ $(document).ready(function() {
 
     $('#filterSeasonforSR_to').change(function() {
         var seasonid_from = $('#filterSeasonforSR_from').val();
-            if (typeof seasonid_from === "undefined") {
-                seasonid_from = 0;
-            }
+        if (typeof seasonid_from === "undefined")
+            seasonid_from = 0;
+
         var seasonid_to = $(this).val();
-            if (typeof seasonid_to === "undefined") {
-                seasonid_to = 0;
-            }
+        if (typeof seasonid_to === "undefined")
+            seasonid_to = 0;
 
         routeSR(seasonid_from, seasonid_to);
     });
