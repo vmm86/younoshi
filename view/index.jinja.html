@@ -18,7 +18,10 @@
 <!--
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap-theme.min.css') }}">
 -->
+<!--     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='data-tables/css/dataTables.fixedHeader.css') }}"> -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='data-tables/css/dataTables.bootstrap.css') }}">
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='data-tables/css/dataTables.responsive.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datetimepicker/css/jquery.datetimepicker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat-ui/css/flat-ui.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='customization/css/style.css') }}">
@@ -107,6 +110,8 @@
 
     <script src="{{ url_for('static', filename='data-tables/js/jquery.dataTables.js') }}"></script>
     <script src="{{ url_for('static', filename='data-tables/js/dataTables.bootstrap.js') }}"></script>
+<!--    <script src="{{ url_for('static', filename='data-tables/extensions/FixedHeader/js/dataTables.fixedHeader.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='data-tables/js/dataTables.responsive.js') }}"></script>
     <script src="{{ url_for('static', filename='datetimepicker/js/jquery.datetimepicker.js') }}"></script>
 
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
@@ -124,53 +129,57 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('table').dataTable(
-        {
-        'language':
-            {
-            'lengthMenu': '_MENU_ <div class="dataTables_length_caption">записей на страницу</div>',
-            'zeroRecords': '',
-            'emptyTable': '',
-            'info': 'Страница _PAGE_ из _PAGES_',
-            'infoEmpty': 'Нет данных для отображения',
-            'infoFiltered': '(отобрано из _MAX_ записей)',
-            'paginate':
-                {
-                'previous': '< назад',
-                    'next': 'вперёд >'
-                }
-            },
-        'iDisplayLength': 20,
-        'aLengthMenu': [ 5, 10, 20, 50, 100 ],
-        }
-    );
+    $('table').dataTable({
+        responsive: {
+            breakpoints: [
+                { name: 'desktop',  width: Infinity },
+                { name: 'tablet-l', width: 1280 },
+                { name: 'tablet-p', width: 900 },
+                { name: 'mobile-l', width: 768 },
+                { name: 'mobile-p', width: 480 }
+            ]
+        },
+        oLanguage: {
+            sLengthMenu:   '_MENU_ <div class="dataTables_length_caption">записей на страницу</div>',
+            sSearch:       'Поиск: ',
+            sZeroRecords:  '',
+            sInfo:         'Страница _PAGE_ из _PAGES_',
+            sInfoEmpty:    'Нет данных для отображения',
+            sInfoFiltered: ' - отфильтровано из _MAX_ записей',
+            sEmptyTable:   '',
+            oPaginate: {
+                sFirst:    '',
+                sNext:     'вперёд >',
+                sPrevious: '< назад',
+                sLast:     ''
+            }
+        },
+        iDisplayLength: 20,
+        aLengthMenu: [ 5, 10, 20, 50, 100 ],
+    });
 
-    $('.datetimepicker').datetimepicker(
-        {
+//    new $.fn.dataTable.FixedHeader( table );
+
+    $('.datetimepicker').datetimepicker({
         lang: 'ru',
-        i18n:
-            {
-            ru:
-                {
-                months:
-                    [
+        i18n: {
+            ru: {
+                months: [
                     'январь',  'февраль', 'март',
                     'апрель',  'май',     'июнь',
                     'июль',    'август',  'сентябрь',
                     'октябрь', 'ноябрь',  'декабрь',
-                    ],
-                dayOfWeek:
-                    [
+                ],
+                dayOfWeek: [
                     'вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб',
-                    ],
-                }
-            },
+                ],
+            }
+        },
         format: 'd.m.Y',
         closeOnDateSelect: true,
         dayOfWeekStart: 1,
         timepicker: false,
-        }
-    );
+    });
 
     $('select').selectpicker();
     $('.checkbox').bootstrapSwitch();
@@ -182,7 +191,7 @@ $(document).ready(function() {
         decimals: 0,
         verticalbuttons: true,
     });
-} );
+});
 </script>
 
 <script src="{{ url_for('static', filename='bootstrap-validator/js/bootstrap-validator.js') }}"></script>
