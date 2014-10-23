@@ -27,6 +27,7 @@ def listTR(seasonid_from, seasonid_to, ageid):
         agename         = None
 
     listTR = teamRating.select().where(teamRating.season_ID.between(seasonid_from, seasonid_to) & teamRating.age_ID == ageid)
+    listTR_count = listTR.count()
 
     return render_template(
         'teamRating.jinja.html', 
@@ -35,4 +36,5 @@ def listTR(seasonid_from, seasonid_to, ageid):
         seasonid_to   = seasonid_to, 
         listAge       = listAge, 
         ageid         = ageid, 
-        listTR        = listTR)
+        listTR        = listTR,
+        listTR_count  = listTR_count)

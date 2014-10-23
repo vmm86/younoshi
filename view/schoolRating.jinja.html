@@ -49,6 +49,7 @@
     <div class="col-lg-10">
         {% if not seasonid_from == 0 %}
         {% if not seasonid_to == 0 %}
+        {% if not listTR_count == 0 %}
         <table id="teamRating" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
@@ -92,6 +93,7 @@
             {% endfor %}
         </tbody>
         </table>
+        {% endif %}
         {% endif %}
         {% endif %}
     </div>

@@ -27,6 +27,7 @@ def listSR(seasonid_from, seasonid_to):
         # agename         = None
 
     listSR = schoolRating.select().where(schoolRating.season_ID.between(seasonid_from, seasonid_to))
+    listSR_count = listSR.count()
 
     return render_template(
         'schoolRating.jinja.html', 
@@ -35,4 +36,5 @@ def listSR(seasonid_from, seasonid_to):
         seasonid_to   = seasonid_to, 
         # listAge       = listAge, 
         # ageid         = ageid, 
-        listSR = listSR)
+        listSR        = listSR,
+        listSR_count  = listSR_count)
