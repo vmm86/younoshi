@@ -17,7 +17,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_modify" data-pk-id="0">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -29,19 +29,19 @@
         </thead>
         <tbody>
             {% for lc in listCity %}
-            <tr id="PK_{{ lc.city_ID }}">
+            <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_modify" data-pk-id="{{ lc.city_ID }}">
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lc.city_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
-                <td class="tableText PK_{{ lc.city_ID }} cityName">{{ lc.cityName }}</td>
+                <td class="tableText">{{ lc.cityName }}</td>
                 <td class="tableText">
-                    <a href="/city/{{ lc.city_ID }}/school">
-                        {% if lc.countSchools == 0 %}нет{% endif %}
-                        {% if lc.countSchools > 0 %} {{ lc.countSchools }} {% endif %}
-                    </a>
+                    {% if lc.countSchools == 0 %}нет{% endif %}
+                    {% if lc.countSchools > 0 %}<a href="/city/{{ lc.city_ID }}/school">{% endif %}
+                        {{ lc.countSchools }}
+                    {% if lc.countSchools > 0 %}</a>{% endif %}
                 </td>
                 <td class="tableInputRight">
                     {% include "includes/deleteCity.jinja.html" %}
@@ -57,39 +57,14 @@
 
 </div>
 
-{% include "includes/modifyCity.jinja.html" %}
+{% include "includes/createCity.jinja.html" %}
+
+{% for lc in listCity %}
+    {% include "includes/updateCity.jinja.html" %}
+{% endfor %}
 
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-/* Вызов модальной формы редактирования данных */
-$('#Modal_modify').on('show.bs.modal', function (modal) {
-    var PK_ID       = parseInt($(modal.relatedTarget).attr('data-pk-id'));
-    var current_row = $('#PK_' + PK_ID);
-    var cityName    = $('td.PK_' + PK_ID + '.cityName').html();
-
-    // [C] Добавление новых данных         - открытие пустой модальной формы
-    // [U] Редактирование имеющихся данных - подгрузка данных из текущей строки в модальную форму
-
-    modalHeader_Create = 'Создать новый населённый пункт';
-    modalHeader_Update = 'Изменить ' + cityName;
-    modalAction_Create = '/city/create';
-    modalAction_Update = '/city/' + PK_ID + '/update';
-
-    // Отрисовка заголовка модальной формы
-    modalHeader = (PK_ID == 0) ? modalHeader_Create : modalHeader_Update;
-    $('#modal-title').html(modalHeader);
-
-    modalAction = (PK_ID == 0) ? modalAction_Create : modalAction_Update;
-    $('#modify-form').attr('action', modalAction);
-
-    // [U] Присвоение данных из текущей строки соответствующим полям модальной формы
-    $( '#city_ID').val(PK_ID);
-    $('#cityName').val(cityName);
-
-    // Получение исходных значений текущей строки до редактирования
-    console.log(PK_ID, cityName);
-});
-</script>
+    <script src="{{ url_for('static', filename='customization/js/formValidation.js') }}"></script>
 {% endblock %}

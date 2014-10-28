@@ -118,7 +118,6 @@
     <script src="{{ url_for('static', filename='bootstrap-select/js/bootstrap-select.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-switch/bootstrap-switch.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-touchspin/js/bootstrap-touchspin.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-validator/js/bootstrap-validator.js') }}"></script>
 
     <script src="{{ url_for('static', filename='flat-ui/js/flatui-checkbox.js') }}"></script>
     <script src="{{ url_for('static', filename='flat-ui/js/flatui-radio.js') }}"></script>
@@ -129,7 +128,8 @@
     <![endif]-->
 
 <script type="text/javascript">
-    var dtable = $('table').DataTable({
+$(document).ready(function() {
+    $('table').dataTable({
         responsive: {
             breakpoints: [
                 { name: 'desktop',  width: Infinity },
@@ -191,14 +191,11 @@
         decimals: 0,
         verticalbuttons: true,
     });
-
-    $('.alert').delay(3200).hide(600, 'linear');
-    
+});
 </script>
 
+<script src="{{ url_for('static', filename='bootstrap-validator/js/bootstrap-validator.js') }}"></script>
 {% block scripts %}{% endblock %}
-
-<script src="{{ url_for('static', filename='customization/js/formValidation.js') }}"></script>
 
 </body>
 </html>
