@@ -82,26 +82,6 @@
 
 <div class="container wrapper" role="main">
 
-{% for category, message in get_flashed_messages(with_categories=true) %}
-
-    {% if category == 'success' %}
-        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-    {% endif %}
-
-    {% if category == 'info' %}
-        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-    {% endif %}
-
-    {% if category == 'warning' %}
-        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-    {% endif %}
-
-    {% if category == 'danger' %}
-        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-    {% endif %}
-
-{% endfor %}
-
 {% block body scoped %}{% endblock %}
 
 </div>
@@ -192,7 +172,7 @@
         verticalbuttons: true,
     });
 
-    $('.alert').delay(3200).hide(600, 'linear');
+    $('.alert').delay(3000).hide(200, 'linear');
     
 </script>
 

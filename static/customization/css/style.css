@@ -930,7 +930,7 @@ input.error {
     border-radius: 1rem;
 
     padding: 1.5rem;
-    margin: 2rem 0;
+    width: 100%;
 }
 
 .close {
