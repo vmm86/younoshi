@@ -692,6 +692,10 @@ fieldset[disabled] .btn {
 
 /* Модальные окна */
 
+.modal-open {
+    overflow: auto;
+}
+
 .modal-dialog {
     margin: 5.5rem auto 0 auto;
 }
