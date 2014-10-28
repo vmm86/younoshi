@@ -87,9 +87,9 @@ table.dataTable td {
     overflow: hidden;
 }
 
-.tableInputLeft input, .tableInputRight input,
+.tableInputLeft input,  .tableInputRight input,
 .tableInputLeft button, .tableInputRight button,
-.tableInputLeft a, .tableInputRight a {
+.tableInputLeft a,      .tableInputRight a {
     display: block;
     cursor: pointer;
 
@@ -139,7 +139,7 @@ table.dataTable td {
 }
 .tableInputRight input:hover,
 .tableInputRight button:hover,
-.tableInputLeft  a:hover {
+.tableInputRight a:hover {
     width: 12rem;
     transition: all 0.6s ease;
 
