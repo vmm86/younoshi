@@ -1,0 +1,50 @@
+
+<div id="modify-modal" class="modal fade modal-lg" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="modify-form" class="flat-form modify-form" name="modify" method="POST" action="">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span>
+                </button>
+                <h3 id="modal-title" class="modal-title" aria-labelledby="modify-modal-label"></h3>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="form-group btn-group" data-toggle="buttons">
+
+                    <label class="btn-label">Выберите тип стадии</label>
+                    <div class="btn-group stageTypeTop">
+                        <label for="stageType_Z" class="btn btn-info stageType">
+                            <input id="stageType_Z" type="radio" name="stageType" value="Z">зона
+                        </label>
+                        <label for="stageType_G" class="btn btn-info stageType">
+                            <input id="stageType_G" type="radio" name="stageType" value="G">группа
+                        </label>
+                    </div>
+                    <div class="btn-group stageTypeBottom">
+                        <label for="stageType_P" class="btn btn-info stageType">
+                            <input id="stageType_P" type="radio" name="stageType" value="P">плэй-офф
+                        </label>
+                    </div>
+
+                </div>
+                <br>
+                <div class="form-group btn-group">
+                    <label for="stageName" class="btn-label">Название стадии</label> 
+                    <input id="stageName" class="form-control" type="text" name="stageName" value="">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                <button class="btn btn-success modify-button">Сохранить</button>
+            </div>
+
+            </form>
+        </div>
+    </div>
+</div>
