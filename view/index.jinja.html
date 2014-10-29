@@ -176,9 +176,60 @@
     
 </script>
 
-{% block scripts %}{% endblock %}
+<script type="text/javascript">
+// Обработка вызова модальной формы редактирования данных
+$('#modify-modal').on('show.bs.modal', function (modal) {
+    // Запись данных из текущей строки в переменные, получаемые из контроллера
+    var PK_ID = $(modal.relatedTarget).attr('data-pk-id');
+    console.log('PK_ID', PK_ID);
 
-<script src="{{ url_for('static', filename='customization/js/formValidation.js') }}"></script>
+    {% for field in modifyFields %}
+    var {{ field }} = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-{{ field|replace('_', '-')|lower }}');
+    console.log('{{ field }}:', {{ field }});
+    {% endfor %}
+
+    // [C] Добавление новых данных         -> открытие пустой модальной формы
+    // [U] Редактирование имеющихся данных -> подгрузка данных из текущей строки в модальную форму
+
+    // Условная отрисовка заголовка модальной формы, получаемого из контроллера
+    modalHeader = (PK_ID == 0) ? {{ createHeader|join(' + ')|safe }} : {{ updateHeader|join(' + ')|safe }};
+    $('#modal-title').html(modalHeader);
+    // Условная отрисовка действия модальной формы, получаемого из контроллера
+    modalAction = (PK_ID == 0) ? {{ createAction|join(' + ')|safe }} : {{ updateAction|join(' + ')|safe }};
+    $('#modify-form').attr('action', modalAction);
+
+    // [U] Присвоение данных из текущей строки соответствующим полям модальной формы, получаемым из контроллера
+    console.log('#PK_ID:', PK_ID);
+
+    {% for field in modifyFields %}
+    $('#{{ field }}').val({{ field }});
+    //console.log('#{{ field }}:', $('#{{ field }}').val());
+    {% endfor %}
+
+    // Условная отрисовка активных радиокнопок модальной формы
+    if (typeof age_ID === 'undefined') {
+        $('label.age_ID').removeClass('active');
+        $('input[name="age_ID"]').prop('checked', false);
+    } else {
+        $('label[for="age_ID_' + age_ID + '"]').addClass('active');
+        $('input#age_ID_' + age_ID).prop('checked', true);
+    };
+});
+
+// Обработка вызова формы удаления данных
+$('.delete-button').on('click', function () {
+    // Получение данных из текущей строки
+    var PK_ID = parseInt($(this).attr("data-pk-id"));
+
+    // Условная отрисовка действия формы удаления данных, получаемого из контроллера
+    $('#delete-form').attr('action', {{ deleteAction|join(' + ')|safe }});
+
+    // Отправка данных для удаления в контроллер
+    $('#delete-form').submit();
+});
+</script>
+
+{% block scripts %}{% endblock %}
 
 </body>
 </html>
