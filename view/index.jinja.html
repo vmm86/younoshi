@@ -199,7 +199,6 @@ $('#modify-modal').on('show.bs.modal', function (modal) {
     $('#modify-form').attr('action', modalAction);
 
     // [U] Присвоение данных из текущей строки соответствующим полям модальной формы, получаемым из контроллера
-    console.log('#PK_ID:', PK_ID);
 
     {% for field in modifyFields %}
     $('#{{ field }}').val({{ field }});
@@ -207,13 +206,12 @@ $('#modify-modal').on('show.bs.modal', function (modal) {
     {% endfor %}
 
     // Условная отрисовка активных радиокнопок модальной формы
-    if (typeof age_ID === 'undefined') {
-        $('label.age_ID').removeClass('active');
-        $('input[name="age_ID"]').prop('checked', false);
-    } else {
-        $('label[for="age_ID_' + age_ID + '"]').addClass('active');
-        $('input#age_ID_' + age_ID).prop('checked', true);
-    };
+    {% for radio in modifyRadios %}
+        $('label.{{ radio }}').removeClass('active');
+        $('input[name="{{ radio }}"]').prop('checked', false);
+        $('label[for="{{ radio }}_' + {{ radio }} + '"]').addClass('active');
+        $('input#{{ radio }}_' + {{ radio }}).prop('checked', true);
+    {% endfor %}
 });
 
 // Обработка вызова формы удаления данных

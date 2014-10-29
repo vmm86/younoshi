@@ -19,7 +19,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="0">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -31,9 +31,9 @@
         </thead>
         <tbody>
             {% for lst in listStage %}
-            <tr>
+            <tr data-pk-id="{{ lst.stage_ID }}" data-stagetype="{{ lst.stageType }}" data-stagename="{{ lst.stageName }}">
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lst.stage_ID }}">
+                    <a class="update-button form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ lst.stage_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
@@ -45,7 +45,9 @@
                 </td>
                 <td class="tableText">{{ lst.stageName }}</td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteStage.jinja.html" %}
+                    <a class="delete-button form-control flat btn-danger input-sm" data-pk-id="{{ lst.stage_ID }}">
+                        <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -57,11 +59,9 @@
 
 </div>
 
-{% include "includes/createStage.jinja.html" %}
+{% include "includes/modifyStage.jinja.html" %}
 
-{% for lst in listStage %}
-    {% include "includes/updateStage.jinja.html" %}
-{% endfor %}
+{% include "includes/delete.jinja.html" %}
 
 {% endblock %}
 

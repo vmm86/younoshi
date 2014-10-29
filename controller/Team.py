@@ -32,6 +32,8 @@ def listTeam(cityid, schoolid):
     # Переменные для автозаполнения модальной формы добавления/обновления данных в JS-скрипте шаблона
     ## Список полей
     modifyFields = ['teamName', 'age_ID', 'ageName']
+    ## Список групп радиокнопок
+    modifyRadios = ['age_ID']
     ## Заголовки модального окна
     createHeader = ['"Создать новую юношескую команду"']
     updateHeader = ['"Изменить "', 'teamName', '" (возраст "', 'ageName', '")"']
@@ -52,6 +54,7 @@ def listTeam(cityid, schoolid):
         listTeam     = listTeam,
         listAge      = listAge, 
         modifyFields = modifyFields,
+        modifyRadios = modifyRadios,
         createHeader = createHeader,
         updateHeader = updateHeader,
         createAction = createAction,
