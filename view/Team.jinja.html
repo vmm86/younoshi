@@ -10,11 +10,12 @@
 
 {% include 'messages.jinja.html' with context %}
 
-<div class="row" style="margin-left: 35rem;">
-    <div class="col-md-4">
+<div class="row">
+    <div class="col-md-3 col-md-offset-3" style="text-align: center;">
         <form id="filterCity" class="flat-form" name="filterCity">
             <div class="btn-group">
                 <label class="btn-label" for="filterCityforTeam">Выберите город</label>
+                <br>
                 <select id="filterCityforTeam" name="filterCityforTeam" class="selectpicker" data-live-search="true" data-style="btn-info">
                     <option value="0" {% for lc in listCity %}{% if lc.city_ID == cityid %}selected{% endif %}{% endfor %}>выберите город</option>
                 {% for lc in listCity %}
@@ -25,10 +26,11 @@
         </form>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3" style="text-align: center;">
         <form id="filterSchool" class="flat-form" name="filterSchool">
             <div class="btn-group">
                 <label class="btn-label" for="filterSchoolforTeam">Выберите школу</label>
+                <br>
                 <select id="filterSchoolforTeam" name="filterSchoolforTeam" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto" {% if listSchool.count() == 0 %} disabled="disabled"{% endif %}>
                     <option value="0" {% for ls in listSchool %}{% if ls.school_ID == schoolid %}selected{% endif %}{% endfor %}>
                         {% if listSchool.count() >  0 %}выберите школу{% endif %}
@@ -54,7 +56,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="0">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -66,17 +68,19 @@
         </thead>
         <tbody>
             {% for lt in listTeam %}
-            <tr>
+            <tr data-pk-id="{{ lt.team_ID }}" data-teamname="{{ lt.teamName }}" data-age-id="{{ lt.age_ID.age_ID }}" data-agename="{{ lt.age_ID.ageName }}">
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lt.team_ID }}">
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ lt.team_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">{{ lt.teamName }}</td>
-                <td class="tableText">{{ lt.age_ID.ageName }} лет</td>
+                <td class="tableText ageName">{{ lt.age_ID.ageName }} лет</td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteTeam.jinja.html" %}
+                    <a class="delete-button form-control flat btn-danger input-sm" data-pk-id="{{ lt.team_ID }}">
+                        <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -90,15 +94,16 @@
 
 </div>
 
-{% include "includes/createTeam.jinja.html" %}
+{% include "includes/modifyTeam.jinja.html" %}
 
-{% for lt in listTeam %}
-    {% include "includes/updateTeam.jinja.html" %}
-{% endfor %}
+{% include "includes/delete.jinja.html" %}
 
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ url_for('static', filename='customization/js/selectAction_Team.js') }}"></script>
-    <script src="{{ url_for('static', filename='customization/js/formValidation.js') }}"></script>
+<script type="text/javascript">
+
+</script>
+<script src="{{ url_for('static', filename='customization/js/selectAction_Team.js') }}"></script>
+<script src="{{ url_for('static', filename='customization/js/formValidation.js') }}"></script>
 {% endblock %}
