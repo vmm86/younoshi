@@ -34,7 +34,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="0">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -46,22 +46,24 @@
         </thead>
         <tbody>
             {% for ls in listSchool %}
-            <tr>
+            <tr data-pk-id="{{ ls.school_ID }}" data-schoolname="{{ ls.schoolName }}" data-cityname="{{ ls.city_ID.cityName }}">
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ ls.school_ID }}">
+                    <a class="update-button form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ ls.school_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">{{ ls.schoolName }}</td>
                 <td class="tableText">
-                    {% if ls.countTeams == 0 %}нет{% endif %}
-                    {% if ls.countTeams > 0 %}<a href="/city/{{ ls.city_ID.city_ID }}/school/{{ ls.school_ID }}/team">{% endif %}
-                        {{ ls.countTeams }}
-                    {% if ls.countTeams > 0 %}</a>{% endif %}
+                    <a href="/city/{{ ls.city_ID.city_ID }}/school/{{ ls.school_ID }}/team">
+                        {% if ls.countTeams == 0 %}нет{% endif %}
+                        {% if ls.countTeams > 0 %}{{ ls.countTeams }} {% endif %}
+                    </a>
                 </td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteSchool.jinja.html" %}
+                    <a class="delete-button form-control flat btn-danger input-sm" data-pk-id="{{ ls.school_ID }}">
+                        <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -74,11 +76,9 @@
 
 </div>
 
-{% include "includes/createSchool.jinja.html" %}
+{% include "includes/modifySchool.jinja.html" %}
 
-{% for ls in listSchool %}
-    {% include "includes/updateSchool.jinja.html" %}
-{% endfor %}
+{% include "includes/delete.jinja.html" %}
 
 {% endblock %}
 

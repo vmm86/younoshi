@@ -1,0 +1,31 @@
+
+<div id="modify-modal" class="modal fade modal-lg" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="modify-form" class="flat-form modify-form" name="modify" method="POST" action="">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span>
+                </button>
+                <h3 id="modal-title" class="modal-title" aria-labelledby="modify-modal-label"></h3>
+            </div>
+
+            <div class="modal-body">
+                    <input id="PK_ID"      class="form-control" type="hidden" name="PK_ID"      value="">
+                <div class="form-group btn-group">
+                    <label class="btn-label" for="schoolName">Школа</label> 
+                    <input id="schoolName" class="form-control" type="text"   name="schoolName" value="">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                <button class="btn btn-success modify-button">Сохранить</button>
+            </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
