@@ -39,7 +39,7 @@ def listSAS(seasonid, ageid):
     modifyFields = ['stage', 'zoneGroupPlayoffToggle', 'gameType', 'startDate', 'finishDate']
     ## Список групп радиокнопок
     modifyRadios = ['zoneGroupPlayoffToggle', 'gameType']
-    ## Список групп радиокнопок
+    ## Список выпадающих списков
     modifySelect = ['stage']   
     ## Заголовки модального окна
     createHeader = ['"Создать новую игровую стадию"']
@@ -49,6 +49,7 @@ def listSAS(seasonid, ageid):
     updateAction = ['"/season/"', seasonid, '"/age/"', ageid, '"/stage/"', 'PK_ID', '"/update"']
     deleteAction = ['"/season/"', seasonid, '"/age/"', ageid, '"/stage/"', 'PK_ID', '"/delete"']
 
+    # Вывод шаблона
     return render_template(
         'SAS.jinja.html', 
         listSeason   = listSeason,
