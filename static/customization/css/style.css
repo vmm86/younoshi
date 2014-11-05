@@ -618,7 +618,7 @@ fieldset[disabled] .btn {
     top: 2.9rem !important;
 }
 .nav .dropdown-menu {
-    top: 0 !important;
+    top: -0.03rem !important;
 }
 
 .nav .dropdown-menu li:first-child > a {
