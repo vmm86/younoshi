@@ -139,7 +139,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="0">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -153,9 +153,9 @@
         </thead>
         <tbody>
             {% for lsast in listSAST %}
-            <tr>
+            <tr data-pk-id="{{ lsast.SAST_ID }}" data-filtercity="{{ lsast.team_ID.school_ID.city_ID.city_ID }}" data-filterschool="{{ lsast.team_ID.school_ID.school_ID }}" data-filterteam="{{ lsast.team_ID.team_ID }}" data-substage-id="{{ lsast.substage_ID.stage_ID }}" data-stagetype="{{ lsast.SAS_ID.stage_ID.stageType }}" data-stagename="{{ lsast.SAS_ID.stage_ID.stageName }}">
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lsast.SAST_ID }}">
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ lsast.SAST_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
@@ -167,7 +167,9 @@
                 </td>
             {% endif %}
                 <td class="tableInputRight">
-                    {% include "includes/deleteSAST.jinja.html" %}
+                    <a class="delete-button form-control flat btn-danger input-sm" data-pk-id="{{ lsast.SAST_ID }}">
+                        <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -183,13 +185,9 @@
 
 </div>
 
-{% include "includes/createSAST.jinja.html" %}
+{% include "includes/modifySAST.jinja.html" %}
 
-{#
-{% for lsast in listSAST %}
-    {% include "includes/updateSAST.jinja.html" %}
-{% endfor %}
-#}
+{% include "includes/delete.jinja.html" %}
 
 {% endblock %}
 

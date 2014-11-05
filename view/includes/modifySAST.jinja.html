@@ -1,0 +1,95 @@
+
+<div id="modify-modal" class="modal fade modal-lg" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="modify-form" class="flat-form modify-form" name="modify" method="POST" action="">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span>
+                </button>
+                <h3 id="modal-title" class="modal-title" aria-labelledby="modify-modal-label"></h3>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-lg-4" style="text-align: center;">
+                        <div class="btn-group">
+                            <label class="btn-label" for="filterCity">Выберите город</label>
+                            <select id="filterCity" name="filterCity" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+                                <option value="0">
+                                    выберите город
+                                </option>
+                            {% for fc in filterCity %}
+                                <option value="{{ fc.city_ID }}">{{ fc.cityName }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4" style="text-align: center;">
+                        <div class="btn-group">
+                            <label class="btn-label" for="filterSchool">Выберите школу</label>
+                            <select id="filterSchool" name="filterSchool" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+                                <option value="0">
+                                    выберите школу
+                                </option>
+                            {% for fs in filterSchool %}
+                                <option value="{{ fs.school_ID }}" data-city-id="{{ fs.city_ID.city_ID }}">{{ fs.schoolName }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4" style="text-align: center;">
+                        <div class="btn-group">
+                            <label class="btn-label" for="filterTeam">Выберите команду</label>
+                            <select id="filterTeam" name="filterTeam" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="auto">
+                                <option value="0">
+                                    выберите команду
+                                </option>
+                            {% for ft in filterTeam %}
+                                <option value="{{ ft.team_ID }}" data-school-id="{{ ft.school_ID.school_ID }}">{{ ft.teamName }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12" style="text-align: center;">
+                        <div class="btn-group">
+                            <div id="substage_ID" class="btn-group btn-toggle" data-toggle="buttons">
+                                <label class="btn-label" for="substage_ID" style="width: 100%; text-align: center;">Выберите подгруппу (если есть)</label>
+                                <br>
+                                <label class="substage_ID btn btn-info" for="substage_ID_0">
+                                    <input id="substage_ID_0" type="radio" name="substage_ID" value="">нет
+                                </label>
+                                <br>
+                                {% for lst in listStage %}
+                                    {% if lst.stageType == "G" %}
+                                        {% if lst.stageName == "А" or lst.stageName == "Б" or lst.stageName == "В" or lst.stageName == "Г" or lst.stageName == "Д" %}
+                                            <label class="substage_ID btn btn-info" for="substage_ID_{{ lst.stage_ID }}" style="width: 20%;">
+                                                <input id="substage_ID_{{ lst.stage_ID }}" type="radio" name="substage_ID" value="{{ lst.stage_ID }}">{{ lst.stageName }}
+                                            </label>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                <button class="btn btn-success modify-button">Сохранить</button>
+            </div>
+
+            </form>
+        </div>
+    </div>
+</div>
