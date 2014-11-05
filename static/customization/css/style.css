@@ -503,7 +503,8 @@ a.btn {
 .btn[disabled], 
 fieldset[disabled] .btn {
     background-color: #BDC3C7;
-    color: #FFF;
+    color: transparent;
+    text-shadow: none;
     opacity: 1;
 }
 
