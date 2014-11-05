@@ -1,0 +1,126 @@
+
+<div id="modify-modal" class="modal fade modal-lg" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="modify-form" class="flat-form modify-form" name="modify" method="POST" action="">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span>
+                </button>
+                <h3 id="modal-title" class="modal-title" aria-labelledby="modify-modal-label"></h3>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-lg-4" style="text-align: right;">
+
+                        <div class="form-group btn-group">
+                            <label class="btn-label" for="chooseZone">&nbsp;</label>
+                            <br>
+                            <br>
+                            <select id="stage_Z" name="stage" class="chooseZone selectpicker" data-style="btn-info">
+                        {% for lst in listStage %}
+                            {% if lst.stageType == "Z" %}
+                                <option value="{{ lst.stage_ID }}">{{ lst.stageName }}</option>
+                            {% endif %}
+                        {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4" style="text-align: center;">
+
+                        <div class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
+                            <label class="btn-label zoneGroupPlayoffToggle" style="width: 100%; text-align: center;">Выберите стадию</label>
+                            <br>
+                            <label class="btn btn-info zoneGroupPlayoffToggle" for="zoneGroupPlayoffToggle_Z">
+                                <input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z">зона
+                            </label>
+                            <label class="btn btn-info zoneGroupPlayoffToggle" for="zoneGroupPlayoffToggle_G">
+                                <input id="zoneGroupPlayoffToggle_G" type="radio" name="zoneGroupPlayoffToggle" value="G">группа
+                            </label>
+                            <br>
+                            <label class="btn btn-info zoneGroupPlayoffToggle" for="zoneGroupPlayoffToggle_P">
+                                <input id="zoneGroupPlayoffToggle_P" type="radio" name="zoneGroupPlayoffToggle" value="P">плэй-офф
+                            </label>
+                        </div>
+                {% for lst in listStage %}
+                    {% if lst.stageType == "P" %}
+                        <input id="stage_P" class="choosePlayoff" type="hidden" name="stage" value="{{ lst.stage_ID }}">
+                    {% endif %}
+                {% endfor %}
+
+                    </div>
+
+                    <div class="col-lg-4" style="text-align: left;">
+
+                        <div class="btn-group">
+                            <label class="btn-label" for="chooseGroup">&nbsp;</label>
+                            <br>
+                            <br>
+                            <select id="stage_G" name="stage" class="chooseGroup selectpicker" data-style="btn-info">
+                        {% for lst in listStage %}
+                            {% if lst.stageType == "G" %}
+                                <option value="{{ lst.stage_ID }}">{{ lst.stageName }}</option>
+                            {% endif %}
+                        {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-4" style="text-align: right;">
+
+                        <div class="form-group btn-group">
+                            <label class="btn-label" for="startDate">Начало соревнований</label> 
+                            <input id="startDate" class="datetimepicker form-control" type="date" name="startDate" value="">
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4" style="text-align: center;">
+
+                        <div class="gameType btn-group btn-toggle" data-toggle="buttons">
+                            <label class="btn-label" for="gameType" style="width: 100%; text-align: center;">Тип соревнования</label>
+                            <br>
+                        {% for lgt in listGameType %}
+                            <label class="btn btn-info gameType" for="gameType_{{ lgt.gameTypeName }}">
+                                <input id="gameType_{{ lgt.gameTypeName }}" type="radio" name="gameType" value="{{ lgt.gameType_ID }}">
+                                {% if lgt.gameTypeName == "CHA" %}Первенство{% endif %}
+                                {% if lgt.gameTypeName == "CUP" %}Кубок{% endif %}
+                            </label>
+                        {% endfor %}
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4" style="text-align: left;">
+
+                        <div class="form-group btn-group">
+                            <label class="btn-label" for="finishDate">Конец соревнований</label> 
+                            <input id="finishDate" class="datetimepicker form-control" type="date" name="finishDate" value="">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                <button class="btn btn-success modify-button">Сохранить</button>
+            </div>
+
+            </form>
+        </div>
+    </div>
+</div>

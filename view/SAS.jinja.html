@@ -66,7 +66,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="0">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -82,9 +82,9 @@
         </thead>
         <tbody>
             {% for lsas in listSAS %}
-            <tr>
+            <tr data-pk-id="{{ lsas.SAS_ID }}" data-stage="{{ lsas.stage_ID.stage_ID }}" data-zonegroupplayofftoggle="{{ lsas.stage_ID.stageType }}" data-gametype="{{ lsas.gameType_ID.gameTypeName }}" data-startdate="{{ lsas.startDate.strftime('%d.%m.%Y')  if lsas.startDate != None  }}" data-finishdate="{{ lsas.finishDate.strftime('%d.%m.%Y') if lsas.finishDate != None }}">
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lsas.SAS_ID }}">
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ lsas.SAS_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
@@ -99,14 +99,10 @@
                     {% if lsas.gameType_ID.gameTypeName == "CUP" %}Кубок{% endif %}
                 </td>
                 <td class="tableText center">
-                    {% if lsas.startDate %}
-                        {{ lsas.startDate.strftime('%d.%m.%Y') }}
-                    {% endif %}
+                    {% if lsas.startDate %}  {{  lsas.startDate.strftime('%d.%m.%Y') if lsas.startDate  != None }} {% endif %}
                 </td>
                 <td class="tableText center">
-                    {% if lsas.finishDate %}
-                        {{ lsas.finishDate.strftime('%d.%m.%Y') }}
-                    {% endif %}
+                    {% if lsas.finishDate %} {{ lsas.finishDate.strftime('%d.%m.%Y') if lsas.finishDate != None }} {% endif %}
                 </td>
                 <td class="tableText">
                     <a href="/season/{{ seasonid }}/age/{{ ageid }}/stage/{{ lsas.SAS_ID }}/team">
@@ -121,7 +117,9 @@
                     </a>
                 </td>
                 <td class="tableInputRight">
-                    {% include "includes/deleteSAS.jinja.html" %}
+                    <a class="delete-button form-control flat btn-danger input-sm" data-pk-id="{{ lsas.SAS_ID }}">
+                        <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -135,13 +133,9 @@
 
 </div>
 
-{% include "includes/createSAS.jinja.html" %}
+{% include "includes/modifySAS.jinja.html" %}
 
-{#
-{% for lsas in listSAS %}
-    {% include "includes/updateSAS.jinja.html" %}
-{% endfor %}
-#}
+{% include "includes/delete.jinja.html" %}
 
 {% endblock %}
 
