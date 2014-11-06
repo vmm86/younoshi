@@ -6,23 +6,17 @@
 
 {% block body %}
 
-{% include 'header.jinja.html' with context %}
-
-{% include 'messages.jinja.html' with context %}
-
-<form id="filterCity" class="flat-form" name="filterCity">
-    <div class="row" style="margin-left: 15rem;">
-        <div class="btn-group">
-            <label class="btn-label" for="filterCityforSchool">Выберите город</label>
-            <select id="filterCityforSchool" class="selectpicker" name="filterCityforSchool" data-live-search="true" data-style="btn-info">
-                <option value="0" {% for lc in listCity %}{% if lc.city_ID == cityid %} selected{% endif %}{% endfor %}>выберите город</option>
-            {% for lc in listCity %}
-                <option value="{{ lc.city_ID }}" {% if lc.city_ID == cityid %} selected{% endif %}>{{ lc.cityName }}</option>
-            {% endfor %}
-            </select>
-        </div>
+<div class="row" style="margin-left: 15rem;">
+    <div class="btn-group">
+        <label class="btn-label" for="filterCityforSchool">Выберите город</label>
+        <select id="filterCityforSchool" class="selectpicker" name="filterCityforSchool" data-live-search="true" data-style="btn-info">
+            <option value="0" {% for lc in listCity %}{% if lc.city_ID == cityid %} selected{% endif %}{% endfor %}>выберите город</option>
+        {% for lc in listCity %}
+            <option value="{{ lc.city_ID }}" {% if lc.city_ID == cityid %} selected{% endif %}>{{ lc.cityName }}</option>
+        {% endfor %}
+        </select>
     </div>
-</form>
+</div>
 
 <div class="row">
 

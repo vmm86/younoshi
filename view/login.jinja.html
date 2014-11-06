@@ -6,8 +6,6 @@
 
 {% block body %}
 
-{% include 'messages.jinja.html' with context %}
-
 <form name="login" action="{{ url_for('login') }}" method="POST" class="flat-form">
 
     <div class="row">
