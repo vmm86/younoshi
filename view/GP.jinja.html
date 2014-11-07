@@ -132,7 +132,7 @@
         <thead>
             <tr>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#Modal_create">
+                    <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="0">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
                     </a>
                 </td>
@@ -153,9 +153,9 @@
         </thead>
         <tbody>
             {% for lgp in listGP %}
-            <tr>
+            <tr data-pk-id="{{ lgp.GP_ID }}" data-gamenumber="{{ lgp.gameNumber }}" data-tournumber="{{ lgp.tourNumber }}" data-stagenumber="{{ lgp.stageNumber }}" data-gamedate="{{ lgp.gameDate.strftime('%d.%m.%Y') }}" data-filterht="{{ lgp.homeTeam_ID.team_ID.team_ID }}" data-filtergt="{{ lgp.guestTeam_ID.team_ID.team_ID }}" data-htscoregame="{{ lgp.homeTeamScoreGame }}" data-gtscoregame="{{ lgp.guestTeamScoreGame }}" data-htscore11m="{{ lgp.homeTeamScore11m }}" data-htscore11m="{{ lgp.guestTeamScore11m }}" data-is-semifinal="{{ lgp.is_Semifinal }}" data-is-final="{{ lgp.is_Final }}">
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#Modal_update_{{ lgp.GP_ID }}">
+                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ lgp.GP_ID }}">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
                     </a>
                 </td>
@@ -187,7 +187,9 @@
                 </td>
             {% endif %}
                 <td class="tableInputRight">
-                    {% include "includes/deleteGP.jinja.html" %}
+                    <a class="delete-button form-control flat btn-danger input-sm" data-pk-id="{{ lgp.GP_ID }}">
+                        <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -199,13 +201,9 @@
 
 </div>
 
-{% include "includes/createGP.jinja.html" %}
+{% include "includes/modifyGP.jinja.html" %}
 
-{#}
-{% for lgp in listGP %}
-    {% include "includes/updateGP.jinja.html" %}
-{% endfor %}
-#}
+{% include "includes/delete.jinja.html" %}
 
 {% endblock %}
 

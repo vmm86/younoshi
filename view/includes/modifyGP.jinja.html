@@ -1,0 +1,127 @@
+
+<div id="modify-modal" class="modal fade modal-lg" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="modify-form" class="flat-form modify-form" name="modify" method="POST" action="">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span>
+                </button>
+                <h3 id="modal-title" class="modal-title" aria-labelledby="modify-modal-label"></h3>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="btn-group">
+                        <label class="btn-label" for="gameNumber">Номер матча </label>
+                        <input id="gameNumber" name="gameNumber" value="" type="number" class="form-control">
+                        <label class="btn-label" for="tourNumber">Номер тура </label>
+                        <input id="tourNumber" name="tourNumber" value="" type="number" class="form-control">
+                    </div>
+
+                {# Поля внутри доступны только для кругового Первенства #}
+                {% if sasgametype == "CHA" %}
+                    <div class="btn-group" data-toggle="buttons">
+
+                        <label class="btn-label {% if sasgametype != "CHA" %}disabled{% endif %}">Номер круга</label>
+                        <div class="btn-group">
+                            <label for="stageNumber" class="btn btn-info {% if sasgametype != "CHA" %}disabled{% endif %}">
+                                <input id="stageNumber_1" type="radio" name="stageNumber" value="1" class="form-control">1 круг
+                            </label>
+                            <label for="stageNumber" class="btn btn-info {% if sasgametype != "CHA" %}disabled{% endif %}">
+                                <input id="stageNumber_2" type="radio" name="stageNumber" value="2" class="form-control">2 круг
+                            </label>
+                        </div>
+                    </div>
+                {% endif %}
+                {# Поля внутри доступны только для кругового Первенства #}
+
+                </div>
+
+                <div class="row">
+
+                    <div class="btn-group">
+                        <label class="btn-label" for="gameDate">Дата матча </label>
+                        <div class="btn-group">
+                            <input id="gameDate" type="date" name="gameDate" value="" size="10" class="datetimepicker form-control">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="btn-group">
+                        <label class="btn-label" for="filterHT">Команда хозяев </label>
+                        <select id="filterHT" class="selectpicker" name="filterHT" data-live-search="true" data-style="btn-info" data-width="auto">
+                            <option value="0">выберите команду</option>
+                            {% for lsast in listSAST %}
+                                <option value="{{ lsast.team_ID.team_ID }}">{{ lsast.team_ID.teamName }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label class="btn-label" for="filterGT">Команда гостей </label>
+                        <select id="filterGT" class="selectpicker" name="filterGT" data-live-search="true" data-style="btn-info" data-width="auto">
+                            <option value="0">выберите команду</option>
+                            {% for lsast in listSAST %}
+                                <option value="{{ lsast.team_ID.team_ID }}">{{ lsast.team_ID.teamName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="btn-group">
+                        <label class="btn-label">Счёт матча </label>
+                        <input id="HTscoreGame" type="number" name="HTscoreGame" value="" class="form-control"> : <input id="GTscoreGame" type="number" name="GTscoreGame" value="" class="form-control">
+                    </div>
+                </div>
+
+            {# поля внутри д.б. доступны только в матчах стадии плэй-офф #}
+            {% if sastype == "P" %}
+                <div class="row">
+
+                    <div class="btn-group">
+                        <label class="btn-label">Счёт серии 11-метровых </label>
+                        <input id="HTscore11m" type="number" name="HTscore11m" value="" class="form-control"> : <input id="GTscore11m" type="number" name="GTscore11m" value="" class="form-control">
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="btn-group">
+                        <input id="is_Semifinal_True"  type="checkbox" name="is_Semifinal" value="1" class="checkbox" data-on-text="Да" data-off-text="Нет">
+                        <input id="is_Semifinal_False" type="hidden"   name="is_Semifinal" value="0">
+                        <label for="is_Semifinal" class="btn-label"> полуфинальный матч плэй-офф</label>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="btn-group">
+                        <input id="is_Final_True"  type="checkbox" name="is_Final" value="1" class="checkbox" data-on-text="Да" data-off-text="Нет">
+                        <input id="is_Final_False" type="hidden"   name="is_Final" value="0">
+                        <label for="is_Final" class="btn-label"> финальный матч плэй-офф</label>
+                    </div>
+
+                </div>
+            {% endif %}
+            {# поля внутри д.б. доступны только в матчах стадии плэй-офф #}
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                <button class="btn btn-success modify-button">Сохранить</button>
+            </div>
+
+            </form>
+        </div>
+    </div>
+</div>

@@ -215,14 +215,21 @@ $('#modify-modal').on('show.bs.modal', function (modal) {
     modalAction = (PK_ID == 0) ? {{ createAction|join(' + ')|safe }} : {{ updateAction|join(' + ')|safe }};
     $('#modify-form').attr('action', modalAction);
 
-    // [U] Присвоение данных из текущей строки соответствующим полям модальной формы, получаемым из контроллера
-
+    // [U] Заполнение активных элементов модальной формы по именам этих полей, получаемым из контроллера:
+    /// текстовые поля (input)
     {% for field in modifyFields %}
         $('#{{ field }}').val({{ field }});
         //console.log('#{{ field }}:', $('#{{ field }}').val());
     {% endfor %}
-
-    // [U] Условная отрисовка активных радиокнопок модальной формы
+    /// чекбоксы (input[type="checkbox"])
+    {% for checkbox in modifyChkbox %}
+        $('input[type="checkbox"][name="{{ checkbox }}"]').bootstrapSwitch('state', false, false);
+        if ({{ checkbox }} == 'True') {
+            $('input#{{ checkbox }}_' + {{ checkbox }}).bootstrapSwitch('toggleState');
+            console.log($('input#{{ checkbox }}_' + {{ checkbox }}), $('input#{{ checkbox }}_' + {{ checkbox }}).val());
+        }
+    {% endfor %}
+    /// радиокнопки (input[type="radio"])
     {% for radio in modifyRadios %}
         $('label.{{ radio }}').removeClass('active');
         $('input[name="{{ radio }}"]').prop('checked', false);
@@ -237,8 +244,7 @@ $('#modify-modal').on('show.bs.modal', function (modal) {
         {% endif %}
 
     {% endfor %}
-
-    // [U] Условная отрисовка активных пунктов выпадающих списков модальной формы (как правило, для выбора группы/зоны/плэй-офф)
+    /// выпадающие списки и их элементы (select)
     {% for select in modifySelect %}
         $('select[name="{{ select }}"] option').prop('selected', false);
 
