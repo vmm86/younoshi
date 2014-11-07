@@ -256,6 +256,22 @@ $('#modify-modal').on('show.bs.modal', function (modal) {
         $('select[name="{{ select }}"] option[value="' + {{ select }} + '"]').prop('selected', true);
         $('.selectpicker').selectpicker('refresh');
     {% endfor %}
+
+    {% if listGP %}
+    // [C] Удобства при создании новых матчей
+    if (PK_ID == 0) {
+        // Получение max значений номера матча, номера тура и даты матча
+        gnmax = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-gnmax');
+        tnmax = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-tnmax');
+        dmax  = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-dmax');
+        console.log(gnmax, tnmax, dmax);
+
+        // Подстановка полученных значений в поля модальной формы для добавления новых данных
+        $('input#gameNumber').val(gnmax);
+        $('input#tourNumber').val(tnmax);
+        $('input#gameDate').val(dmax);
+        }
+    {% endif %}
 });
 
 // Обработка вызова формы удаления данных
