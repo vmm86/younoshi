@@ -90,27 +90,27 @@
 
 </div>
 
-    <script src="{{ url_for('static', filename='jquery-2.1.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery-2.1.1.min.js') }}"></script>
 
-    <script src="{{ url_for('static', filename='data-tables/js/jquery.dataTables.js') }}"></script>
-    <script src="{{ url_for('static', filename='data-tables/js/dataTables.bootstrap.js') }}"></script>
-<!--    <script src="{{ url_for('static', filename='data-tables/extensions/FixedHeader/js/dataTables.fixedHeader.js') }}"></script> -->
-    <script src="{{ url_for('static', filename='data-tables/js/dataTables.responsive.js') }}"></script>
-    <script src="{{ url_for('static', filename='datetimepicker/js/jquery.datetimepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='data-tables/js/jquery.dataTables.js') }}"></script>
+<script src="{{ url_for('static', filename='data-tables/js/dataTables.bootstrap.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='data-tables/extensions/FixedHeader/js/dataTables.fixedHeader.js') }}"></script> -->
+<script src="{{ url_for('static', filename='data-tables/js/dataTables.responsive.js') }}"></script>
+<script src="{{ url_for('static', filename='datetimepicker/js/jquery.datetimepicker.js') }}"></script>
 
-    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-select/js/bootstrap-select.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-switch/bootstrap-switch.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-touchspin/js/bootstrap-touchspin.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-validator/js/bootstrap-validator.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap-select/js/bootstrap-select.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap-switch/bootstrap-switch.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap-touchspin/js/bootstrap-touchspin.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap-validator/js/bootstrap-validator.js') }}"></script>
 
-    <script src="{{ url_for('static', filename='flat-ui/js/flatui-checkbox.js') }}"></script>
-    <script src="{{ url_for('static', filename='flat-ui/js/flatui-radio.js') }}"></script>
+<script src="{{ url_for('static', filename='flat-ui/js/flatui-checkbox.js') }}"></script>
+<script src="{{ url_for('static', filename='flat-ui/js/flatui-radio.js') }}"></script>
 
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 
 <script type="text/javascript">
     var dtable = $('table').DataTable({
@@ -177,118 +177,10 @@
     });
 
     $('.alert').delay(3000).hide(200, 'linear');
-    
 </script>
 
-<script type="text/javascript">
-// Обработка вызова модальной формы редактирования данных
-$('#modify-modal').on('show.bs.modal', function (modal) {
-    // Запись данных из текущей строки в переменные, получаемые из контроллера
-    var PK_ID = $(modal.relatedTarget).attr('data-pk-id');
-    console.log('PK_ID', PK_ID);
-
-    {% for field in modifyFields %}
-        var {{ field }} = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-{{ field|replace('_', '-')|lower }}');
-        console.log('{{ field }}: ', {{ field }});
-
-        {% if listSAST or listGP %}
-            {% if field == 'stageType' %}
-                {% if sastype == "Z" %} stageType = "зоне";   {% endif %}
-                {% if sastype == "G" %} stageType = "группе"; {% endif %}
-                {% if sastype == "P" %} stageType = "этапе";  {% endif %}
-                console.log('{{ field }}: ', {{ field }});
-            {% endif %}
-
-            {% if field == 'stageName' %}
-                stageName = "{{ sasname }}";
-                console.log('{{ field }}: ', {{ field }});
-            {% endif %}
-
-        {% endif %}
-
-    {% endfor %}
-
-    // [C] Добавление новых данных         -> открытие пустой модальной формы
-    // [U] Редактирование имеющихся данных -> подгрузка данных из текущей строки в модальную форму
-
-    // Условная отрисовка заголовка модальной формы, получаемого из контроллера
-    modalHeader = (PK_ID == 0) ? {{ createHeader|join(' + ')|safe }} : {{ updateHeader|join(' + ')|safe }};
-    $('#modal-title').html(modalHeader);
-    // Условная отрисовка действия модальной формы, получаемого из контроллера
-    modalAction = (PK_ID == 0) ? {{ createAction|join(' + ')|safe }} : {{ updateAction|join(' + ')|safe }};
-    $('#modify-form').attr('action', modalAction);
-
-    // [U] Заполнение активных элементов модальной формы по именам этих полей, получаемым из контроллера:
-    /// текстовые поля (input)
-    {% for field in modifyFields %}
-        $('#{{ field }}').val({{ field }});
-        //console.log('#{{ field }}:', $('#{{ field }}').val());
-    {% endfor %}
-    /// чекбоксы (input[type="checkbox"])
-    {% for checkbox in modifyChkbox %}
-        $('input[type="checkbox"][name="{{ checkbox }}"]').bootstrapSwitch('state', false, false);
-        if ({{ checkbox }} == 'True') {
-            $('input#{{ checkbox }}_' + {{ checkbox }}).bootstrapSwitch('toggleState');
-            console.log($('input#{{ checkbox }}_' + {{ checkbox }}), $('input#{{ checkbox }}_' + {{ checkbox }}).val());
-        }
-    {% endfor %}
-    /// радиокнопки (input[type="radio"])
-    {% for radio in modifyRadios %}
-        $('label.{{ radio }}').removeClass('active');
-        $('input[name="{{ radio }}"]').prop('checked', false);
-        $('input#{{ radio }}_' + {{ radio }}).prop('checked', true);
-        $('label[for="{{ radio }}_' + {{ radio }} + '"]').addClass('active');
-
-        {% if radio == 'substage_ID' %}
-            if (substage_ID == '' || substage_ID === undefined) {
-                $('input#substage_ID_0').prop('checked', true);
-                $('label[for="substage_ID_0"]').addClass('active');
-            }
-        {% endif %}
-
-    {% endfor %}
-    /// выпадающие списки и их элементы (select)
-    {% for select in modifySelect %}
-        $('select[name="{{ select }}"] option').prop('selected', false);
-
-        {% if select == 'stage' %}
-            $('select[name="{{ select }}"], input[name="{{ select }}"]').prop('disabled', true);
-            $('#stage_' + zoneGroupPlayoffToggle).prop('disabled', false);
-        {% endif %}
-
-        $('select[name="{{ select }}"] option[value="' + {{ select }} + '"]').prop('selected', true);
-        $('.selectpicker').selectpicker('refresh');
-    {% endfor %}
-
-    {% if listGP %}
-    // [C] Удобства при создании новых матчей
-    if (PK_ID == 0) {
-        // Получение max значений номера матча, номера тура и даты матча
-        gnmax = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-gnmax');
-        tnmax = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-tnmax');
-        dmax  = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-dmax');
-        console.log(gnmax, tnmax, dmax);
-
-        // Подстановка полученных значений в поля модальной формы для добавления новых данных
-        $('input#gameNumber').val(gnmax);
-        $('input#tourNumber').val(tnmax);
-        $('input#gameDate').val(dmax);
-        }
-    {% endif %}
-});
-
-// Обработка вызова формы удаления данных
-$('.delete-button').on('click', function () {
-    // Получение данных из текущей строки
-    var PK_ID = parseInt($(this).attr("data-pk-id"));
-
-    // Условная отрисовка действия формы удаления данных, получаемого из контроллера
-    $('#delete-form').attr('action', {{ deleteAction|join(' + ')|safe }});
-
-    // Отправка данных для удаления в контроллер
-    $('#delete-form').submit();
-});
-</script>
+{# Скрипт для создания и редактирония данных из модальной формы #}
+{% include 'includes/createUpdateAction.jinja.html' %}
 
 {% block scripts %}{% endblock %}
 
