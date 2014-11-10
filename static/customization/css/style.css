@@ -649,6 +649,36 @@ fieldset[disabled] .btn {
     border-radius: 0 0 1rem 1rem;
 }
 
+/* Фиксы Bootstrap Switch */
+
+.bootstrap-switch {
+    border-radius: 1rem;
+    border: 0.2rem solid #3498DB;
+}
+
+.bootstrap-switch.bootstrap-switch-focused {
+    border-color: #3498DB;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary,
+.bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary {
+    background: #3498DB;
+    color: #FFF;
+    text-shadow: 1px 1px 0px rgba(0, 60, 100, 0.5);
+}
+
+.bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-default,
+.bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-default {
+    color: #000;
+    background: none repeat scroll 0% 0% #EEE;
+}
+
+.bootstrap-switch .bootstrap-switch-container {
+
+}
+
 /* Форма авторизации при входе на сайт */
 
 #authForm {
@@ -781,67 +811,38 @@ fieldset[disabled] .btn {
     left: -1000%;
 }
 
-.listAgeTop, 
-.listAgeBottom,
-.stageTypeTop,
-.stageTypeBottom {
-    margin:  0 !important;
-    padding: 0 !important;
-
-    width: 100% !important;
-}
-
-.listAgeTop      label,
-.listAgeBottom   label,
-.stageTypeTop    label,
-.stageTypeBottom label {
-    font-weight: bold !important;
-}
-
-.stageTypeTop  label {
-    width: 75px;
-}
-.stageTypeBottom  label {
-    width: 150px;
-}
-
-.listAgeTop     label:first-child,
-.stageTypeTop   label:first-child  {
+.filterAge label:nth-child(3) {
     border-radius: 1rem 0 0 0 !important;
 }
-.listAgeTop     label:last-child,
-.stageTypeTop   label:last-child  {
+.filterAge label:nth-child(6)  {
     border-radius: 0 1rem 0 0 !important;
 }
-.listAgeBottom  label:first-child {
+.filterAge label:nth-child(8) {
     border-radius: 0 0 0 1rem !important;
 }
-.listAgeBottom  label:last-child {
+.filterAge label:nth-child(11) {
     border-radius: 0 0 1rem 0 !important;
 }
 .stageTypeBottom  label {
     border-radius: 0 0 1rem 1rem !important;
 }
 
-.listAgeTop      label.active {
+.filterAge label.active {
     box-shadow: 0 -4px 4px -1px    rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeTop      label:first-child.active,
-.stageTypeTop    label:first-child.active {
+.filterAge label:nth-child(3).active{
     box-shadow: -4px -4px 4px -1px rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeTop      label:last-child.active,
-.stageTypeTop    label:last-child.active {
+.filterAge label:nth-child(6).active {
     box-shadow: 4px -4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom   label.active,
-.stageTypeBottom label.active {
+.filterAge label.active {
     box-shadow: 0 4px 4px -1px     rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom   label:first-child.active {
+.filterAge label:nth-child(8).active {
     box-shadow: -4px 4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
-.listAgeBottom   label:last-child.active {
+.filterAge label:nth-child(11).active {
     box-shadow: 4px 4px 4px -1px   rgba(0, 0, 0, 0.2) inset;
 }
 

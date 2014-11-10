@@ -13,28 +13,32 @@
 
             <div class="modal-body">
 
-                <div class="form-group btn-group" data-toggle="buttons">
+                <div class="row">
 
-                    <label class="btn-label">Выберите тип стадии</label>
-                    <div class="btn-group stageTypeTop">
-                        <label for="stageType_Z" class="btn btn-info stageType">
+                    <div class="form-group btn-group">
+                        <label for="stageName" class="btn-label">Название стадии</label> 
+                        <input id="stageName" class="form-control" type="text" name="stageName" value="">
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="zoneGroupPlayoffToggle form-group btn-group" data-toggle="buttons" style="width: 20%;">
+                        <label class="btn-label">Выберите тип стадии</label>
+                        <br>
+                        <label for="stageType_Z" class="stageType btn btn-info">
                             <input id="stageType_Z" type="radio" name="stageType" value="Z">зона
                         </label>
-                        <label for="stageType_G" class="btn btn-info stageType">
+                        <label for="stageType_G" class="stageType btn btn-info">
                             <input id="stageType_G" type="radio" name="stageType" value="G">группа
                         </label>
-                    </div>
-                    <div class="btn-group stageTypeBottom">
-                        <label for="stageType_P" class="btn btn-info stageType">
+                        <br>
+                        <label for="stageType_P" class="stageType btn btn-info">
                             <input id="stageType_P" type="radio" name="stageType" value="P">плэй-офф
                         </label>
                     </div>
 
-                </div>
-                <br>
-                <div class="form-group btn-group">
-                    <label for="stageName" class="btn-label">Название стадии</label> 
-                    <input id="stageName" class="form-control" type="text" name="stageName" value="">
                 </div>
 
             </div>

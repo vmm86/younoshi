@@ -191,16 +191,19 @@ $('#modify-modal').on('show.bs.modal', function (modal) {
         var {{ field }} = $('tr[data-pk-id="' + PK_ID + '"]').attr('data-{{ field|replace('_', '-')|lower }}');
         console.log('{{ field }}: ', {{ field }});
 
-        {% if field == 'stageType' %}
-            {% if sastype == "Z" %} stageType = "зоне";   {% endif %}
-            {% if sastype == "G" %} stageType = "группе"; {% endif %}
-            {% if sastype == "P" %} stageType = "этапе";  {% endif %}
-            console.log('{{ field }}: ', {{ field }});
-        {% endif %}
+        {% if listSAST or listGP %}
+            {% if field == 'stageType' %}
+                {% if sastype == "Z" %} stageType = "зоне";   {% endif %}
+                {% if sastype == "G" %} stageType = "группе"; {% endif %}
+                {% if sastype == "P" %} stageType = "этапе";  {% endif %}
+                console.log('{{ field }}: ', {{ field }});
+            {% endif %}
 
-        {% if field == 'stageName' %}
-            stageName = "{{ sasname }}";
-            console.log('{{ field }}: ', {{ field }});
+            {% if field == 'stageName' %}
+                stageName = "{{ sasname }}";
+                console.log('{{ field }}: ', {{ field }});
+            {% endif %}
+
         {% endif %}
 
     {% endfor %}
