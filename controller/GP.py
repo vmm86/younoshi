@@ -3,7 +3,7 @@
 
 from exceptions import TypeError, AttributeError, KeyError
 
-import datetime
+from datetime import date, datetime
 
 from flask import session, render_template, url_for, request, redirect, flash
 
@@ -21,6 +21,8 @@ def listGP(seasonid, ageid, sasid):
     # Список сезонов и возрастов, название текущего сезона и возраста, название и тип игровой стадии текущего игрового этапа, тип текущего соревнования
     listSeason = Season.select().order_by(Season.season_ID.asc())
     listAge = Age.select().order_by(Age.ageName)
+    for age in listAge:
+        age.ageName = int(date.today().year) - int(age.ageName)
     try:
         seasonname  = Season.get(season_ID = seasonid).seasonName
         agename     = Age.get(age_ID = ageid).ageName
@@ -59,7 +61,7 @@ def listGP(seasonid, ageid, sasid):
     except (TypeError, AttributeError):
         gnmax = 0
         tnmax = 1
-        dmax  = datetime.datetime.now().strftime('%d.%m.%Y')
+        dmax  = datetime.now().strftime('%d.%m.%Y')
     finally:
         gnmax += 1
 
@@ -129,7 +131,7 @@ def createGP(seasonid, ageid, sasid):
     if stagenumber == '':
         stagenumber = None
 
-    gamedate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+    gamedate = datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
 
     htid = request.form['filterHT']
     gtid = request.form['filterGT']
@@ -212,7 +214,7 @@ def updateGP(seasonid, ageid, sasid, gpid):
     if stagenumber == '':
         stagenumber = None
 
-    gamedate = datetime.datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+    gamedate = datetime.strptime(request.form['gameDate'], '%d.%m.%Y').strftime('%Y-%m-%d')
 
     htid = request.form['filterHT']
     gtid = request.form['filterGT']

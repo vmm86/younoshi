@@ -1,6 +1,8 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
+from datetime import date
+
 from flask import session, render_template, url_for, request, redirect, flash
 
 from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
@@ -25,9 +27,14 @@ def listTeam(cityid, schoolid):
         schoolname = None
 
     # Список команд в выбранной школе
-    listTeam = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).order_by(Team.teamName)
-    # Список возрастов
+    listTeam = Team.select().join(School).where(School.school_ID == schoolid).join(City).where(City.city_ID == cityid).switch(Team).join(Age).order_by(Team.teamName)
+    for lt in listTeam:
+        lt.age_ID.ageName = int(date.today().year) - int(lt.age_ID.ageName)
+
+    # Список возрастов по состоянию на текущий год
     listAge  = Age.select().order_by(Age.ageName)
+    for age in listAge:
+        age.ageName = int(date.today().year) - int(age.ageName)
 
     # Переменные для автозаполнения модальной формы добавления/обновления данных в JS-скрипте шаблона
     ## Список полей

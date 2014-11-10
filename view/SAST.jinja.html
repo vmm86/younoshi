@@ -8,7 +8,7 @@
 
 <div class="row">
 
-    <div class="col-lg-5" style="text-align: right;">
+    <div class="col-lg-4" style="text-align: right;">
  
         <div class="btn-group">
             <label class="btn-label" for="chooseSeason">Выберите сезон</label>
@@ -26,7 +26,7 @@
 
     </div>
 
-    <div class="col-lg-2" style="text-align: center;">
+    <div class="col-lg-4" style="text-align: center;">
 
         <div class="btn-group" data-toggle="buttons">
             <label class="btn-label">Выберите возраст</label>
@@ -34,7 +34,7 @@
             {% for la in listAge %}
                 {% if loop.index in range(1,5) %}
                 <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAST" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAST" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
                 </label>
                 {% endif %}
             {% endfor %}
@@ -43,7 +43,7 @@
             {% for la in listAge %}
                 {% if loop.index in range(5,9) %}
                 <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAST" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAST" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
                 </label>
                 {% endif %}
             {% endfor %}
@@ -52,13 +52,13 @@
 
     </div>
 
-    <div class="col-lg-5" style="text-align: left;"></div>
+    <div class="col-lg-4" style="text-align: left;"></div>
 
 </div>
 
 <div class="row">
 
-    <div class="col-lg-5" style="text-align: right;">
+    <div class="col-lg-4" style="text-align: right;">
 
         <div class="form-group btn-group">
             <label class="btn-label" for="chooseZone">&nbsp;</label>
@@ -77,7 +77,7 @@
 
     </div>
 
-    <div class="col-lg-2" style="text-align: center;">
+    <div class="col-lg-4" style="text-align: center;">
 
         <div id="zoneGroupPlayoffToggle" class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
             <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label><br>
@@ -101,7 +101,7 @@
 
     </div>
 
-    <div class="col-lg-5" style="text-align: left;">
+    <div class="col-lg-4" style="text-align: left;">
 
         <div class="btn-group">
             <label class="btn-label" for="chooseGroup">&nbsp;</label>

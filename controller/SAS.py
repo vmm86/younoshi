@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-import datetime
+from datetime import date, datetime
 
 from flask import session, render_template, url_for, request, redirect, flash
 
@@ -16,9 +16,11 @@ from User import login_required
 ## Игровые этапы
 @login_required
 def listSAS(seasonid, ageid):
-    # Список сезонов и возрастов, название текущего сезона и возраста
+    # Список сезонов и возрастов по состоянию на текущий год, название текущего сезона и возраста
     listSeason = Season.select().order_by(Season.season_ID.asc())
     listAge    = Age.select().order_by(Age.ageName)
+    for age in listAge:
+        age.ageName = int(date.today().year) - int(age.ageName)
     try:
         seasonname = Season.get(season_ID = seasonid).seasonName
         agename    = Age.get(age_ID = ageid).ageName
@@ -84,9 +86,9 @@ def createSAS(seasonid, ageid):
         finishdate = None
 
     if startdate:
-        startdate  = datetime.datetime.strptime(startdate,  '%d.%m.%Y').strftime('%Y-%m-%d')
+        startdate  = datetime.strptime(startdate,  '%d.%m.%Y').strftime('%Y-%m-%d')
     if finishdate:
-        finishdate = datetime.datetime.strptime(finishdate, '%d.%m.%Y').strftime('%Y-%m-%d')
+        finishdate = datetime.strptime(finishdate, '%d.%m.%Y').strftime('%Y-%m-%d')
 
     # Сохранение новой записи в БД
     if session['demo']:
@@ -126,9 +128,9 @@ def updateSAS(seasonid, ageid, sasid):
         finishdate = None
 
     if startdate:
-        startdate  = datetime.datetime.strptime(startdate,  '%d.%m.%Y').strftime('%Y-%m-%d')
+        startdate  = datetime.strptime(startdate,  '%d.%m.%Y').strftime('%Y-%m-%d')
     if finishdate:
-        finishdate = datetime.datetime.strptime(finishdate, '%d.%m.%Y').strftime('%Y-%m-%d')
+        finishdate = datetime.strptime(finishdate, '%d.%m.%Y').strftime('%Y-%m-%d')
 
     # Обновление текущей записи в БД
     if session['demo']:

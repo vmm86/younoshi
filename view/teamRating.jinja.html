@@ -8,60 +8,58 @@
 
 <div class="row">
 
-    <div class="col-md-5">
-        <form id="filterSeason_from" class="flat-form" name="filterSeason_from" style="text-align: right;">
-            <div class="btn-group">
-                <label class="btn-label" for="filterSeasonforTR_from">Начальный сезон</label>
-                <br>
-                <select id="filterSeasonforTR_from" name="filterSeasonforTR_from" class="selectpicker" data-live-search="true" data-style="btn-info">
-                    <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_from %}selected{% endif %}{% endfor %}>выберите сезон</option>
-                {% for ls in listSeason %}
-                    <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_from %}selected{% endif %}>{{ ls.seasonName }}</option>
-                {% endfor %}
-                </select>
-            </div>
-        </form>
+    <div class="col-md-2 col-md-offset-2" style="text-align: center;">
+
+        <div class="btn-group">
+            <label class="btn-label" for="filterSeasonforTR_from">Начальный сезон</label>
+            <br>
+            <select id="filterSeasonforTR_from" name="filterSeasonforTR_from" class="selectpicker" data-live-search="true" data-style="btn-info">
+                <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_from %}selected{% endif %}{% endfor %}>выберите сезон</option>
+            {% for ls in listSeason %}
+                <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_from %}selected{% endif %}>{{ ls.seasonName }}</option>
+            {% endfor %}
+            </select>
+        </div>
+
     </div>
 
-    <div class="col-md-2">
-        <form id="filterSeason_to" class="flat-form" name="filterSeason_to" style="text-align: center;">
-            <div class="btn-group">
-                <label class="btn-label" for="filterSeasonforTR_to">Конечный сезон</label>
-                <br>
-                <select id="filterSeasonforTR_to" name="filterSeasonforTR_to" class="selectpicker" data-live-search="true" data-style="btn-info">
-                    <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_to %}selected{% endif %}{% endfor %}>выберите сезон</option>
-                {% for ls in listSeason %}
-                    <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_to %}selected{% endif %}>{{ ls.seasonName }}</option>
-                {% endfor %}
-                </select>
-            </div>
-        </form>
+    <div class="col-md-2" style="text-align: center;">
+
+        <div class="btn-group">
+            <label class="btn-label" for="filterSeasonforTR_to">Конечный сезон</label>
+            <br>
+            <select id="filterSeasonforTR_to" name="filterSeasonforTR_to" class="selectpicker" data-live-search="true" data-style="btn-info">
+                <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_to %}selected{% endif %}{% endfor %}>выберите сезон</option>
+            {% for ls in listSeason %}
+                <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_to %}selected{% endif %}>{{ ls.seasonName }}</option>
+            {% endfor %}
+            </select>
+        </div>
+
     </div>
 
-    <div class="col-md-5">
-        <form id="filterAge" class="flat-form" name="filterAge" style="text-align: left;">
-            <div class="form-group btn-group" data-toggle="buttons">
-                <label class="btn-label">Возраст</label>
-                <div class="btn-group listAgeTop">
-                {% for la in listAge %}
-                    {% if loop.index in range(1,5) %}
-                    <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforTR" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
-                    </label>
-                    {% endif %}
-                {% endfor %}
-                </div>
-                <div class="btn-group listAgeBottom">
-                {% for la in listAge %}
-                    {% if loop.index in range(5,9) %}
-                    <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforTR" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
-                    </label>
-                    {% endif %}
-                {% endfor %}
-                </div>
-            </div>
-        </form>
+    <div class="col-md-3" style="text-align: center;">
+
+        <div class="filterAge form-group btn-group" data-toggle="buttons">
+            <label class="btn-label">Возраст</label>
+            <br>
+            {% for la in listAge %}
+                {% if loop.index in range(1,5) %}
+                <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforTR" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
+                </label>
+                {% endif %}
+            {% endfor %}
+            <br>
+            {% for la in listAge %}
+                {% if loop.index in range(5,9) %}
+                <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforTR" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
+                </label>
+                {% endif %}
+            {% endfor %}
+        </div>
+
     </div>
 
 </div>

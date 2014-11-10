@@ -31,7 +31,7 @@
                 {% for la in listAge %}
                     {% if loop.index in range(1,5) %}
                     <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAS" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAS" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
                     </label>
                     {% endif %}
                 {% endfor %}
@@ -40,7 +40,7 @@
                 {% for la in listAge %}
                     {% if loop.index in range(5,9) %}
                     <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAS" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }}
+                        <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforSAS" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
                     </label>
                     {% endif %}
                 {% endfor %}

@@ -1,6 +1,8 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
+from datetime import date
+
 from flask import session, render_template, url_for, request, redirect, flash
 
 from werkzeug.exceptions import default_exceptions, BadRequest, HTTPException, NotFound
@@ -14,9 +16,11 @@ from User import login_required
 ## Команды в игровых этапах
 @login_required
 def listSAST(seasonid, ageid, sasid):
-    # Список сезонов и возрастов, название текущего сезона и возраста, название и тип игровой стадии текущего игрового этапа
+    # Список сезонов и возрастов по состоянию на текущий год, название текущего сезона и возраста, название и тип игровой стадии текущего игрового этапа
     listSeason = Season.select().order_by(Season.season_ID.asc())
     listAge = Age.select().order_by(Age.ageName)
+    for age in listAge:
+        age.ageName = int(date.today().year) - int(age.ageName)
     try:
         seasonname = Season.get(season_ID = seasonid).seasonName
         agename    = Age.get(age_ID = ageid).ageName
