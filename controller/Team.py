@@ -38,9 +38,9 @@ def listTeam(cityid, schoolid):
 
     # Переменные для автозаполнения модальной формы добавления/обновления данных в JS-скрипте шаблона
     ## Список полей
-    modifyFields = ['teamName', 'age_ID', 'ageName']
+    modifyFields = ['teamName', 'filterAge', 'ageName']
     ## Список групп радиокнопок
-    modifyRadios = ['age_ID']
+    modifyRadios = ['filterAge']
     ## Заголовки модального окна
     createHeader = ['"Создать новую юношескую команду"']
     updateHeader = ['"Изменить "', 'teamName', '" (возраст "', 'ageName', '")"']
@@ -73,7 +73,7 @@ def listTeam(cityid, schoolid):
 def createTeam(cityid, schoolid):
     # Получение полей формы из шаблона
     teamname = request.form['teamName']
-    ageid    = request.form['age_ID']
+    ageid    = request.form['filterAge']
 
     # Сохранение новой записи в БД
     if session['demo']:
@@ -95,7 +95,7 @@ def createTeam(cityid, schoolid):
 def updateTeam(cityid, schoolid, teamid):
     # Получение полей формы из шаблона
     teamname = request.form['teamName']
-    ageid    = request.form['age_ID']
+    ageid    = request.form['filterAge']
 
     # Обновление текущей записи в БД
     if session['demo']:

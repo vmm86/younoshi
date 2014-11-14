@@ -18,28 +18,36 @@
 <!--
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap-theme.min.css') }}">
 -->
-<!--     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='data-tables/css/dataTables.fixedHeader.css') }}"> -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='data-tables/css/dataTables.bootstrap.css') }}">
-    
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='data-tables/css/dataTables.responsive.css') }}">
+<!--     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatables/extensions/FixedHeader/css/dataTables.fixedHeader.css') }}"> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatables/media/css/dataTables.bootstrap.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatables/extensions/Responsive/css/dataTables.responsive.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datetimepicker/css/jquery.datetimepicker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat-ui/css/flat-ui.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='customization/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='customization/css/mq.css') }}">
 </head>
 <body role="document">
 
 {% set active_group = active_group|default('') -%}
 {% set active_page  =  active_page|default('') -%}
 
-<div id="top-menu" class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav id="top-menu" class="navbar navbar-default navbar-fixed-top" role="navigation">
 
 {% if session['logged_in'] %}
 
-    <div class="userName"><a href="/">{{ session['userName'] }}</a></div>
+    <div class="navbar-header">
+        <a href="/" class="navbar-brand">{{ session['userName'] }}</a>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-menu-items">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
 
     <div class="container">
 
-        <div class="navbar-collapse collapse">
+        <div id="top-menu-items" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown {% if active_group == 'Source' %}active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown">Исходные данные <b class="caret"></b></a>
@@ -78,7 +86,7 @@
 
 {% endif %}
 
-</div>
+</nav>
 
 <div class="container wrapper" role="main">
 
@@ -92,10 +100,10 @@
 
 <script src="{{ url_for('static', filename='jquery-2.1.1.min.js') }}"></script>
 
-<script src="{{ url_for('static', filename='data-tables/js/jquery.dataTables.js') }}"></script>
-<script src="{{ url_for('static', filename='data-tables/js/dataTables.bootstrap.js') }}"></script>
-<!-- <script src="{{ url_for('static', filename='data-tables/extensions/FixedHeader/js/dataTables.fixedHeader.js') }}"></script> -->
-<script src="{{ url_for('static', filename='data-tables/js/dataTables.responsive.js') }}"></script>
+<script src="{{ url_for('static', filename='datatables/media/js/jquery.dataTables.js') }}"></script>
+<script src="{{ url_for('static', filename='datatables/media/js/dataTables.bootstrap.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='datatables/extensions/FixedHeader/js/dataTables.fixedHeader.js') }}"></script> -->
+<script src="{{ url_for('static', filename='datatables/extensions/Responsive/js/dataTables.responsive.js') }}"></script>
 <script src="{{ url_for('static', filename='datetimepicker/js/jquery.datetimepicker.js') }}"></script>
 
 <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
@@ -113,14 +121,18 @@
 <![endif]-->
 
 <script type="text/javascript">
-    var dtable = $('table').DataTable({
+    var dtable = $('.dt-responsive').DataTable({
+        sDom:
+            "<'row'<'col-xs-12 col-sm-6 col-md-6 col-lg-6 center'l><'col-xs-12 col-sm-6 col-md-6 col-lg-6 center'f>>"+
+            "tr"+
+            "<'row'<'col-xs-12 col-sm-6 col-md-6 col-lg-6 center'i><'col-xs-12 col-sm-6 col-md-6 col-lg-6 center'p>>",
         responsive: {
             breakpoints: [
                 { name: 'desktop',  width: Infinity },
-                { name: 'tablet-l', width: 1280 },
-                { name: 'tablet-p', width: 900 },
-                { name: 'mobile-l', width: 768 },
-                { name: 'mobile-p', width: 480 }
+                { name: 'tablet-l', width: 1170 },
+                { name: 'tablet-p', width: 970  },
+                { name: 'mobile-l', width: 750  },
+                { name: 'mobile-p', width: 480  }
             ]
         },
         oLanguage: {
@@ -140,6 +152,10 @@
         },
         iDisplayLength: 20,
         aLengthMenu: [ 5, 10, 20, 50, 100 ],
+        aoColumnDefs: [
+            { 'bSortable': false, 'aTargets': [ 0, 1, -1 ] }
+        ],
+        aaSorting: [ [2,'asc'] ]
     });
 
 //    new $.fn.dataTable.FixedHeader( table );

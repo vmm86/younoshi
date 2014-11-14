@@ -8,49 +8,49 @@
 
 <div class="row">
 
-    <div class="col-md-6">
-        <form id="filterSeason_from" class="flat-form" name="filterSeason_from" style="text-align: right;">
-            <div class="btn-group">
-                <label class="btn-label" for="filterSeasonforSR_from">Начальный сезон</label>
-                <br>
-                <select id="filterSeasonforSR_from" name="filterSeasonforSR_from" class="selectpicker" data-live-search="true" data-style="btn-info">
-                    <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_from %}selected{% endif %}{% endfor %}>выберите сезон</option>
-                {% for ls in listSeason %}
-                    <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_from %}selected{% endif %}>{{ ls.seasonName }}</option>
-                {% endfor %}
-                </select>
-            </div>
-        </form>
+    <div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-3 col-md-offset-3 col-lg-3 col-lg-offset-3" style="text-align: center;">
+
+        <div class="btn-group">
+            <label class="btn-label" for="filterSeason_from">Начальный сезон</label>
+            <br>
+            <select name="filterSeason_from" class="selectpicker" data-live-search="true" data-style="btn-info">
+                <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_from %}selected{% endif %}{% endfor %}>выберите сезон</option>
+            {% for ls in listSeason %}
+                <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_from %}selected{% endif %}>{{ ls.seasonName }}</option>
+            {% endfor %}
+            </select>
+        </div>
+
     </div>
 
-    <div class="col-md-6">
-        <form id="filterSeason_to" class="flat-form" name="filterSeason_to" style="text-align: left;">
-            <div class="btn-group">
-                <label class="btn-label" for="filterSeasonforSR_to">Конечный сезон</label>
-                <br>
-                <select id="filterSeasonforSR_to" name="filterSeasonforSR_to" class="selectpicker" data-live-search="true" data-style="btn-info">
-                    <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_to %}selected{% endif %}{% endfor %}>выберите сезон</option>
-                {% for ls in listSeason %}
-                    <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_to %}selected{% endif %}>{{ ls.seasonName }}</option>
-                {% endfor %}
-                </select>
-            </div>
-        </form>
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3" style="text-align: center;">
+
+        <div class="btn-group">
+            <label class="btn-label" for="filterSeason_to">Конечный сезон</label>
+            <br>
+            <select name="filterSeason_to" class="selectpicker" data-live-search="true" data-style="btn-info">
+                <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_to %}selected{% endif %}{% endfor %}>выберите сезон</option>
+            {% for ls in listSeason %}
+                <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_to %}selected{% endif %}>{{ ls.seasonName }}</option>
+            {% endfor %}
+            </select>
+        </div>
+
     </div>
 
 </div>
 
 <div class="row">
 
-    <div class="col-lg-1"></div>
-
-    <div class="col-lg-10">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 col-lg-10 col-lg-offset-1">
         {% if not seasonid_from == 0 %}
         {% if not seasonid_to == 0 %}
         {% if not listTR_count == 0 %}
-        <table id="teamRating" class="table-striped table-hover table-condensed display responsive nowrap" cellspacing="0" cellpadding="0">
+        <table id="teamRating" class="table-striped table-hover table-condensed display dt-responsive nowrap" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
+                <td class="dt max-tablet"            rowspan="2"></td>
+                <td class="tableInputLeft never"     rowspan="2">
                 <td class="tableNumber all"          rowspan="2">#</td>
                 <td class="tableText   all"          rowspan="2">Юношеская команда</td>
                 <td class="tableNumber min-desktop"  rowspan="2">Игры</td>
@@ -58,6 +58,7 @@
                 <td class="tableNumber min-desktop"  colspan="3">Мячи</td>
                 <td class="tableNumber min-desktop"  colspan="4">Плэй-офф</td>
                 <td class="tableNumber min-mobile-l" rowspan="2">Рейтинг</td>
+                <td class="tableInputRight never"    rowspan="2">
             </tr>
             <tr>
                 <td class="tableNumber min-desktop">В</td>
@@ -74,6 +75,8 @@
         <tbody>
             {% for lsr in listSR %}
             <tr>
+                <td class="dt">&nbsp;</td>
+                <td class="tableInputLeft">
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">  {{ lsr.schoolName }} ({{ lsr.cityName }})</td>
                 <td class="tableNumber">{% if lsr.games       != 0 %} {{ lsr.games }}       {% endif %}</td>
@@ -81,12 +84,13 @@
                 <td class="tableNumber">{% if lsr.equals      != 0 %} {{ lsr.equals }}      {% endif %}</td>
                 <td class="tableNumber">{{ lsr.scored }}</td>
                 <td class="tableNumber">{{ lsr.missed }}</td>
-                <td class="tableNumber">{{ lsr.goals }}</td>
+                <td class="tableNumber"><span class="{% if lsr.goals > 0 %}positive{% endif %} {% if lsr.goals < 0 %}negative{% endif %}">{{ lsr.goals }}</span></td>
                 <td class="tableNumber">{% if lsr.playoff     != 0 %} {{ lsr.playoff }}     {% endif %}</td>
                 <td class="tableNumber">{% if lsr.playoff_11m != 0 %} {{ lsr.playoff_11m }} {% endif %}</td>
                 <td class="tableNumber">{% if lsr.playoff_SF  != 0 %} {{ lsr.playoff_SF }}  {% endif %}</td>
                 <td class="tableNumber">{% if lsr.playoff_F   != 0 %} {{ lsr.playoff_F }}   {% endif %}</td>
                 <td class="tableNumber"><b>{{ lsr.schoolRating }}</b></td>
+                <td class="tableInputRight">
             </tr>
             {% endfor %}
         </tbody>
@@ -95,8 +99,6 @@
         {% endif %}
         {% endif %}
     </div>
-
-    <div class="col-lg-1"></div>
 
 </div>
 

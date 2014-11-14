@@ -1,0 +1,94 @@
+@charset "utf-8";
+
+@media all and (max-width: 768px) {
+
+    .container.wrapper,
+    .col-xs-12 {
+        padding: 0.1rem;
+    }
+
+    .dt {
+        background: transparent;
+        border: none;
+        padding: 0 1rem !important;
+        width: auto !important;
+    }
+
+    table.dataTable.dtr-inline.collapsed tbody td:first-child:before, 
+    table.dataTable.dtr-inline.collapsed tbody th:first-child:before {
+        box-shadow: none;
+        box-sizing: content-box;
+
+        background-color: #3498DB;
+
+        border: none;
+        border-radius: 2.5rem;
+
+        padding: 0 !important;
+        margin: 0 0 0 -1rem;
+
+        display: block;
+        position: absolute;
+
+        color: #FFF;
+        content: "\002B";
+        font-size: 2.5rem;
+        font-weight: bold;
+        line-height: 2.5rem;
+        text-align: center;
+
+        height: 2.5rem;
+        width:  2.5rem;
+
+        top:  15%;
+        left: 40%;
+    }
+
+    table.dataTable.dtr-inline.collapsed tbody tr.parent td:first-child:before, 
+    table.dataTable.dtr-inline.collapsed tbody tr.parent th:first-child:before {
+        background-color: #3498DB;
+        content: '\2013';
+    }
+
+    .tableInputLeft,
+    .tableInputRight {
+        width: 2rem;
+    }
+
+    .tableInputLeft  a span,
+    .tableInputRight a span {
+        display: none;
+    }
+
+    .tableInputLeft input, 
+    .tableInputLeft button, 
+    .tableInputLeft a {
+        text-align: center;
+        width: 3rem;
+        left: 0rem;
+    }
+    .tableInputRight input,
+    .tableInputRight button,
+    .tableInputRight a {
+        text-align: center;
+        width: 3rem;
+        right: 0rem;
+    }
+
+    .tableInputLeft input:hover,
+    .tableInputLeft button:hover,
+    .tableInputLeft a:hover {
+        left: 0;
+    }
+
+    .tableInputRight input:hover,
+    .tableInputRight button:hover,
+    .tableInputRight a:hover {
+        right: 0;
+    }
+
+    .modal-lg {
+        width: 100%;
+    }
+
+}

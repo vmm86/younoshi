@@ -5,12 +5,12 @@ $(document).ready(function() {
     function routeSAST(seasonid, ageid, sasid) {
         console.log('season ', seasonid, 'age', ageid, 'sas', sasid);
         path = '/season/' + seasonid + '/age/' + ageid + '/stage/' + sasid + '/team';
-        window.location.href = path;
+        return window.location.href = path;
     }
 
 /// Фильтр списка команд в игровой стадии по сезону
 
-    $('#filterSeasonforSAST').change(function() {
+    $('[name="filterSeason"]').change(function() {
         var seasonid = $(this).val();
         if (typeof seasonid === "undefined")
             seasonid = 0;
@@ -24,8 +24,8 @@ $(document).ready(function() {
 
 /// Фильтр списка команд в игровой стадии по возрасту
 
-    $('input[name="filterAgeforSAST"]').change(function() {
-        var seasonid = $('#filterSeasonforSAST').val();
+    $('[name="filterAge"]').change(function() {
+        var seasonid = $('[name="filterSeason"]').val();
         if (typeof seasonid === "undefined")
             seasonid = 0;
 
@@ -41,11 +41,11 @@ $(document).ready(function() {
 /// Фильтр списка команд в игровой стадии по самой игровой стадии
 
     $('#chooseZone, #chooseGroup, #zoneGroupPlayoffToggle_P').change(function() {
-        var seasonid = $('#filterSeasonforSAST').val();
+        var seasonid = $('[name="filterSeason"]').val();
         if (typeof seasonid === "undefined")
             seasonid = 0;
 
-        var ageid = $('input[name="filterAgeforSAST"]').val();
+        var ageid = $('[name="filterAge"]').val();
         if (typeof ageid === "undefined")
             ageid = 0;
 
@@ -60,10 +60,10 @@ $(document).ready(function() {
 
 /// Фильтр школ (для команд) по городам
 
-    $('#filterCity').change(function() {
+    $('[name="filterCity"]').change(function() {
         var cityid         = $(this).val();
-        var school_of_city = '#filterSchool option[data-city-id="' + cityid + '"]';
-        $('#filterSchool option:not(:first-child)').removeAttr('selected').hide();
+        var school_of_city = '[name="filterSchool"] option[data-city-id="' + cityid + '"]';
+        $('[name="filterSchool"] option:not(:first-child)').removeAttr('selected').hide();
             console.log('s-hide');
         $(school_of_city).show();
             console.log('s-show');
@@ -75,10 +75,10 @@ $(document).ready(function() {
 
 /// Фильтр команд по школам
 
-    $('#filterSchool').change(function() {
+    $('[name="filterSchool"]').change(function() {
         var schoolid       = $(this).val();
-        var team_of_school = '#filterTeam option[data-school-id="' + schoolid + '"]';
-        $('#filterTeam option:not(:first-child)').removeAttr('selected').hide();
+        var team_of_school = '[name="filterTeam"] option[data-school-id="' + schoolid + '"]';
+        $('[name="filterTeam"] option:not(:first-child)').removeAttr('selected').hide();
             console.log('t-hide');
         $(team_of_school).show();
             console.log('t-show');
@@ -88,7 +88,7 @@ $(document).ready(function() {
         //     console.log('t-remove');
     });
 
-    $('#filterTeam').change(function() {
+    $('[name="filterTeam"]').change(function() {
         teamid = $(this).val();
         console.log('team ID is ', teamid);
     });

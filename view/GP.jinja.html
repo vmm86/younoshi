@@ -8,12 +8,12 @@
 
 <div class="row">
 
-    <div class="col-lg-4" style="text-align: right;">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;">
  
         <div class="btn-group">
-            <label class="btn-label" for="chooseSeason">Выберите сезон</label>
+            <label class="btn-label" for="chooseSeason">Сезон</label>
             <br>
-            <select id="filterSeasonforGP" name="filterSeasonforGP" class="selectpicker" data-live-search="true" data-style="btn-info">
+            <select name="filterSeason" class="selectpicker" data-live-search="true" data-style="btn-info">
                 <option value="0" {% for lse in listSeason %}{% if lse.season_ID == seasonid %}selected{% endif %}{% endfor %}>
                     {% if listSeason.count() >  0 %}выберите сезон{% endif %}
                     {% if listSeason.count() == 0 %}{% endif %}
@@ -26,23 +26,27 @@
 
     </div>
 
-    <div class="col-lg-4" style="text-align: center;">
+</div>
 
-        <div id="filterAge" class="filterAge btn-group" data-toggle="buttons">
-            <label class="btn-label">Выберите возраст</label>
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;">
+
+        <div class="filterAge btn-group form-group" data-toggle="buttons">
+            <label class="btn-label">Возраст</label>
             <br>
             {% for la in listAge %}
                 {% if loop.index in range(1,5) %}
-                <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforGP" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
+                <label for="filterAge_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                    <input id="filterAge_{{ la.age_ID }}" type="radio" name="filterAge" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
                 </label>
                 {% endif %}
             {% endfor %}
             <br>
             {% for la in listAge %}
                 {% if loop.index in range(5,9) %}
-                <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforGP" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
+                <label for="filterAge_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                    <input id="filterAge_{{ la.age_ID }}" type="radio" name="filterAge" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
                 </label>
                 {% endif %}
             {% endfor %}
@@ -50,13 +54,11 @@
 
     </div>
 
-    <div class="col-lg-4" style="text-align: left;"></div>
-
 </div>
 
 <div class="row">
 
-    <div class="col-lg-4" style="text-align: right;">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-4 col-sm-offset-0 col-md-3 col-md-offset-2 col-lg-3 col-lg-offset-2" style="text-align: center;">
 
         <div class="form-group btn-group">
             <label class="btn-label" for="chooseZone">&nbsp;</label>
@@ -75,10 +77,10 @@
 
     </div>
 
-    <div class="col-lg-4" style="text-align: center;">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-4 col-sm-offset-0 col-md-2 col-md-offset-0 col-lg-2 col-lg-offset-0" style="text-align: center;">
 
         <div id="zoneGroupPlayoffToggle" class="zoneGroupPlayoffToggle btn-group btn-toggle" data-toggle="buttons">
-            <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Выберите стадию</label>
+            <label class="btn-label" for="chooseSeason" style="width: 100%; text-align: center;">Стадия</label>
             <br>
             <label class="btn btn-info {% if sastype == "Z" %}active{% endif %} {% if listSAS_Z.count() == 0 %}disabled{% endif %}">
                 <input id="zoneGroupPlayoffToggle_Z" type="radio" name="zoneGroupPlayoffToggle" value="Z" 
@@ -100,7 +102,7 @@
 
     </div>
 
-    <div class="col-lg-4" style="text-align: left;">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-4 col-sm-offset-0 col-md-3 col-md-offset-0 col-lg-3 col-lg-offset-0" style="text-align: center;">
 
         <div class="btn-group">
             <label class="btn-label" for="chooseGroup">&nbsp;</label>
@@ -124,38 +126,38 @@
 
 <div class="row">
 
-    <div class="col-lg-1"></div>
-
-    <div class="col-lg-10">
-        <table id="listGP" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 col-lg-10 col-lg-offset-1">
+        <table id="listGP" class="table-striped table-hover table-condensed table-responsive display dt-responsive wrap" cellspacing="0" cellpadding="0">
         <thead>
             <tr data-pk-id="0" data-gnmax="{{ gnmax }}" data-tnmax="{{ tnmax }}" data-dmax="{{ dmax }}">
-                <td class="tableInputLeft">
+                <td class="dt max-tablet"></td>
+                <td class="tableInputLeft all">
                     <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="0">
-                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
+                        <i class="glyphicon glyphicon-plus"></i><span>&nbsp;&nbsp;Добавить</span>
                     </a>
                 </td>
-                <td class="tableNumber">#</td>
-                <td class="tableNumber">Тур</td>
+                <td class="tableNumber all">#</td>
+                <td class="tableNumber min-tablet">Тур</td>
             {% if sasgametype == "CHA" %}
-                <td class="tableNumber">Круг</td>
+                <td class="tableNumber min-tablet">Круг</td>
             {% endif %}
-                <td class="tableText">Дата матча</td>
-                <td class="tableText">Команда хозяев</td>
-                <td class="tableScore">Счёт</td>
-                <td class="tableText">Команда гостей</td>
+                <td class="tableText min-tablet">Дата матча</td>
+                <td class="tableText all">Команда хозяев</td>
+                <td class="tableScore min-tablet">Счёт</td>
+                <td class="tableText all">Команда гостей</td>
             {% if sastype == "P" %}
-                <td class="tableNumber">ПФ/Ф</td>
+                <td class="tableNumber min-tablet">ПФ/Ф</td>
             {% endif %}
-                <td class="tableInputRight"></td>
+                <td class="tableInputRight all"></td>
             </tr>
         </thead>
         <tbody>
             {% for lgp in listGP %}
             <tr data-pk-id="{{ lgp.GP_ID }}" data-gamenumber="{{ lgp.gameNumber }}" data-tournumber="{{ lgp.tourNumber }}" data-stagenumber="{{ lgp.stageNumber }}" data-gamedate="{{ lgp.gameDate.strftime('%d.%m.%Y') }}" data-filterht="{{ lgp.homeTeam_ID.team_ID.team_ID }}" data-filtergt="{{ lgp.guestTeam_ID.team_ID.team_ID }}" data-htscoregame="{{ lgp.homeTeamScoreGame }}" data-gtscoregame="{{ lgp.guestTeamScoreGame }}" data-htscore11m="{{ lgp.homeTeamScore11m }}" data-htscore11m="{{ lgp.guestTeamScore11m }}" data-is-semifinal="{{ lgp.is_Semifinal }}" data-is-final="{{ lgp.is_Final }}">
+                <td class="dt">&nbsp;</td>
                 <td class="tableInputLeft">
-                    <a class="form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ lgp.GP_ID }}">
-                        <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
+                    <a class="update-button form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ lgp.GP_ID }}">
+                        <i class="glyphicon glyphicon-pencil"></i><span>&nbsp;&nbsp;Изменить</span>
                     </a>
                 </td>
                 <td class="tableNumber">{{ lgp.gameNumber }}</td>
@@ -187,7 +189,7 @@
             {% endif %}
                 <td class="tableInputRight">
                     <a class="delete-button form-control flat btn-danger input-sm" data-pk-id="{{ lgp.GP_ID }}">
-                        <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                        <span>Удалить&nbsp;&nbsp;</span><i class="glyphicon glyphicon-remove"></i>
                     </a>
                 </td>
             </tr>
@@ -195,8 +197,6 @@
         </tbody>
         </table>
     </div>
-
-    <div class="col-lg-1"></div>
 
 </div>
 

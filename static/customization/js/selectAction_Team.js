@@ -1,4 +1,6 @@
-$( document ).ready(function() {
+$(document).ready(function() {
+
+//  Отображение данных
 
     function routeTeam(cityid, schoolid) {
         console.log('city ', cityid, 'school', schoolid);
@@ -6,9 +8,9 @@ $( document ).ready(function() {
         return window.location.href = path;
     }
 
-//  Фильтр школ по городам
+///  Фильтр школ по городам
 
-    $('#filterCityforTeam').change(function() {
+    $('[name="filterCity"]').change(function() {
         var cityid = $(this).val();
         if (typeof cityid === "undefined")
             cityid = 0;
@@ -18,10 +20,10 @@ $( document ).ready(function() {
         routeTeam(cityid, schoolid);
     });
 
-//  Фильтр команд по школам
+///  Фильтр команд по школам
 
-    $('#filterSchoolforTeam').change(function() {
-        var cityid = $('#filterCityforTeam').val();
+    $('[name="filterSchool"]').change(function() {
+        var cityid = $('[name="filterCity"]').val();
         if (typeof cityid === "undefined")
             cityid = 0;
 

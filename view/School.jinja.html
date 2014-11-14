@@ -6,57 +6,63 @@
 
 {% block body %}
 
-<div class="row" style="margin-left: 15rem;">
-    <div class="btn-group">
-        <label class="btn-label" for="filterCityforSchool">Выберите город</label>
-        <select id="filterCityforSchool" class="selectpicker" name="filterCityforSchool" data-live-search="true" data-style="btn-info">
-            <option value="0" {% for lc in listCity %}{% if lc.city_ID == cityid %} selected{% endif %}{% endfor %}>выберите город</option>
-        {% for lc in listCity %}
-            <option value="{{ lc.city_ID }}" {% if lc.city_ID == cityid %} selected{% endif %}>{{ lc.cityName }}</option>
-        {% endfor %}
-        </select>
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-4 col-lg-2 col-lg-offset-5" style="text-align: center;">
+
+        <div class="btn-group">
+            <label class="btn-label" for="filterCity">Город</label>
+            <select id="filterCity" class="selectpicker" name="filterCity" data-live-search="true" data-style="btn-info">
+                <option value="0" {% for lc in listCity %}{% if lc.city_ID == cityid %} selected{% endif %}{% endfor %}>выберите город</option>
+            {% for lc in listCity %}
+                <option value="{{ lc.city_ID }}" {% if lc.city_ID == cityid %} selected{% endif %}>{{ lc.cityName }}</option>
+            {% endfor %}
+            </select>
+        </div>
+
     </div>
+
 </div>
 
 <div class="row">
 
-    <div class="col-lg-1"></div>
-
-    <div class="col-lg-10">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 col-lg-10 col-lg-offset-1">
         {% if cityname %}
-        <table id="listSchool" class="table-striped table-hover table-condensed table-responsive" cellspacing="0" cellpadding="0">
+        <table id="listSchool" class="table-striped table-hover table-condensed table-responsive display dt-responsive nowrap" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
-                <td class="tableInputLeft">
+                <td class="dt max-tablet"></td>
+                <td class="tableInputLeft all">
                     <a class="form-control flat btn-success input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="0">
-                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<span>Добавить</span>
+                        <i class="glyphicon glyphicon-plus"></i><span>&nbsp;&nbsp;Добавить</span>
                     </a>
                 </td>
-                <td class="tableNumber">#</td>
-                <td class="tableText">Спортивная школа</td>
-                <td class="tableText">Команды</td>
-                <td class="tableInputRight"></td>
+                <td class="tableNumber all">#</td>
+                <td class="tableText all">Спортивная школа</td>
+                <td class="tableText min-tablet">Команды</td>
+                <td class="tableInputRight all"></td>
             </tr>
         </thead>
         <tbody>
             {% for ls in listSchool %}
             <tr data-pk-id="{{ ls.school_ID }}" data-schoolname="{{ ls.schoolName }}" data-cityname="{{ ls.city_ID.cityName }}">
+                <td class="dt">&nbsp;</td>
                 <td class="tableInputLeft">
                     <a class="update-button form-control flat btn-warning input-sm" data-toggle="modal" data-target="#modify-modal" data-pk-id="{{ ls.school_ID }}">
-                        <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;<span>Изменить</span>
+                        <i class="glyphicon glyphicon-pencil"></i><span>&nbsp;&nbsp;Изменить</span>
                     </a>
                 </td>
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">{{ ls.schoolName }}</td>
                 <td class="tableText">
                     <a href="/city/{{ ls.city_ID.city_ID }}/school/{{ ls.school_ID }}/team">
-                        {% if ls.countTeams == 0 %}нет{% endif %}
-                        {% if ls.countTeams > 0 %}{{ ls.countTeams }} {% endif %}
+                        {% if ls.countTeams == 0 %} <span class="badge badge-default">нет</span> {% endif %}
+                        {% if ls.countTeams > 0 %}  <span class="badge">{{ ls.countTeams }}</span> {% endif %}
                     </a>
                 </td>
                 <td class="tableInputRight">
                     <a class="delete-button form-control flat btn-danger input-sm" data-pk-id="{{ ls.school_ID }}">
-                        <span>Удалить</span>&nbsp;&nbsp;<i class="glyphicon glyphicon-remove"></i>
+                        <span>Удалить&nbsp;&nbsp;</span><i class="glyphicon glyphicon-remove"></i>
                     </a>
                 </td>
             </tr>
@@ -65,8 +71,6 @@
         </table>
         {% endif %}
     </div>
-
-    <div class="col-lg-1"></div>
 
 </div>
 

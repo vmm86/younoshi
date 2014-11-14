@@ -1,4 +1,6 @@
-$( document ).ready(function() {
+$(document).ready(function() {
+
+//  Отображение данных
 
     function routeSchool(cityid) {
         console.log('city ', cityid);
@@ -6,9 +8,9 @@ $( document ).ready(function() {
         return window.location.href = path;
     }
 
-//  Фильтр школ по городам
+///  Фильтр школ по городам
 
-    $('#filterCityforSchool').change(function() {
+    $('[name="filterCity"]').change(function() {
         var cityid = $(this).val();
         if (typeof cityid === "undefined")
             cityid = 0;

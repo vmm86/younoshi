@@ -1,10 +1,36 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/lato/lato-regular.eot');
+    src: local('Lato Regular'),
+         url('../fonts/lato/lato-regular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/lato/lato-regular.woff')       format('woff'),
+         url('../fonts/lato/lato-regular.ttf')        format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/lato/lato-bold.eot');
+    src: local('Lato Bold'),
+         url('../fonts/lato/lato-bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/lato/lato-bold.woff')       format('woff'),
+         url('../fonts/lato/lato-bold.ttf')        format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 *, html, body {
+    -webkit-font-smoothing: subpixel-antialiased !important;
+    font-smoothing: subpixel-antialiased !important;
+
     box-sizing: border-box;
 }
 
 body {
-/*    font-family: Arial, Helvetica, sans-serif;*/
-    font-size: 14px;
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    font-size: 15px;
     line-height: 1.6;
 }
 
@@ -62,7 +88,7 @@ table thead tr td {
     background: #34495E; /* wetasphalt */
 
     color: #FFF;
-    font-weight: bold;
+    font-weight: bold !important;
     text-transform: uppercase;
     text-shadow: 2px 2px 0 #2C3E50; /* midnightblue */
 }
@@ -83,7 +109,7 @@ table.dataTable td {
     background: transparent !important;
     border: none !important;
     padding: 0 !important;
-    width: 15rem;
+    width: 12.25rem;
     overflow: hidden;
 }
 
@@ -102,12 +128,16 @@ table.dataTable td {
     text-transform: uppercase;
     line-height: 1.35;
 
-    width: 12rem;
-    transition: all 0.7s ease;
     height: 2.8rem;
 
     position: relative;
-    top: -1px;
+    top: 0;
+
+    -webkit-transition: all 0.75s ease;
+    -moz-transition   : all 0.75s ease;
+    -o-transition     : all 0.75s ease;
+    -ms-transition    : all 0.75s ease;
+    transition        : all 0.75s ease;
 }
 
 .tableInputLeft input,
@@ -115,43 +145,53 @@ table.dataTable td {
 .tableInputLeft a {
     border-radius: 1rem 0 0 1rem;
 
+    text-align: left;
     float: right;
 
-    left: 8.9rem;
+    left: 8.5rem;
 }
 .tableInputRight input,
 .tableInputRight button,
 .tableInputRight a {
     border-radius: 0 1rem 1rem 0;
 
+    text-align: right;
     float: left;
 
-    right: 7.9rem;
+    right: 7.5rem;
 }
 
 .tableInputLeft input:hover,
 .tableInputLeft button:hover,
 .tableInputLeft a:hover {
-    width: 12rem;
-    transition: all 0.7s ease;
+    left: 0.5rem;
 
-    left: 0;
+    -webkit-transition: all 0.75s ease;
+    -moz-transition   : all 0.75s ease;
+    -o-transition     : all 0.75s ease;
+    -ms-transition    : all 0.75s ease;
+    transition        : all 0.75s ease;
 }
 .tableInputRight input:hover,
 .tableInputRight button:hover,
 .tableInputRight a:hover {
-    width: 12rem;
-    transition: all 0.6s ease;
+    right: 0.5rem;
 
-    right: 0;
+    -webkit-transition: all 0.75s ease;
+    -moz-transition   : all 0.75s ease;
+    -o-transition     : all 0.75s ease;
+    -ms-transition    : all 0.75s ease;
+    transition        : all 0.75s ease;
 }
 
 .tableNumber {
     text-align: center;
 
-    width: 5rem;
+    width: 4rem;
 }
 .tableText {
+    text-align: left;
+    font-weight: normal;
 }
 .tableScore {
     text-align: center;
@@ -173,16 +213,20 @@ table.dataTable td {
 }
 
 .row {
-    margin: 0.5rem !important;
+    margin: 0.25rem 0;
 }
 
 /* Имя текущего пользователя */
 
-.userName {
+.navbar-brand {
+    color: #3498DB !important;
+    font-size: 1.6rem;
+    font-weight: normal;
+    padding: 1.55rem 0;
     float: left;
     position: absolute;
     left: 1.5%;
-    top: 25%;
+    top: 5%;
 }
 
 /* Верхнее меню навигации */
@@ -197,9 +241,26 @@ table.dataTable td {
     position: fixed;
 }
 
+#top-menu .container {
+    padding-left: 14rem;
+}
+
 .navbar {
     margin: 0;
     min-height: 5.5rem;
+}
+
+.navbar-toggle:before {
+    color: #34495E !important;
+    content: '\2022 \2022 \2022';
+    font-size: 22px;
+    font-style: normal;
+    font-weight: normal;
+    transition: color 0.25s linear 0s;
+}
+.navbar-default .navbar-toggle:hover:before {
+    color:  #3498DB !important;
+    transition: color 0.25s linear 0s;
 }
 
 .navbar-default .navbar-nav > .active > a, 
@@ -214,6 +275,10 @@ table.dataTable td {
 .navbar-default .navbar-nav > .dropdown > a:focus .caret {
     border-top-color:    #3498DB;
     border-bottom-color: #3498DB;
+}
+
+.navbar-default .navbar-nav > li > a {
+    padding: 1.55rem 0.4rem;
 }
 
 .navbar-default .navbar-nav > li > a:hover, 
@@ -306,6 +371,7 @@ input[type=number] {
 }
 
 .form-control {
+/*    font-family: 'Lato', Courier, Helvetica, sans-serif;*/
     font-size: 1.5rem;
     padding: 0.5rem 1rem;
     border: 0.2rem solid #3498DB;
@@ -433,7 +499,7 @@ a.btn {
 /* Выбор игровой стадии */
 
 .zoneGroupPlayoffToggle {
-    width: 60%;
+    width: 100%;
 }
 
 .zoneGroupPlayoffToggle label:nth-child(3) {
@@ -527,6 +593,10 @@ fieldset[disabled] .btn {
 
 /* Фиксы Bootstrap-Select */
 
+.caret {
+    margin-left: 0 !important;
+}
+
 .selectpicker.btn-info + .dropdown-menu > .dropdown-menu li > a {
     text-align: left;
 }
@@ -541,7 +611,7 @@ fieldset[disabled] .btn {
 .dropdown-header {
     display: block;
 
-    padding: 1.55rem 0 1.55rem 2.1rem;
+    padding: 1.55rem 0 1.55rem 0.4rem;
 
     color: #34495E;
     font-size: 1.6rem;
@@ -593,6 +663,7 @@ fieldset[disabled] .btn {
 .bootstrap-select > .btn.dropdown-toggle {
     border-radius: 1rem !important;
 
+    text-shadow: 0px 1px 0px rgba(0, 60, 100, 0.75);
     text-transform: none;
 }
 .bootstrap-select.open > .btn.dropdown-toggle {
@@ -811,6 +882,10 @@ fieldset[disabled] .btn {
     left: -1000%;
 }
 
+.filterAge label.btn {
+    width: 25%;
+}
+
 .filterAge label:nth-child(3) {
     border-radius: 1rem 0 0 0 !important;
 }
@@ -823,24 +898,23 @@ fieldset[disabled] .btn {
 .filterAge label:nth-child(11) {
     border-radius: 0 0 1rem 0 !important;
 }
-.stageTypeBottom  label {
-    border-radius: 0 0 1rem 1rem !important;
-}
 
-.filterAge label.active {
-    box-shadow: 0 -4px 4px -1px    rgba(0, 0, 0, 0.2) inset;
-}
 .filterAge label:nth-child(3).active{
     box-shadow: -4px -4px 4px -1px rgba(0, 0, 0, 0.2) inset;
+}
+.filterAge label:nth-child(4).active,
+.filterAge label:nth-child(5).active {
+    box-shadow: 0 -4px 4px -1px    rgba(0, 0, 0, 0.2) inset;
 }
 .filterAge label:nth-child(6).active {
     box-shadow: 4px -4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
 }
-.filterAge label.active {
-    box-shadow: 0 4px 4px -1px     rgba(0, 0, 0, 0.2) inset;
-}
 .filterAge label:nth-child(8).active {
     box-shadow: -4px 4px 4px -1px  rgba(0, 0, 0, 0.2) inset;
+}
+.filterAge label:nth-child(9).active.active,
+.filterAge label:nth-child(10).active.active {
+    box-shadow: 0 4px 4px -1px     rgba(0, 0, 0, 0.2) inset;
 }
 .filterAge label:nth-child(11).active {
     box-shadow: 4px 4px 4px -1px   rgba(0, 0, 0, 0.2) inset;
@@ -937,24 +1011,71 @@ input.error {
 
 .close {
     font-size: 3rem;
-    line-height: 1;
+    line-height: 1.85;
 }
 
 /* DataTables Responsive */
-
-table.dataTable.dtr-inline.collapsed tbody td:first-child:before, 
-table.dataTable.dtr-inline.collapsed tbody th:first-child:before {
-    top: 20%;
-    left: 10%;
-    font-weight: bold;
-    line-height: 16px;
-    box-shadow: none;
+table.dataTable thead .sorting {
+    background-image: url('../images/sort_both.png') no-repeat right center transparent;
+    background-color: #34495E;
 }
-table.dataTable.dtr-inline.collapsed tbody tr.parent td:first-child:before, 
-table.dataTable.dtr-inline.collapsed tbody tr.parent th:first-child:before {
-    content: '‒';
-    font-weight: bold;
-    line-height: 14px;
+table.dataTable thead .sorting_asc {
+    background-image: url('../images/sort_asc.png')  no-repeat right center transparent;
+    background-color: #34495E;
+}
+table.dataTable thead .sorting_desc {
+    background-image: url('../images/sort_desc.png') no-repeat right center transparent;
+    background-color: #34495E;
+}
+
+table.dataTable {
+    border: none !important;
+}
+
+#teamRating_length {
+    display: inline-block;
+}
+
+div.dataTables_length label {
+    display: inline-block;
+    float: none;
+    margin: 0;
+    width: auto;
+}
+div.dataTables_length .btn-group,
+div.dataTables_length .btn-group .btn {
+    width: auto !important;
+}
+div.dataTables_length .dataTables_length_caption {
+    display: inline-block;
+/*    float: left;*/
+}
+
+div.dataTables_filter {
+    display: inline-block;
+    float: none;
+    margin: 0;
+}
+
+div.dataTables_filter label {
+    display: inline-block;
+}
+div.dataTables_filter input {
+    width: 14em;
+    display: inline-block;
+}
+
+div.dataTables_paginate {
+    text-align: center;
+    float: none;
+    margin: 0;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, 
+.table-striped > tbody > tr:nth-child(2n+1) > th,
+.table-hover   > tbody > tr:hover           > td,
+.table-hover   > tbody > tr:hover           > th {
+    background-color: transparent;
 }
 
 table.dataTable tr.child td.child {
@@ -974,4 +1095,31 @@ table.dataTable tr.child span.dtr-title,
 table.dataTable tr.child span.dtr-data {
     display: table-cell;
     width: 50%;
+}
+
+/* Bootstrap */
+
+.badge {
+    min-width: 10px;
+    padding: 4px 7px;
+    font-size: 1.33rem;
+    font-weight: bold;
+    color: #FFF;
+    text-shadow: 0px 1px 0px rgba(0, 60, 100, 0.75);
+    background-color: #3498DB;
+    border-radius: none;
+    vertical-align: middle;
+}
+
+.badge.badge-default,
+.badge.badge-zero {
+    background: #999;
+}
+
+.negative {
+    color: #DF2D1B;
+}
+
+.positive {
+    color: #20AF5C;
 }

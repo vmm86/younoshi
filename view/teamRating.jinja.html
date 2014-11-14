@@ -8,12 +8,12 @@
 
 <div class="row">
 
-    <div class="col-md-2 col-md-offset-2" style="text-align: center;">
+    <div class="col-xs-12 col-sm-6 col-md-3 col-md-offset-1 col-lg-3 col-lg-offset-1" style="text-align: center;">
 
         <div class="btn-group">
-            <label class="btn-label" for="filterSeasonforTR_from">Начальный сезон</label>
+            <label class="btn-label" for="filterSeason_from">Начальный сезон</label>
             <br>
-            <select id="filterSeasonforTR_from" name="filterSeasonforTR_from" class="selectpicker" data-live-search="true" data-style="btn-info">
+            <select name="filterSeason_from" class="selectpicker" data-live-search="true" data-style="btn-info">
                 <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_from %}selected{% endif %}{% endfor %}>выберите сезон</option>
             {% for ls in listSeason %}
                 <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_from %}selected{% endif %}>{{ ls.seasonName }}</option>
@@ -23,12 +23,12 @@
 
     </div>
 
-    <div class="col-md-2" style="text-align: center;">
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3" style="text-align: center;">
 
         <div class="btn-group">
-            <label class="btn-label" for="filterSeasonforTR_to">Конечный сезон</label>
+            <label class="btn-label" for="filterSeason_to">Конечный сезон</label>
             <br>
-            <select id="filterSeasonforTR_to" name="filterSeasonforTR_to" class="selectpicker" data-live-search="true" data-style="btn-info">
+            <select name="filterSeason_to" class="selectpicker" data-live-search="true" data-style="btn-info">
                 <option value="0" {% for ls in listSeason %}{% if ls.season_ID == seasonid_to %}selected{% endif %}{% endfor %}>выберите сезон</option>
             {% for ls in listSeason %}
                 <option value="{{ ls.season_ID }}" {% if ls.season_ID == seasonid_to %}selected{% endif %}>{{ ls.seasonName }}</option>
@@ -38,23 +38,23 @@
 
     </div>
 
-    <div class="col-md-3" style="text-align: center;">
+    <div class="col-sm-12 col-sm-12 col-md-5 col-lg-4" style="text-align: center;">
 
-        <div class="filterAge form-group btn-group" data-toggle="buttons">
+        <div class="filterAge btn-group form-group" data-toggle="buttons">
             <label class="btn-label">Возраст</label>
             <br>
             {% for la in listAge %}
                 {% if loop.index in range(1,5) %}
-                <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforTR" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
+                <label for="filterAge_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                    <input id="filterAge_{{ la.age_ID }}" type="radio" name="filterAge" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
                 </label>
                 {% endif %}
             {% endfor %}
             <br>
             {% for la in listAge %}
                 {% if loop.index in range(5,9) %}
-                <label for="age_ID_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
-                    <input id="age_ID_{{ la.age_ID }}" type="radio" name="filterAgeforTR" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
+                <label for="filterAge_{{ la.age_ID }}" class="btn btn-info {% if la.age_ID == ageid %}active{% endif %}">
+                    <input id="filterAge_{{ la.age_ID }}" type="radio" name="filterAge" value="{{ la.age_ID }}" {% if la.age_ID == ageid %}checked{% endif %}>{{ la.ageName }} г.р.
                 </label>
                 {% endif %}
             {% endfor %}
@@ -66,16 +66,16 @@
 
 <div class="row">
 
-    <div class="col-lg-1"></div>
-
-    <div class="col-lg-10">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 col-lg-10 col-lg-offset-1">
         {% if not seasonid_from == 0 %}
         {% if not seasonid_to == 0 %}
         {% if not ageid == 0 %}
         {% if not listTR_count == 0 %}
-        <table id="teamRating" class="table-striped table-hover table-condensed display responsive nowrap" cellspacing="0" cellpadding="0">
+        <table id="teamRating" class="table-striped table-hover table-condensed display dt-responsive nowrap" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
+                <td class="dt max-tablet"            rowspan="2"></td>
+                <td class="tableInputLeft never"     rowspan="2">
                 <td class="tableNumber all"          rowspan="2">#</td>
                 <td class="tableText   all"          rowspan="2">Юношеская команда</td>
                 <td class="tableNumber min-desktop"  rowspan="2">Игры</td>
@@ -83,6 +83,7 @@
                 <td class="tableNumber min-desktop"  colspan="3">Мячи</td>
                 <td class="tableNumber min-desktop"  colspan="4">Плэй-офф</td>
                 <td class="tableNumber min-mobile-l" rowspan="2">Рейтинг</td>
+                <td class="tableInputRight never"    rowspan="2">
             </tr>
             <tr>
                 <td class="tableNumber min-desktop">В</td>
@@ -99,6 +100,8 @@
         <tbody>
             {% for ltr in listTR %}
             <tr>
+                <td class="dt">&nbsp;</td>
+                <td class="tableInputLeft">
                 <td class="tableNumber">{{ loop.index }}</td>
                 <td class="tableText">  {{ ltr.teamName }} ({{ ltr.cityName }})</td>
                 <td class="tableNumber">{% if ltr.games       != 0 %} {{ ltr.games }}       {% endif %}</td>
@@ -106,12 +109,13 @@
                 <td class="tableNumber">{% if ltr.equals      != 0 %} {{ ltr.equals }}      {% endif %}</td>
                 <td class="tableNumber">{{ ltr.scored }}</td>
                 <td class="tableNumber">{{ ltr.missed }}</td>
-                <td class="tableNumber">{{ ltr.goals }}</td>
+                <td class="tableNumber"><span class="{% if ltr.goals > 0 %}positive{% endif %} {% if ltr.goals < 0 %}negative{% endif %}">{{ ltr.goals }}</span></td>
                 <td class="tableNumber">{% if ltr.playoff     != 0 %} {{ ltr.playoff }}     {% endif %}</td>
                 <td class="tableNumber">{% if ltr.playoff_11m != 0 %} {{ ltr.playoff_11m }} {% endif %}</td>
                 <td class="tableNumber">{% if ltr.playoff_SF  != 0 %} {{ ltr.playoff_SF }}  {% endif %}</td>
                 <td class="tableNumber">{% if ltr.playoff_F   != 0 %} {{ ltr.playoff_F }}   {% endif %}</td>
                 <td class="tableNumber"><b>{{ ltr.teamRating }}</b></td>
+                <td class="tableInputRight">
             </tr>
             {% endfor %}
         </tbody>
@@ -121,8 +125,6 @@
         {% endif %}
         {% endif %}
     </div>
-
-    <div class="col-lg-1"></div>
 
 </div>
 

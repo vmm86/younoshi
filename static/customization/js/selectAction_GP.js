@@ -1,14 +1,16 @@
 $(document).ready(function() {
 
+//  Отображение данных
+
     function routeGP(seasonid, ageid, sasid) {
         console.log('season ', seasonid, 'age', ageid, 'sas', sasid);
         path = '/season/' + seasonid + '/age/' + ageid + '/stage/' + sasid + '/gp';
         return window.location.href = path;
     }
 
-//  Фильтр списка команд в игровой стадии по сезону
+///  Фильтр списка команд в игровой стадии по сезону
 
-    $('#filterSeasonforGP').change(function() {
+    $('[name="filterSeason"]').change(function() {
         var seasonid = $(this).val();
         if (typeof seasonid === "undefined")
             seasonid = 0;
@@ -20,10 +22,10 @@ $(document).ready(function() {
         routeGP(seasonid, ageid, sasid);
     });
 
-//  Фильтр списка команд в игровой стадии по возрасту
+///  Фильтр списка команд в игровой стадии по возрасту
 
-    $('input[name="filterAgeforGP"]').change(function() {
-        var seasonid = $('#filterSeasonforGP').val();
+    $('[name="filterAge"]').change(function() {
+        var seasonid = $('[name="filterSeason"]').val();
         if (typeof seasonid === "undefined")
             seasonid = 0;
 
@@ -36,14 +38,14 @@ $(document).ready(function() {
         routeGP(seasonid, ageid, sasid);
     });
 
-//  Фильтр списка команд в игровой стадии по самой игровой стадии
+///  Фильтр списка команд в игровой стадии по самой игровой стадии
 
     $('#chooseZone, #chooseGroup, #zoneGroupPlayoffToggle_P').change(function() {
-        var seasonid = $('#filterSeasonforGP').val();
+        var seasonid = $('[name="filterSeason"]').val();
         if (typeof seasonid === "undefined")
             seasonid = 0;
 
-        var ageid = $('input[name="filterAgeforGP"]').val();
+        var ageid = $('[name="filterAge"]').val();
         if (typeof ageid === "undefined")
             ageid = 0;
 
