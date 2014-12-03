@@ -14,16 +14,16 @@
     font-family: 'Lato';
     src: url('../fonts/lato/lato-bold.eot');
     src: local('Lato Bold'),
-         url('../fonts/lato/lato-bold.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/lato/lato-bold.woff')       format('woff'),
-         url('../fonts/lato/lato-bold.ttf')        format('truetype');
+         url('../fonts/lato/lato-bold.eot?#iefix')    format('embedded-opentype'),
+         url('../fonts/lato/lato-bold.woff')          format('woff'),
+         url('../fonts/lato/lato-bold.ttf')           format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 
 *, html, body {
     -webkit-font-smoothing: subpixel-antialiased !important;
-    font-smoothing: subpixel-antialiased !important;
+    font-smoothing:         subpixel-antialiased !important;
 
     box-sizing: border-box;
 }
@@ -195,6 +195,10 @@ table.dataTable td {
 }
 .tableScore {
     text-align: center;
+}
+
+td.dataTables_empty {
+    border: none;
 }
 
 /* Фиксы Flat UI */

@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 1200px) {
 
     .container.wrapper,
     .col-xs-12 {
@@ -12,6 +12,10 @@
         border: none;
         padding: 0 1rem !important;
         width: auto !important;
+    }
+
+    td.child {
+        border: none;
     }
 
     table.dataTable.dtr-inline.collapsed tbody td:first-child:before, 
