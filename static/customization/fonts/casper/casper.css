@@ -1,0 +1,40 @@
+
+@font-face {
+    font-family: 'casper_bold_italic';
+    src: url('casper_bold_italic.eot');
+    src: url('casper_bold_italic.eot?#iefix') format('embedded-opentype'),
+         url('casper_bold_italic.woff') format('woff'),
+         url('casper_bold_italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'casper_bold';
+    src: url('casper_bold.eot');
+    src: url('casper_bold.eot?#iefix') format('embedded-opentype'),
+         url('casper_bold.woff') format('woff'),
+         url('casper_bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'casper_italic';
+    src: url('casper_italic.eot');
+    src: url('casper_italic.eot?#iefix') format('embedded-opentype'),
+         url('casper_italic.woff') format('woff'),
+         url('casper_italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'casper';
+    src: url('casper.eot');
+    src: url('casper.eot?#iefix') format('embedded-opentype'),
+         url('casper.woff') format('woff'),
+         url('casper.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

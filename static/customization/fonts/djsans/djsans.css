@@ -1,0 +1,72 @@
+@font-face {
+    font-family: 'dejavu_sansbook';
+    src: url('dejavusans.eot');
+    src: url('dejavusans.eot?#iefix') format('embedded-opentype'),
+         url('dejavusans.woff') format('woff'),
+         url('dejavusans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dejavu_sansbold';
+    src: url('dejavusans-bold.eot');
+    src: url('dejavusans-bold.eot?#iefix') format('embedded-opentype'),
+         url('dejavusans-bold.woff') format('woff'),
+         url('dejavusans-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dejavu_sansbold_oblique';
+    src: url('dejavusans-boldoblique.eot');
+    src: url('dejavusans-boldoblique.eot?#iefix') format('embedded-opentype'),
+         url('dejavusans-boldoblique.woff') format('woff'),
+         url('dejavusans-boldoblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dejavu_sansoblique';
+    src: url('dejavusans-oblique.eot');
+    src: url('dejavusans-oblique.eot?#iefix') format('embedded-opentype'),
+         url('dejavusans-oblique.woff') format('woff'),
+         url('dejavusans-oblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dejavu_sanscondensed';
+    src: url('dejavusanscondensed.eot');
+    src: url('dejavusanscondensed.eot?#iefix') format('embedded-opentype'),
+         url('dejavusanscondensed.woff') format('woff'),
+         url('dejavusanscondensed.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dejavu_sanscondensed_bold';
+    src: url('dejavusanscondensed-bold.eot');
+    src: url('dejavusanscondensed-bold.eot?#iefix') format('embedded-opentype'),
+         url('dejavusanscondensed-bold.woff') format('woff'),
+         url('dejavusanscondensed-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dejavu_sansCnBdOb';
+    src: url('dejavusanscondensed-boldoblique.eot');
+    src: url('dejavusanscondensed-boldoblique.eot?#iefix') format('embedded-opentype'),
+         url('dejavusanscondensed-boldoblique.woff') format('woff'),
+         url('dejavusanscondensed-boldoblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dejavu_sanscondensed_oblique';
+    src: url('dejavusanscondensed-oblique.eot');
+    src: url('dejavusanscondensed-oblique.eot?#iefix') format('embedded-opentype'),
+         url('dejavusanscondensed-oblique.woff') format('woff'),
+         url('dejavusanscondensed-oblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

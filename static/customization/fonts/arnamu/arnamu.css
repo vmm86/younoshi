@@ -1,0 +1,49 @@
+
+@font-face {
+    font-family: 'arian_amuregular';
+    src: url('arnamu.eot');
+    src: url('arnamu.eot?#iefix') format('embedded-opentype'),
+         url('arnamu.woff') format('woff'),
+         url('arnamu.ttf.gz') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'arian_amubold';
+    src: url('arnamu_bold.eot');
+    src: url('arnamu_bold.eot?#iefix') format('embedded-opentype'),
+         url('arnamu_bold.woff') format('woff'),
+         url('arnamu_bold.ttf.gz') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'arian_amuitalic';
+    src: url('arnamu_italic.eot');
+    src: url('arnamu_italic.eot?#iefix') format('embedded-opentype'),
+         url('arnamu_italic.woff') format('woff'),
+         url('arnamu_italic.ttf.gz') format('truetype');
+    font-weight: normal;
+}
+
+
+
+
+@font-face {
+    font-family: 'arian_amubold_italic';
+    src: url('arnamu_italic_bold.eot');
+    src: url('arnamu_italic_bold.eot?#iefix') format('embedded-opentype'),
+         url('arnamu_italic_bold.woff') format('woff'),
+         url('arnamu_italic_bold.ttf.gz') format('truetype');
+    font-weight: bold;
+}

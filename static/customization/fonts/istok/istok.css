@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'istok_webbold';
+    src: url('istokweb-bold.eot');
+    src: url('istokweb-bold.eot?#iefix') format('embedded-opentype'),
+         url('istokweb-bold.woff') format('woff'),
+         url('istokweb-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'istok_webbold_italic';
+    src: url('istokweb-bolditalic.eot');
+    src: url('istokweb-bolditalic.eot?#iefix') format('embedded-opentype'),
+         url('istokweb-bolditalic.woff') format('woff'),
+         url('istokweb-bolditalic.ttf') format('truetype');
+    font-weight: bold;
+}
+@font-face {
+    font-family: 'istok_webitalic';
+    src: url('istokweb-italic.eot');
+    src: url('istokweb-italic.eot?#iefix') format('embedded-opentype'),
+         url('istokweb-italic.woff') format('woff'),
+         url('istokweb-italic.ttf') format('truetype');
+    font-weight: normal;
+}
+@font-face {
+    font-family: 'istok_webregular';
+    src: url('istokweb-regular.eot');
+    src: url('istokweb-regular.eot?#iefix') format('embedded-opentype'),
+         url('istokweb-regular.woff') format('woff'),
+         url('istokweb-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
