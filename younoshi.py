@@ -5,7 +5,7 @@ import MySQLdb
 
 from flask import Flask
 
-from peewee import MySQLDatabase, Proxy
+from peewee import MySQLDatabase
 
 # Инициализация приложения
 app = Flask(__name__, template_folder = 'view')
