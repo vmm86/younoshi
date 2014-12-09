@@ -620,7 +620,64 @@ CREATE TABLE IF NOT EXISTS `teamRating` (
 -- Структура для представления `teamRating`
 --
 DROP TABLE IF EXISTS `teamRating`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `teamRating` AS select distinct `Se`.`season_ID` AS `season_ID`,`Se`.`seasonName` AS `seasonName`,`C`.`city_ID` AS `city_ID`,`C`.`cityName` AS `cityName`,`Sc`.`school_ID` AS `school_ID`,`Sc`.`schoolName` AS `schoolName`,`T`.`team_ID` AS `team_ID`,`T`.`teamName` AS `teamName`,`A`.`age_ID` AS `age_ID`,`A`.`ageName` AS `ageName`,cast((select count(0) from `GameProtocol` `GP` where ((`GP`.`homeTeam_ID` = `T`.`team_ID`) or (`GP`.`guestTeam_ID` = `T`.`team_ID`))) as signed) AS `games`,cast((select count(0) from `GameProtocol` `GP` where (((`GP`.`homeTeamScoreGame` > `GP`.`guestTeamScoreGame`) and (`GP`.`homeTeam_ID` = `T`.`team_ID`)) or ((`GP`.`homeTeamScoreGame` < `GP`.`guestTeamScoreGame`) and (`GP`.`guestTeam_ID` = `T`.`team_ID`)) or ((`GP`.`homeTeamScoreGame` = `GP`.`guestTeamScoreGame`) and (((`GP`.`homeTeamScore11m` > `GP`.`guestTeamScore11m`) and (`GP`.`homeTeam_ID` = `T`.`team_ID`)) or ((`GP`.`homeTeamScore11m` < `GP`.`guestTeamScore11m`) and (`GP`.`guestTeam_ID` = `T`.`team_ID`)))))) as signed) AS `wins`,cast((select count(0) from `GameProtocol` `GP` where ((`GP`.`homeTeamScoreGame` = `GP`.`guestTeamScoreGame`) and ((`GP`.`homeTeam_ID` = `T`.`team_ID`) or (`GP`.`guestTeam_ID` = `T`.`team_ID`)))) as signed) AS `equals`,cast(((select sum(`GP`.`homeTeamScoreGame`) from `GameProtocol` `GP` where (`GP`.`homeTeam_ID` = `T`.`team_ID`)) + (select sum(`GP`.`guestTeamScoreGame`) from `GameProtocol` `GP` where (`GP`.`guestTeam_ID` = `T`.`team_ID`))) as signed) AS `scored`,cast(((select sum(`GP`.`homeTeamScoreGame`) from `GameProtocol` `GP` where (`GP`.`guestTeam_ID` = `T`.`team_ID`)) + (select sum(`GP`.`guestTeamScoreGame`) from `GameProtocol` `GP` where (`GP`.`homeTeam_ID` = `T`.`team_ID`))) as signed) AS `missed`,cast((select (`scored` - `missed`)) as signed) AS `goals`,cast((select count(0) from ((`SeasonAgeStageTeam` `SAST` left join `SeasonAgeStage` `SAS` on((`SAST`.`SAS_ID` = `SAS`.`SAS_ID`))) left join `Stage` on((`SAS`.`stage_ID` = `Stage`.`stage_ID`))) where ((`SAST`.`team_ID` = `T`.`team_ID`) and (`Stage`.`stageType` = 'P'))) as signed) AS `playoff`,cast((select count(distinct `GP`.`GP_ID`) from (((`GameProtocol` `GP` left join `SeasonAgeStageTeam` `SAST` on((`GP`.`SAS_ID` = `SAST`.`SAS_ID`))) left join `SeasonAgeStage` `SAS` on((`SAST`.`SAS_ID` = `SAS`.`SAS_ID`))) left join `Stage` on((`SAS`.`stage_ID` = `Stage`.`stage_ID`))) where ((`Stage`.`stageType` = 'P') and (`GP`.`homeTeamScoreGame` = `GP`.`guestTeamScoreGame`) and (((`GP`.`homeTeamScore11m` > `GP`.`guestTeamScore11m`) and (`GP`.`homeTeam_ID` = `T`.`team_ID`)) or ((`GP`.`homeTeamScore11m` < `GP`.`guestTeamScore11m`) and (`GP`.`guestTeam_ID` = `T`.`team_ID`))))) as signed) AS `playoff_11m`,cast((select count(distinct `GP`.`GP_ID`) from (((`GameProtocol` `GP` left join `SeasonAgeStageTeam` `SAST` on((`GP`.`SAS_ID` = `SAST`.`SAS_ID`))) left join `SeasonAgeStage` `SAS` on((`SAST`.`SAS_ID` = `SAS`.`SAS_ID`))) left join `Stage` on((`SAS`.`stage_ID` = `Stage`.`stage_ID`))) where ((`Stage`.`stageType` = 'P') and ((`GP`.`homeTeam_ID` = `T`.`team_ID`) or (`GP`.`guestTeam_ID` = `T`.`team_ID`)) and (`GP`.`is_Semifinal` = 1))) as signed) AS `playoff_SF`,cast((select count(distinct `GP`.`GP_ID`) from (((`GameProtocol` `GP` left join `SeasonAgeStageTeam` `SAST` on((`GP`.`SAS_ID` = `SAST`.`SAS_ID`))) left join `SeasonAgeStage` `SAS` on((`SAST`.`SAS_ID` = `SAS`.`SAS_ID`))) left join `Stage` on((`SAS`.`stage_ID` = `Stage`.`stage_ID`))) where ((`Stage`.`stageType` = 'P') and ((`GP`.`homeTeam_ID` = `T`.`team_ID`) or (`GP`.`guestTeam_ID` = `T`.`team_ID`)) and (`GP`.`is_Final` = 1))) as signed) AS `playoff_F`,cast((select round((((((((((`games` * 10000) + (`wins` * 30000)) + (`equals` * 10000)) + (`goals` * 501)) + (`playoff` * 9000)) + (`playoff_11m` * 10000)) + (`playoff_SF` * 28000)) + (`playoff_F` * 38000)) / `games`),0)) as signed) AS `teamRating` from ((((((`Team` `T` left join `School` `Sc` on((`T`.`school_ID` = `Sc`.`school_ID`))) left join `City` `C` on((`Sc`.`city_ID` = `C`.`city_ID`))) left join `Age` `A` on((`A`.`age_ID` = `T`.`age_ID`))) left join `SeasonAgeStageTeam` `SAST` on((`SAST`.`team_ID` = `T`.`team_ID`))) left join `SeasonAgeStage` `SAS` on((`SAS`.`SAS_ID` = `SAST`.`SAS_ID`))) left join `Season` `Se` on((`Se`.`season_ID` = `SAS`.`season_ID`))) order by cast((select round((((((((((`games` * 10000) + (`wins` * 30000)) + (`equals` * 10000)) + (`goals` * 501)) + (`playoff` * 9000)) + (`playoff_11m` * 10000)) + (`playoff_SF` * 28000)) + (`playoff_F` * 38000)) / `games`),0)) as signed) desc;
+CREATE OR REPLACE VIEW `teamRating` AS 
+SELECT DISTINCT 
+`Se`.`season_ID`, `Se`.`seasonName`, 
+`C`.`city_ID`,     `C`.`cityName`, 
+`Sc`.`school_ID`, `Sc`.`schoolName`, 
+`T`.`team_ID`,     `T`.`teamName`,
+`A`.`age_ID`,      `A`.`ageName`,
+CAST((SELECT COUNT(*) FROM `GameProtocol` AS `GP` 
+WHERE (`GP`.`homeTeam_ID` = `T`.`team_ID` OR `GP`.`guestTeam_ID` = `T`.`team_ID`)) AS SIGNED) 
+AS `games`,
+CAST((SELECT COUNT(*) FROM `GameProtocol` AS `GP` 
+WHERE (`GP`.`homeTeamScoreGame` > `GP`.`guestTeamScoreGame` AND `GP`.`homeTeam_ID` = `T`.`team_ID`) 
+OR (`GP`.`homeTeamScoreGame` < `GP`.`guestTeamScoreGame` AND `GP`.`guestTeam_ID` = `T`.`team_ID`) 
+OR (`GP`.`homeTeamScoreGame` = `GP`.`guestTeamScoreGame` AND ((`homeTeamScore11m` > `guestTeamScore11m` AND `GP`.`homeTeam_ID` = `T`.`team_ID`) OR (`homeTeamScore11m` < `guestTeamScore11m` AND `GP`.`guestTeam_ID`  = `T`.`team_ID`)))) AS SIGNED) 
+AS `wins`,
+CAST((SELECT COUNT(*) FROM `GameProtocol` AS `GP` 
+WHERE `GP`.`homeTeamScoreGame` = `GP`.`guestTeamScoreGame` AND (`GP`.`homeTeam_ID` = `T`.`team_ID` OR `GP`.`guestTeam_ID` = `T`.`team_ID`)) AS SIGNED) 
+AS `equals`,
+CAST((SELECT SUM(`GP`.`homeTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`homeTeam_ID` = `T`.`team_ID`)) + (SELECT SUM(`GP`.`guestTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`guestTeam_ID` = `T`.`team_ID`)) AS SIGNED) 
+AS `scored`,
+CAST((SELECT SUM(`GP`.`homeTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`guestTeam_ID` = `T`.`team_ID`)) + (SELECT SUM(`GP`.`guestTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`homeTeam_ID` = `T`.`team_ID`)) AS SIGNED) 
+AS `missed`,
+CAST((SELECT (`scored` - `missed`)) AS SIGNED) 
+AS `goals`,
+CAST((SELECT COUNT(*) FROM `SeasonAgeStageTeam` AS `SAST` 
+LEFT JOIN `SeasonAgeStage` AS `SAS`   ON (`SAST`.`SAS_ID`  = `SAS`.`SAS_ID`) 
+LEFT JOIN `Stage`          AS `Stage` ON (`SAS`.`stage_ID` = `Stage`.`stage_ID`) 
+WHERE `SAST`.`team_ID` = `T`.`team_ID` AND `Stage`.`stageType` = "P") AS SIGNED) 
+AS `playoff`,
+CAST((SELECT COUNT(DISTINCT `GP_ID`) FROM `GameProtocol` AS `GP` 
+LEFT JOIN `SeasonAgeStageTeam` AS `SAST`  ON (`GP`.`SAS_ID`    = `SAST`.`SAS_ID`) 
+LEFT JOIN `SeasonAgeStage`     AS `SAS`   ON (`SAST`.`SAS_ID`  = `SAS`.`SAS_ID`) 
+LEFT JOIN `Stage`              AS `Stage` ON (`SAS`.`stage_ID` = `Stage`.`stage_ID`) 
+WHERE `Stage`.`stageType` = "P" AND `GP`.`homeTeamScoreGame` = `GP`.`guestTeamScoreGame` 
+AND ((`homeTeamScore11m` > `guestTeamScore11m` AND `GP`.`homeTeam_ID`  = `T`.`team_ID`) OR (`homeTeamScore11m` < `guestTeamScore11m` AND `GP`.`guestTeam_ID` = `T`.`team_ID`))) AS SIGNED) 
+AS `playoff_11m`,
+CAST((SELECT COUNT(DISTINCT `GP_ID`) FROM `GameProtocol` AS `GP` 
+LEFT JOIN `SeasonAgeStageTeam` AS `SAST`  ON (`GP`.`SAS_ID`    = `SAST`.`SAS_ID`) 
+LEFT JOIN `SeasonAgeStage`     AS `SAS`   ON (`SAST`.`SAS_ID`  = `SAS`.`SAS_ID`) 
+LEFT JOIN `Stage`              AS `Stage` ON (`SAS`.`stage_ID` = `Stage`.`stage_ID`) 
+WHERE `Stage`.`stageType` = "P" AND (`GP`.`homeTeam_ID` = `T`.`team_ID` OR `GP`.`guestTeam_ID` = `T`.`team_ID`) AND `GP`.`is_Semifinal` = 1) AS SIGNED) 
+AS `playoff_SF`,
+CAST((SELECT COUNT(DISTINCT `GP_ID`) FROM `GameProtocol` AS `GP` 
+LEFT JOIN `SeasonAgeStageTeam` AS `SAST`  ON (`GP`.`SAS_ID`    = `SAST`.`SAS_ID`) 
+LEFT JOIN `SeasonAgeStage`     AS `SAS`   ON (`SAST`.`SAS_ID`  = `SAS`.`SAS_ID`) 
+LEFT JOIN `Stage`              AS `Stage` ON (`SAS`.`stage_ID` = `Stage`.`stage_ID`) 
+WHERE `Stage`.`stageType` = "P" AND (`GP`.`homeTeam_ID` = `T`.`team_ID` OR `GP`.`guestTeam_ID` = `T`.`team_ID`) AND `GP`.`is_Final` = 1) AS SIGNED) 
+AS `playoff_F`,
+CAST((SELECT ROUND (( (`games` * 10000) + (`wins` * 30000) + (`equals` * 10000) + (`goals` * 501) + (`playoff` * 9000) + (`playoff_11m` * 10000) + (`playoff_SF` * 28000) + (`playoff_F` * 38000)) / `games`)) AS SIGNED) 
+AS `teamRating`
+FROM `Team` AS `T` 
+LEFT JOIN `School`             AS `Sc`   ON (`T`.`school_ID`  = `Sc`.`school_ID`)
+LEFT JOIN `City`               AS `C`    ON (`Sc`.`city_ID`   = `C`.`city_ID`)
+LEFT JOIN `Age`                AS `A`    ON (`A`.`age_ID`     = `T`.`age_ID`)
+LEFT JOIN `SeasonAgeStageTeam` AS `SAST` ON (`SAST`.`team_ID` = `T`.`team_ID`)
+LEFT JOIN `SeasonAgeStage`     AS `SAS`  ON (`SAS`.`SAS_ID`   = `SAST`.`SAS_ID`)
+LEFT JOIN `Season`             AS `Se`   ON (`Se`.`season_ID` = `SAS`.`season_ID`)
+ORDER BY `teamRating` DESC;
 
 --
 -- Дублирующая структура для представления `schoolRating`
@@ -649,7 +706,28 @@ CREATE TABLE IF NOT EXISTS `schoolRating` (
 -- Структура для представления `schoolRating`
 --
 DROP TABLE IF EXISTS `schoolRating`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `schoolRating` AS select `teamRating`.`season_ID` AS `season_ID`,`teamRating`.`seasonName` AS `seasonName`,`teamRating`.`city_ID` AS `city_ID`,`teamRating`.`cityName` AS `cityName`,`teamRating`.`school_ID` AS `school_ID`,`teamRating`.`schoolName` AS `schoolName`,cast(sum(`teamRating`.`games`) as signed) AS `games`,cast(sum(`teamRating`.`wins`) as signed) AS `wins`,cast(sum(`teamRating`.`equals`) as signed) AS `equals`,cast(sum(`teamRating`.`scored`) as signed) AS `scored`,cast(sum(`teamRating`.`missed`) as signed) AS `missed`,cast(sum(`teamRating`.`goals`) as signed) AS `goals`,cast(sum(`teamRating`.`playoff`) as signed) AS `playoff`,cast(sum(`teamRating`.`playoff_11m`) as signed) AS `playoff_11m`,cast(sum(`teamRating`.`playoff_SF`) as signed) AS `playoff_SF`,cast(sum(`teamRating`.`playoff_F`) as signed) AS `playoff_F`,cast(sum(`teamRating`.`teamRating`) as signed) AS `schoolRating` from `teamRating` group by `teamRating`.`school_ID` order by cast(sum(`teamRating`.`teamRating`) as signed) desc;
+CREATE OR REPLACE VIEW `schoolRating` AS
+SELECT 
+`teamRating`.`season_ID`  AS `season_ID`,
+`teamRating`.`seasonName` AS `seasonName`,
+`teamRating`.`city_ID`    AS `city_ID`,
+`teamRating`.`cityName`   AS `cityName`,
+`teamRating`.`school_ID`  AS `school_ID`,
+`teamRating`.`schoolName` AS `schoolName`,
+CAST(SUM(`teamRating`.`games`)       AS SIGNED) AS `games`,
+CAST(SUM(`teamRating`.`wins`)        AS SIGNED) AS `wins`,
+CAST(SUM(`teamRating`.`equals`)      AS SIGNED) AS `equals`,
+CAST(SUM(`teamRating`.`scored`)      AS SIGNED) AS `scored`,
+CAST(SUM(`teamRating`.`missed`)      AS SIGNED) AS `missed`,
+CAST(SUM(`teamRating`.`goals`)       AS SIGNED) AS `goals`,
+CAST(SUM(`teamRating`.`playoff`)     AS SIGNED) AS `playoff`,
+CAST(SUM(`teamRating`.`playoff_11m`) AS SIGNED) AS `playoff_11m`,
+CAST(SUM(`teamRating`.`playoff_SF`)  AS SIGNED) AS `playoff_SF`,
+CAST(SUM(`teamRating`.`playoff_F`)   AS SIGNED) AS `playoff_F`,
+CAST(SUM(`teamRating`.`teamRating`)  AS SIGNED) AS `schoolRating`
+FROM `teamRating`
+GROUP BY `teamRating`.`school_ID`
+ORDER BY CAST(SUM(`teamRating`.`teamRating`) AS SIGNED) DESC;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
