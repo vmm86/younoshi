@@ -124,10 +124,10 @@ CAST((SELECT COUNT(*) FROM `GameProtocol` AS `GP`
 WHERE `GP`.`homeTeamScoreGame` = `GP`.`guestTeamScoreGame` AND (`GP`.`homeTeam_ID` = `T`.`team_ID` OR `GP`.`guestTeam_ID` = `T`.`team_ID`)) AS SIGNED) 
 AS `equals`,
 
-CAST(((SELECT SUM(`GP`.`homeTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`homeTeam_ID` = `T`.`team_ID`)) + (SELECT SUM(`GP`.`guestTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`guestTeam_ID` = `T`.`team_ID`))) AS SIGNED) 
+CAST((SELECT SUM(`GP`.`homeTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`homeTeam_ID` = `T`.`team_ID`)) + (SELECT SUM(`GP`.`guestTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`guestTeam_ID` = `T`.`team_ID`)) AS SIGNED) 
 AS `scored`,
 
-CAST(((SELECT SUM(`GP`.`homeTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`guestTeam_ID` = `T`.`team_ID`)) + (SELECT SUM(`GP`.`guestTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`homeTeam_ID` = `T`.`team_ID`))) AS SIGNED) 
+CAST((SELECT SUM(`GP`.`homeTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`guestTeam_ID` = `T`.`team_ID`)) + (SELECT SUM(`GP`.`guestTeamScoreGame`) FROM `GameProtocol` `GP` WHERE (`GP`.`homeTeam_ID` = `T`.`team_ID`)) AS SIGNED) 
 AS `missed`,
 
 CAST((SELECT (`scored` - `missed`)) AS SIGNED) 
@@ -177,15 +177,14 @@ ORDER BY `teamRating` DESC
 -------------------------------------------
 # Запрос для создания вида `schoolRating` #
 -------------------------------------------
-CREATE VIEW `schoolRating` AS 
+CREATE VIEW `schoolRating` AS
 SELECT 
-    `teamRating`.`season_ID`  AS `season_ID`,
-    `teamRating`.`seasonName` AS `seasonName`,
-    `teamRating`.`city_ID`    AS `city_ID`,
-    `teamRating`.`cityName`   AS `cityName`,
-    `teamRating`.`school_ID`  AS `school_ID`,
-    `teamRating`.`schoolName` AS `schoolName`,
-
+`teamRating`.`season_ID`  AS `season_ID`,
+`teamRating`.`seasonName` AS `seasonName`,
+`teamRating`.`city_ID`    AS `city_ID`,
+`teamRating`.`cityName`   AS `cityName`,
+`teamRating`.`school_ID`  AS `school_ID`,
+`teamRating`.`schoolName` AS `schoolName`,
 CAST(SUM(`teamRating`.`games`)       AS SIGNED) AS `games`,
 CAST(SUM(`teamRating`.`wins`)        AS SIGNED) AS `wins`,
 CAST(SUM(`teamRating`.`equals`)      AS SIGNED) AS `equals`,
@@ -196,8 +195,7 @@ CAST(SUM(`teamRating`.`playoff`)     AS SIGNED) AS `playoff`,
 CAST(SUM(`teamRating`.`playoff_11m`) AS SIGNED) AS `playoff_11m`,
 CAST(SUM(`teamRating`.`playoff_SF`)  AS SIGNED) AS `playoff_SF`,
 CAST(SUM(`teamRating`.`playoff_F`)   AS SIGNED) AS `playoff_F`,
-CAST(SUM(`teamRating`.`teamRating`)  AS SIGNED) AS `schoolRating` 
-
-FROM `teamRating` 
-GROUP BY `school_ID` 
-ORDER BY `schoolRating` DESC
+CAST(SUM(`teamRating`.`teamRating`)  AS SIGNED) AS `schoolRating`
+FROM `teamRating`
+GROUP BY `teamRating`.`school_ID`
+ORDER BY CAST(SUM(`teamRating`.`teamRating`) AS SIGNED) DESC
