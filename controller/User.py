@@ -66,17 +66,22 @@ def index():
 
 ## Вход в систему
 def login():
-    if request.method == 'POST' and request.form['login']:
-        try:
-            userlogin = request.form['userLogin']
-            userpassw = md5(request.form['userPassword']).hexdigest()
-            user      = User.get(userLogin = userlogin, userPassword = userpassw)
-        except User.DoesNotExist:
-            flash('Имя или пароль введёны неправильно - попробуйте ещё раз', 'danger')
-        else:
-            auth_user(user)
-            return redirect(
-                url_for('index'))
+    if session.get('logged_in') and session['logged_in'] == True:
+        return redirect(
+            url_for('index'), 
+            code=302)
+    else:
+        if request.method == 'POST' and request.form['login']:
+            try:
+                userlogin = request.form['userLogin']
+                userpassw = md5(request.form['userPassword']).hexdigest()
+                user      = User.get(userLogin = userlogin, userPassword = userpassw)
+            except User.DoesNotExist:
+                flash('Имя или пароль введёны неправильно - попробуйте ещё раз', 'danger')
+            else:
+                auth_user(user)
+                return redirect(
+                    url_for('index'))
 
     return render_template('login.jinja.html')
 
